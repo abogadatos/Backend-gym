@@ -7,15 +7,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Classes } from './classes.entity';
+import { User } from './user.entity';
 
 @Entity('trainers')
 export class Trainers {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  //   @OneToOne(()=>Users)
-  //   @JoinColumn({name:'user_id'})
-  //   user:Users
+  @OneToOne(()=>User)
+  @JoinColumn({name:'user_id'})
+     user:User
 
   @Column('text')
   bio: string;

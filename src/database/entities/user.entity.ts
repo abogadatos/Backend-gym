@@ -4,9 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BookedClasses } from './booked_classes.entity';
+import { Attendance } from './attendance.entity';
+import { Reviews } from './reviews.entity';
 
 @Entity({
   name: 'users',
@@ -165,4 +169,17 @@ export class User {
 
   @UpdateDateColumn()
   updated_At: Date;
+
+@OneToMany(()=>BookedClasses,(bookedClasses)=>bookedClasses.user)
+bookedClasses:BookedClasses[]
+
+@OneToMany(()=>Attendance,(attendance)=>attendance.user)
+attendanceRecords:Attendance[]
+
+//@OneToMany(()=>Payments,(payment)=>payment.user)
+//payments:Payments[]
+
+@OneToMany(()=>Reviews,(reviews)=>reviews.user)
+reviews:Reviews[]
+
 }
