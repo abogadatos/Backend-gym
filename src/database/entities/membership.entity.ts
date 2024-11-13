@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'memberships' })
 export class Memberships {
@@ -44,4 +44,8 @@ export class Memberships {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: Date;
+
+  //@OneToMany(()=>Payments,(payment)=>payment.membership)
+  //payments:Payments[]
+
 }
