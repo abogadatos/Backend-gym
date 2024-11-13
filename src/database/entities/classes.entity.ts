@@ -1,5 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn,ManyToOne,JoinColumn } from "typeorm";
 import { Reviews } from "./reviews.entity";
+import { BookedClasses } from "./booked_classes.entity";
+import { Trainers } from "./trainer.entity";
+import { Attendance } from "./attendance.entity";
 
 
 @Entity({
@@ -61,10 +64,16 @@ export class Classes{
     })
     update_at:number;
 
-    // @ManyToOne(() => Trainer, (trainer) => trainer.classes)
-    // @JoinColumn({ name: 'trainer_id' })
-    // trainer: Trainer;
+    @ManyToOne(() => Trainers , (trainer) => trainer.classes)
+    @JoinColumn({ name: 'trainer_id' })
+    trainer: Trainers;
 
     @OneToMany(() => Reviews, (review) => review.class)
     reviews: Reviews[];
+
+    @OneToMany(() => BookedClasses , (bookedClass) => bookedClass.class)
+    bookedClasses: BookedClasses[];
+
+    @OneToMany(()=>Attendance,attendance=>attendance.class)
+    attendanceRecords:Attendance[]
 }
