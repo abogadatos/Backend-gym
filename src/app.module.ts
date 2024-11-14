@@ -1,22 +1,46 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import typeormConfig from './database/config/typeorm';
+import { AttendanceModule } from './modules/attendances/attendance.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
+import { BookedClassesModule } from './modules/booked_classes/booked_classes.module';
+import { ClassesModule } from './modules/classes/classes.module';
+import { MembershipsModule } from './modules/memberships/memberships.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
-import { PaymentsController } from './modules/payments/payments.controller';
-import { AttendanceController } from './modules/attendance/attendance.controller';
-import { PaymentsService } from './modules/payments/payments.service';
-import { AttendanceService } from './modules/attendance/attendance.service';
-import { BookedClassesController } from './modules/booked_classes/booked_classes.controller';
-import { BookedClassesService } from './modules/booked_classes/booked_classes.service';
+import { TrainersModule } from './modules/trainers/trainers.module';
+import { UsersModule } from './modules/users/users.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
-  imports: [AuthModule, UsersModule, ProductsModule, ReviewsModule],
-  controllers: [
-    PaymentsController,
-    AttendanceController,
-    BookedClassesController,
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.development.env',
+      load: [typeormConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeorm'),
+    }),
+    AttendanceModule,
+    AuthModule,
+    BookedClassesModule,
+    ClassesModule,
+    MembershipsModule,
+    PaymentsModule,
+    ProductsModule,
+    ReviewsModule,
+    TrainersModule,
+    UsersModule,
   ],
-  providers: [PaymentsService, AttendanceService, BookedClassesService],
+  controllers: [AppController],
+  providers: [AppService],
+  exports: [],
 })
 export class AppModule {}

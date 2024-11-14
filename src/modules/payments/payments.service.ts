@@ -1,29 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { PaymentsRepository } from './payments.repository';
+import { PaymentsCustomRepository } from './payments.repository';
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly PaymentsRepository: PaymentsRepository) {}
+  constructor(
+    private readonly paymentsCustomRepository: PaymentsCustomRepository,
+  ) {}
 
   getAllPaymentsService() {
-    return this.PaymentsRepository.getAllPayments();
+    return this.paymentsCustomRepository.getAllPayments();
   }
   getPaymentsByIdService() {
-    return this.PaymentsRepository.getPaymentsById();
+    return this.paymentsCustomRepository.getPaymentsById();
   }
   createPaymentsService() {
-    return this.PaymentsRepository.createPayments();
+    return this.paymentsCustomRepository.createPayments();
   }
   upDatePaymentsService() {
-    return this.PaymentsRepository.upDatePayments();
+    return this.paymentsCustomRepository.upDatePayments();
   }
   deletePaymentsService() {
-    return this.PaymentsRepository.deletePayments();
+    return this.paymentsCustomRepository.deletePayments();
   }
   getPaymentsByMembershipIdService() {
-    return this.PaymentsRepository.getPaymentsByMembershipId();
+    return this.paymentsCustomRepository.getPaymentsByMembershipId();
   }
   getPaymentsByUserIdService() {
-    return this.PaymentsRepository.getPaymentsByUserId();
+    return this.paymentsCustomRepository.getPaymentsByUserId();
   }
 }

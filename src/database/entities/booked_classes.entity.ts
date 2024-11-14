@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Classes } from './classes.entity';
 import { User } from './user.entity';
+import { Status } from 'src/enum/bookingStatus.enum';
 
 @Entity('booked_classes')
 export class BookedClasses {
@@ -17,7 +18,7 @@ export class BookedClasses {
   @Column({ type: 'timestamp' })
   booking_date: Date;
 
-  @Column({ type: 'enum', enum: BookedClasses })
+  @Column({ type: 'enum', enum: Status, default: Status.Pending })
   status: string;
 
   @CreateDateColumn()

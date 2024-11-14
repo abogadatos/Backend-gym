@@ -1,8 +1,8 @@
-import { registerAs } from '@nestjs/config';
-import { config as dotenvConfiguration } from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
+import { registerAs } from '@nestjs/config';
+import { config as dotenvConfiguracion } from 'dotenv';
 
-dotenvConfiguration({ path: '.development.env' });
+dotenvConfiguracion({ path: '.development.env' });
 
 export default registerAs(
   'typeorm',
@@ -18,8 +18,10 @@ export default registerAs(
       migrations: ['dist/migrations/*{.ts,.js}'],
       autoLoadEntities: true,
       logger: 'advanced-console',
-      synchronize: true,
+      synchronize: process.env.DB_SYNC === 'true',
       logging: true,
       dropSchema: false,
+      retryAttempts: parseInt(process.env.DB_RETRY_ATTEMPTS, 10) || 5, // Add retryAttempts
+      retryDelay: parseInt(process.env.DB_RETRY_DELAY, 10) || 3000, // Add retryDelay
     }) as DataSourceOptions,
 );
