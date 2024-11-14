@@ -41,3 +41,4 @@ export class Reviews {
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
+

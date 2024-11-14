@@ -30,3 +30,4 @@ export class Trainers {
   @OneToMany(() => Classes, (classEntity) => classEntity.trainer)
   classes: Classes[];
 }
+
