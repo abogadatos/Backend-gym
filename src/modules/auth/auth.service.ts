@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-
 @Injectable()
 export class AuthService {
-  create( ) {
+  create() {
     return 'This action adds a new auth';
   }
 
@@ -23,4 +22,3 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 }
- 

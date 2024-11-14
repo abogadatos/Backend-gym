@@ -170,16 +170,15 @@ export class User {
   @UpdateDateColumn()
   updated_At: Date;
 
-@OneToMany(()=>BookedClasses,(bookedClasses)=>bookedClasses.user)
-bookedClasses:BookedClasses[]
+  @OneToMany(() => BookedClasses, (bookedClasses) => bookedClasses.user)
+  bookedClasses: BookedClasses[];
 
-@OneToMany(()=>Attendance,(attendance)=>attendance.user)
-attendanceRecords:Attendance[]
+  @OneToMany(() => Attendance, (attendance) => attendance.user)
+  attendanceRecords: Attendance[];
 
-//@OneToMany(()=>Payments,(payment)=>payment.user)
-//payments:Payments[]
+  //@OneToMany(()=>Payments,(payment)=>payment.user)
+  //payments:Payments[]
 
-@OneToMany(()=>Reviews,(reviews)=>reviews.user)
-reviews:Reviews[]
-
+  @OneToMany(() => Reviews, (reviews) => reviews.user)
+  reviews: Reviews[];
 }

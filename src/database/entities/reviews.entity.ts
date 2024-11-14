@@ -37,7 +37,7 @@ export class Reviews {
   @JoinColumn({ name: 'class_id' })
   class: Classes;
 
-   @ManyToOne(() => User, (user) => user.reviews)
-   @JoinColumn({ name: 'user_id' })
-   user: User;
+  @ManyToOne(() => User, (user) => user.reviews)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
