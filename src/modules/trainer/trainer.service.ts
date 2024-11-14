@@ -6,6 +6,7 @@ import { UpdateTrainerDto } from './dto/update-trainer.dto';
 @Injectable()
 export class TrainersService {
   create(createTrainerDto: CreateTrainerDto) {
+    createTrainerDto;
     return 'This action adds a new trainer';
   }
 
@@ -18,6 +19,7 @@ export class TrainersService {
   }
 
   update(id: number, updateTrainerDto: UpdateTrainerDto) {
+    updateTrainerDto;
     return `This action updates a #${id} trainer`;
   }
 

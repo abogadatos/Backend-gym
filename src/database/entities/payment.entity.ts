@@ -10,7 +10,7 @@ import { Memberships } from './membership.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'payments' })
-export class Payments {
+export class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -74,4 +74,3 @@ export class Payments {
   @JoinColumn({ name: 'membership_id' })
   membership: Memberships;
 }
-

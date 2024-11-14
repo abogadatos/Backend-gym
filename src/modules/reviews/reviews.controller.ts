@@ -11,6 +11,7 @@ export class ReviewsController {
   }
   @Get(':id')
   findOne(@Param('id') id: string) {
+    id;
     return this.reviewsService.getByidReviews();
   }
   @Post()
@@ -25,6 +26,7 @@ export class ReviewsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    id;
     return this.reviewsService.deleteReviews();
   }
 }

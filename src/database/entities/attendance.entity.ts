@@ -13,6 +13,12 @@ export class Attendance {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'timestamp' })
+  check_in_time: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  check_out_time: Date;
+
   @ManyToOne(() => User, (user) => user.attendanceRecords)
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -20,10 +26,4 @@ export class Attendance {
   @ManyToOne(() => Classes, (classEntity) => classEntity.attendanceRecords)
   @JoinColumn({ name: 'class_id' })
   class: Classes;
-
-  @Column({ type: 'timestamp' })
-  check_in_time: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  check_out_time: Date;
 }
