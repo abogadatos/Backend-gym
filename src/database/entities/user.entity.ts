@@ -11,6 +11,7 @@ import {
 import { BookedClasses } from './booked_classes.entity';
 import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
+import { Payment } from './payment.entity';
 
 @Entity({
   name: 'users',
@@ -176,10 +177,9 @@ export class User {
   @OneToMany(() => Attendance, (attendance) => attendance.user)
   attendanceRecords: Attendance[];
 
-  //@OneToMany(()=>Payments,(payment)=>payment.user)
-  //payments:Payments[]
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
   @OneToMany(() => Reviews, (reviews) => reviews.user)
   reviews: Reviews[];
 }
-

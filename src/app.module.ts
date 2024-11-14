@@ -11,9 +11,12 @@ import { BookedClassesController } from './modules/booked_classes/booked_classes
 import { BookedClassesService } from './modules/booked_classes/booked_classes.service';
 
 @Module({
-  imports: [AuthModule, UsersModule, ProductsModule,ReviewsModule],
-  controllers: [PaymentsController, AttendanceController, BookedClassesController],
-  providers: [PaymentsService, AttendanceService, BookedClassesService]
+  imports: [AuthModule, UsersModule, ProductsModule, ReviewsModule],
+  controllers: [
+    PaymentsController,
+    AttendanceController,
+    BookedClassesController,
+  ],
+  providers: [PaymentsService, AttendanceService, BookedClassesService],
 })
-
 export class AppModule {}

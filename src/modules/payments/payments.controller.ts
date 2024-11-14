@@ -3,42 +3,40 @@ import { PaymentsService } from './payments.service';
 
 @Controller('payments')
 export class PaymentsController {
-    constructor(private readonly paymentsService:PaymentsService){}
+  constructor(private readonly paymentsService: PaymentsService) {}
 
- @Get()
- getAllPayments(){
-    return this.paymentsService.getAllPaymentsService()
- }
+  @Get()
+  getAllPayments() {
+    return this.paymentsService.getAllPaymentsService();
+  }
 
- @Get(':id')
- getPaymentsById(){
-    return this.paymentsService.getPaymentsByIdService()
- }
+  @Get(':id')
+  getPaymentsById() {
+    return this.paymentsService.getPaymentsByIdService();
+  }
 
- @Post()
- createPayments(){
-    return this.paymentsService.createPaymentsService
- }
+  @Post()
+  createPayments() {
+    return this.paymentsService.createPaymentsService;
+  }
 
- @Put(':id')
-upDatePayments(){
-    return this.paymentsService.upDatePaymentsService()
-}
+  @Put(':id')
+  upDatePayments() {
+    return this.paymentsService.upDatePaymentsService();
+  }
 
-@Delete()
-deletePayments(){
-    return this.paymentsService.deletePaymentsService()
-}
+  @Delete()
+  deletePayments() {
+    return this.paymentsService.deletePaymentsService();
+  }
 
-@Get('membership/:membershipId')
-getPaymentsByMembershipId(){
-    return this.paymentsService.getPaymentsByMembershipIdService()
-}
+  @Get('membership/:membershipId')
+  getPaymentsByMembershipId() {
+    return this.paymentsService.getPaymentsByMembershipIdService();
+  }
 
-@Get('user/:userId')
-getPaymentsByUserId(){
-    return this.paymentsService.getPaymentsByUserIdService()
-}
-
-
+  @Get('user/:userId')
+  getPaymentsByUserId() {
+    return this.paymentsService.getPaymentsByUserIdService();
+  }
 }

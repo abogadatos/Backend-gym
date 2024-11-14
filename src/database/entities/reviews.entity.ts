@@ -33,12 +33,11 @@ export class Reviews {
   })
   created_at: number;
 
-  @ManyToOne(() => Classes, (classEntity) => classEntity.reviews)
-  @JoinColumn({ name: 'class_id' })
-  class: Classes;
-
   @ManyToOne(() => User, (user) => user.reviews)
   @JoinColumn({ name: 'user_id' })
   user: User;
-}
 
+  @ManyToOne(() => Classes, (classEntity) => classEntity.reviews)
+  @JoinColumn({ name: 'class_id' })
+  class: Classes;
+}

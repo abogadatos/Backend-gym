@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Payment } from './payment.entity';
 
 @Entity({ name: 'memberships' })
 export class Memberships {
@@ -45,6 +46,6 @@ export class Memberships {
   })
   updated_at: Date;
 
-  //@OneToMany(()=>Payments,(payment)=>payment.membership)
-  //payments:Payments[]
+  @OneToMany(() => Payment, (payment) => payment.membership)
+  payments: Payment[];
 }
