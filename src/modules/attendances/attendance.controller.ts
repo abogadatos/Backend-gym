@@ -3,40 +3,40 @@ import { AttendanceService } from './attendance.service';
 
 @Controller('attendance')
 export class AttendanceController {
-  constructor(private readonly AttendanceService: AttendanceService) {}
+  constructor(private readonly attendanceService: AttendanceService) {}
 
   @Get()
   getAllAttendance() {
-    return this.AttendanceService.getAllAttendanceService();
+    return this.attendanceService.getAllAttendanceService();
   }
 
   @Get(':id')
   getAttendanceById() {
-    return this.AttendanceService.getAttendanceByIdService();
+    return this.attendanceService.getAttendanceByIdService();
   }
 
   @Post()
   registerAttendance() {
-    return this.AttendanceService.registerAttendanceService();
+    return this.attendanceService.registerAttendanceService();
   }
 
   @Put(':id')
   upDateAttendance() {
-    return this.AttendanceService.upDateAttendanceService();
+    return this.attendanceService.upDateAttendanceService();
   }
 
   @Delete(':id')
   deleteAttendance() {
-    return this.AttendanceService.deleteAttendanceService();
+    return this.attendanceService.deleteAttendanceService();
   }
 
   @Get('/class/:classId')
   getAttendanceByClassId() {
-    return this.AttendanceService.getAttendanceByClassIdService();
+    return this.attendanceService.getAttendanceByClassIdService();
   }
 
   @Get('user/:userId')
   getAttendanceByUserId() {
-    return this.AttendanceService.getAttendanceByUserIdService();
+    return this.attendanceService.getAttendanceByUserIdService();
   }
 }
