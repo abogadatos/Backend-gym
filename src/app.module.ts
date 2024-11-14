@@ -13,6 +13,7 @@ import { BookedClassesService } from './modules/booked_classes/booked_classes.se
 @Module({
   imports: [AuthModule, UsersModule, ProductsModule,ReviewsModule],
   controllers: [PaymentsController, AttendanceController, BookedClassesController],
-  providers: [PaymentsService, AttendanceService, BookedClassesService],
+  providers: [PaymentsService, AttendanceService, BookedClassesService]
 })
+
 export class AppModule {}

@@ -14,9 +14,9 @@ export class Trainers {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(()=>User)
-  @JoinColumn({name:'user_id'})
-     user:User
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column('text')
   bio: string;
