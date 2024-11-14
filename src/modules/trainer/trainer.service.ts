@@ -1,29 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Classes } from 'src/database/entities/classes.entity';
+import { Trainers } from 'src/database/entities/trainer.entity';
+import { Repository } from 'typeorm';
 
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 
 @Injectable()
 export class TrainersService {
-  create(createTrainerDto: CreateTrainerDto) {
-    createTrainerDto;
-    return 'This action adds a new trainer';
+  constructor(
+    @InjectRepository(Trainers)
+    private trainersRepository: Repository<Trainers>,
+  ) {}
+
+  async create(createTrainerDto: CreateTrainerDto): Promise<Trainers> {
+    const trainer = this.trainersRepository.create(createTrainerDto);
+    return await this.trainersRepository.save(trainer);
   }
 
-  findAll() {
-    return `This action returns all trainers`;
+  async findAll(): Promise<Trainers[]> {
+    return await this.trainersRepository.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} trainer`;
+  async findOne(id: string): Promise<Trainers> {
+    const trainer = await this.trainersRepository.findOne({
+      where: { id },
+      relations: ['user', 'classes'],
+    });
+    if (!trainer) {
+      throw new NotFoundException(`Trainer with ID ${id} not found`);
+    }
+    return trainer;
   }
 
-  update(id: number, updateTrainerDto: UpdateTrainerDto) {
-    updateTrainerDto;
-    return `This action updates a #${id} trainer`;
+  async update(id: string, UpdateTrainerDto: UpdateTrainerDto): Promise<Trainers> {
+    await this.trainersRepository.update(id, UpdateTrainerDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} trainer`;
+  async remove(id: string): Promise<void> {
+    await this.trainersRepository.delete(id);
+  }
+
+  async findTrainerClasses(id: string): Promise<Classes[]> {
+    const trainer = await this.trainersRepository.findOne({
+      where: { id },
+      relations: ['classes'],
+    });
+    if (!trainer) {
+      throw new NotFoundException(`Trainer with ID ${id} not found`);
+    }
+    return trainer.classes;
   }
 }
