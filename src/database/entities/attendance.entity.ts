@@ -6,15 +6,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Classes } from './classes.entity';
+import { User } from './user.entity';
 
 @Entity('attendance')
 export class Attendance {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // @ManyToOne(()=>Users,user=>user.attendanceRecords)
-  // @JoinColumn({name:'user_id'})
-  // user:Users
+  @ManyToOne(() => User, (user) => user.attendanceRecords)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @ManyToOne(() => Classes, (classEntity) => classEntity.attendanceRecords)
   @JoinColumn({ name: 'class_id' })
