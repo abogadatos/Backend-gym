@@ -74,3 +74,4 @@ export class Payments {
   @JoinColumn({ name: 'membership_id' })
   membership: Memberships;
 }
+
