@@ -13,9 +13,9 @@ export class Attendance {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(()=>User,user=>user.attendanceRecords)
-  @JoinColumn({name:'user_id'})
-  user:User
+  @ManyToOne(() => User, (user) => user.attendanceRecords)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @ManyToOne(() => Classes, (classEntity) => classEntity.attendanceRecords)
   @JoinColumn({ name: 'class_id' })
