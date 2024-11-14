@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -29,8 +21,8 @@ export class AuthController {
   }
 
   @Patch(':id')
-  update(@Param("id")id ) {
-    return this.authService.update(id );
+  update(@Param('id') id) {
+    return this.authService.update(id);
   }
 
   @Delete(':id')

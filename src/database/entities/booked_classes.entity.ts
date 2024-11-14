@@ -14,9 +14,9 @@ export class BookedClasses {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-   @ManyToOne(()=>User,user=>user.bookedClasses)
-   @JoinColumn({name:'user_id'})
-    user:User
+  @ManyToOne(() => User, (user) => user.bookedClasses)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @ManyToOne(() => Classes, (classEntity) => classEntity.bookedClasses)
   @JoinColumn({ name: 'class_id' })
