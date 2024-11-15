@@ -3,21 +3,55 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as data from '../../utils/mock-users.json';
 
 @Injectable()
-export class UsersRepository {
+export class UsersCustomRepository {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>) {}
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  
-    async createUser(user:Partial<User>){
-      const newUser= await this.userRepository.save(user);
-      const dbUser= await this.userRepository.findOneBy({id:newUser.id})
+  async initializeUser() {
+    const existingUsers = await this.userRepository.count();
 
-      const {password,...userNoPassword}=dbUser;
-      return userNoPassword;
- 
+    if (existingUsers === 0) {
+      for (const person of data) {
+        console.log(`${person.firstName} was added`);
+
+        this.userRepository
+          .createQueryBuilder()
+          .insert()
+          .into(User)
+          .values({
+            firstName: person.firstName,
+            lastName: person.lastName,
+            email: person.email,
+            password: person.password,
+            phone: person.phone,
+            country: person.country,
+            address: person.address,
+          })
+          .orIgnore()
+          .execute();
+      }
+      console.log(`Users were added from users' custom repo`);
+      return {
+        message: `Users were added from users' custom repo`,
+      };
+    } else if (existingUsers > 0) {
+      console.warn('Users already exist within database');
+      return `Users already exist within database`;
+    }
+  }
+
+  async createUser(user: Partial<User>) {
+    const newUser = await this.userRepository.save(user);
+    const dbUser = await this.userRepository.findOneBy({ id: newUser.id });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userNoPassword } = dbUser;
+    return userNoPassword;
   }
 
   async findAll(): Promise<User[]> {
@@ -25,23 +59,25 @@ export class UsersRepository {
   }
 
   async getUserById(id: string): Promise<User> {
-    const user= await this.userRepository.findOne({ where:{id} }); 
-    if(!user) throw new NotFoundException ("No se Enontro el usuario")
-      
-      return user;
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('No se Enontro el usuario');
+
+    return user;
   }
 
-  async update(id: string, updateUserDto: Partial<CreateUserDto>): Promise<User> {
-    await this.userRepository.update(id, updateUserDto); 
-    return this.userRepository.findOneBy({ id }); 
+  async update(
+    id: string,
+    updateUserDto: Partial<CreateUserDto>,
+  ): Promise<User> {
+    await this.userRepository.update(id, updateUserDto);
+    return this.userRepository.findOneBy({ id });
   }
 
-  async remove(id: string){
-    const user= await this.userRepository.findOneBy({id});
-        if(!user) throw new NotFoundException ("No se Enontro el usuario")
-        this.userRepository.remove(user); 
-        
-        
-        return `Usuario con ${ user.id } fue eliminado correctamente`;
-    }
+  async remove(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException('No se Enontro el usuario');
+    this.userRepository.remove(user);
+
+    return `Usuario con ${user.id} fue eliminado correctamente`;
+  }
 }
