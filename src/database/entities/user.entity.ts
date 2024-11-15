@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -12,6 +13,7 @@ import { BookedClasses } from './booked_classes.entity';
 import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
 import { Payment } from './payment.entity';
+import { Trainers } from './trainer.entity';
 
 @Entity({
   name: 'users',
@@ -107,12 +109,10 @@ export class User {
   @Column({
     type: 'enum',
     enum: Role,
-    array: true,  
+    array: true,
     default: [Role.User],
   })
   roles: Role[];
-
-
 
   /**
    * Membership status assigned to the user, indicating the current state of their membership.
@@ -189,6 +189,7 @@ export class User {
   @UpdateDateColumn()
   updated_At: Date;
 
+  @OneToOne(() => Trainers, (trainers) => trainers.user)
   @OneToMany(() => BookedClasses, (bookedClasses) => bookedClasses.user)
   bookedClasses: BookedClasses[];
 
