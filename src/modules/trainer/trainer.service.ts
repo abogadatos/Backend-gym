@@ -5,7 +5,6 @@ import { Trainers } from 'src/database/entities/trainer.entity';
 import { Repository } from 'typeorm';
 
 import { CreateTrainerDto } from './dto/create-trainer.dto';
-import { UpdateTrainerDto } from './dto/update-trainer.dto';
 
 @Injectable()
 export class TrainersService {
@@ -32,12 +31,12 @@ export class TrainersService {
       throw new NotFoundException(`Trainer with ID ${id} not found`);
     }
     return trainer;
-  }
+  }   
 
-  async update(id: string, UpdateTrainerDto: UpdateTrainerDto): Promise<Trainers> {
+  async update(id: string, UpdateTrainerDto): Promise<Trainers> {
     await this.trainersRepository.update(id, UpdateTrainerDto);
     return this.findOne(id);
-  }
+  }  
 
   async remove(id: string): Promise<void> {
     await this.trainersRepository.delete(id);

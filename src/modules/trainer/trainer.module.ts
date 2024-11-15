@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { Trainers } from 'src/database/entities/trainer.entity';
 import { TrainersController } from './trainer.controller';
 import { TrainersService } from './trainer.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Trainers])],

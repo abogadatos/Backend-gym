@@ -24,4 +24,7 @@ export default registerAs(
       retryAttempts: parseInt(process.env.DB_RETRY_ATTEMPTS, 10) || 5, // Add retryAttempts
       retryDelay: parseInt(process.env.DB_RETRY_DELAY, 10) || 3000, // Add retryDelay
     }) as DataSourceOptions,
+
+    
 );
+ 
