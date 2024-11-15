@@ -65,12 +65,19 @@ export class UsersCustomRepository {
     return user;
   }
 
-  async update(
-    id: string,
-    updateUserDto: Partial<CreateUserDto>,
-  ): Promise<User> {
-    await this.userRepository.update(id, updateUserDto);
-    return this.userRepository.findOneBy({ id });
+  
+  async updateUser(id: string, user: Partial<User>): Promise<any> {
+    
+    const userExists = await this.userRepository.findOne({ where: { id } });
+
+    if (!userExists) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    await this.userRepository.update(id, user);
+    const updatedUser = await this.userRepository.findOne({ where: { id } });
+    const { password, ...userNoPassword } = updatedUser;
+
+    return userNoPassword;
   }
 
   async remove(id: string) {

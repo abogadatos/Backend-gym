@@ -1,12 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
+  
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -37,7 +39,7 @@ export class UsersService implements OnModuleInit {
     return this.usersCustomRepository.initializeUser();
   }
 
-  async create(createUserDto: CreateUserDto) {
+ create(createUserDto: CreateUserDto) {
     const newUser = this.usersCustomRepository.createUser(createUserDto);
     return newUser;
   }
@@ -46,8 +48,8 @@ export class UsersService implements OnModuleInit {
     return this.usersCustomRepository.getUserById(id);
   }
 
-  update() {
-    return `This action updates user`;
+  updateUser(id:string,user:any){
+    return this.usersCustomRepository.updateUser(id,user);
   }
 
   delete(id: string) {

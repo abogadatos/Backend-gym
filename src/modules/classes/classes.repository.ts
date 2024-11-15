@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundError } from 'rxjs';
 import { Classes } from 'src/database/entities/classes.entity';
 import { Repository } from 'typeorm';
 
@@ -10,32 +11,43 @@ export class ClassesCustomRepository {
     private classesRepository: Repository<Classes>,
   ) {}
 
-  async getAllBookedClasses() {
-    const clases=await this.classesRepository.find()
-    return clases;
+  async getAllClasses(page:number,limit:number) {
+    const skip=(page-1)*limit;
+        const classes= await this.classesRepository.find({
+        take:limit,
+        skip:skip,
+        });
+    return classes;  
+  }
+  
+
+  async getClassById(id:string) {
+    const classe= await this.classesRepository.findOne({ where: { id } });
+    return classe;
   }
 
-  getBookedClassById() {
-    return 'retorna las reservas de clases por id';
+  async createClass( classe: Partial <Classes> ) {
+    const newClass= await this.classesRepository.save(classe);
+    return newClass;
   }
 
-  createBooked() {
-    return 'crea una reserva';
-  }
+  async updateClass(id: string, classe: Partial<Classes>) {
 
-  upDateBooked() {
-    return 'editar una reserva';
+    const existingClass = await this.classesRepository.findOne({ where: { id } });
+  
+    if (!existingClass) {
+      throw new NotFoundException('Class not found');
+    }
+  
+    const updatedClass = this.classesRepository.merge(existingClass, classe);
+    await this.classesRepository.save(updatedClass);
+  
+    return updatedClass;
   }
-
-  deleteBooked() {
-    return 'eliminar una reserva';
-  }
-
-  getBooketsByUserId() {
-    return 'obtener las reservas de un usuario especifiico';
-  }
-
-  getBooketsByclassId() {
-    return 'busca las reservas de una clase ';
+  async deleteClass(id:string) {
+    const classe= await this.classesRepository.findOneBy({id})
+    if(!classe) throw new NotFoundException("Class not found")
+    this.classesRepository.remove(classe);
+    return `Class ${id} was successfully deleted `;
   }
 }
