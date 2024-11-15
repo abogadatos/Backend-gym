@@ -62,13 +62,17 @@ export class Classes {
   @Column({
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  created_at: Date
+  created_at: Date;
+  
   @Column({
-    type: 'text',
+    type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
   update_at: Date;
+  
 
   @ManyToOne(() => Trainers, (trainer) => trainer.classes)
   @JoinColumn({ name: 'trainer_id' })
