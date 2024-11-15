@@ -6,37 +6,37 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Get()
-  getAllPayments() {
-    return this.paymentsService.getAllPaymentsService();
+  async getAllPayments() {
+    return await this.paymentsService.getAllPaymentsService();
   }
 
   @Get(':id')
-  getPaymentsById() {
-    return this.paymentsService.getPaymentsByIdService();
+  async getPaymentsById() {
+    return await this.paymentsService.getPaymentsByIdService();
   }
 
   @Post()
-  createPayments() {
-    return this.paymentsService.createPaymentsService;
+  async createPayments() {
+    return await this.paymentsService.createPaymentsService;
   }
 
   @Put(':id')
-  upDatePayments() {
-    return this.paymentsService.upDatePaymentsService();
+  async upDatePayments() {
+    return await this.paymentsService.upDatePaymentsService();
   }
 
   @Delete()
-  deletePayments() {
-    return this.paymentsService.deletePaymentsService();
+  async deletePayments() {
+    return await this.paymentsService.deletePaymentsService();
   }
 
   @Get('membership/:membershipId')
-  getPaymentsByMembershipId() {
-    return this.paymentsService.getPaymentsByMembershipIdService();
+  async getPaymentsByMembershipId() {
+    return await this.paymentsService.getPaymentsByMembershipIdService();
   }
 
   @Get('user/:userId')
-  getPaymentsByUserId() {
-    return this.paymentsService.getPaymentsByUserIdService();
+  async getPaymentsByUserId() {
+    return await this.paymentsService.getPaymentsByUserIdService();
   }
 }

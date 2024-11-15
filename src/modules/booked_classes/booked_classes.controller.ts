@@ -6,36 +6,36 @@ export class BookedClassesController {
   constructor(private readonly bookendClassesService: BookedClassesService) {}
 
   @Get()
-  getAllBookedClasses() {
-    return this.bookendClassesService.getAllBookedClassesService();
+  async getAllBookedClasses() {
+    return await this.bookendClassesService.getAllBookedClassesService();
   }
   @Get(':id')
-  getBookedClassById() {
-    return this.bookendClassesService.getBookedClassByIdService();
+  async getBookedClassById() {
+    return await this.bookendClassesService.getBookedClassByIdService();
   }
 
   @Post()
-  createBooked() {
-    return this.bookendClassesService.createBookedService();
+  async createBooked() {
+    return await this.bookendClassesService.createBookedService();
   }
 
   @Put(':id')
-  upDateBooked() {
-    return this.bookendClassesService.upDateBookedService();
+  async upDateBooked() {
+    return await this.bookendClassesService.upDateBookedService();
   }
 
   @Delete(':id')
-  deleteBooked() {
-    return this.bookendClassesService.deleteBookedService();
+  async deleteBooked() {
+    return await this.bookendClassesService.deleteBookedService();
   }
 
   @Get('user/:userId')
-  getBooketsByUserId() {
-    return this.bookendClassesService.getBooketsByUserIdService();
+  async getBooketsByUserId() {
+    return await this.bookendClassesService.getBooketsByUserIdService();
   }
 
   @Get('class/:classId')
-  getBooketsByclassId() {
-    return this.bookendClassesService.getBooketsByclassIdService();
+  async getBooketsByclassId() {
+    return await this.bookendClassesService.getBooketsByclassIdService();
   }
 }

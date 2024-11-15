@@ -17,27 +17,27 @@ export class TrainersController {
   constructor(private readonly trainersService: TrainersService) {}
 
   @Post()
-  create(@Body() createTrainerDto: CreateTrainerDto) {
-    return this.trainersService.create(createTrainerDto);
+  async create(@Body() createTrainerDto: CreateTrainerDto) {
+    return await this.trainersService.create(createTrainerDto);
   }
 
   @Get()
-  findAll() {
-    return this.trainersService.findAll();
+  async findAll() {
+    return await this.trainersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trainersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.trainersService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
-    return this.trainersService.update(+id, updateTrainerDto);
+  async update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
+    return await this.trainersService.update(+id, updateTrainerDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trainersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.trainersService.remove(+id);
   }
 }

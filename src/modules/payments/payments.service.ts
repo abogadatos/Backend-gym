@@ -7,25 +7,25 @@ export class PaymentsService {
     private readonly paymentsCustomRepository: PaymentsCustomRepository,
   ) {}
 
-  getAllPaymentsService() {
-    return this.paymentsCustomRepository.getAllPayments();
+  async getAllPaymentsService() {
+    return await this.paymentsCustomRepository.getAllPayments();
   }
-  getPaymentsByIdService() {
-    return this.paymentsCustomRepository.getPaymentsById();
+  async getPaymentsByIdService() {
+    return await this.paymentsCustomRepository.getPaymentsById();
   }
-  createPaymentsService() {
-    return this.paymentsCustomRepository.createPayments();
+  async createPaymentsService() {
+    return await this.paymentsCustomRepository.createPayments();
   }
-  upDatePaymentsService() {
-    return this.paymentsCustomRepository.upDatePayments();
+  async upDatePaymentsService() {
+    return await this.paymentsCustomRepository.upDatePayments();
   }
-  deletePaymentsService() {
-    return this.paymentsCustomRepository.deletePayments();
+  async deletePaymentsService() {
+    return await this.paymentsCustomRepository.deletePayments();
   }
-  getPaymentsByMembershipIdService() {
-    return this.paymentsCustomRepository.getPaymentsByMembershipId();
+  async getPaymentsByMembershipIdService() {
+    return await this.paymentsCustomRepository.getPaymentsByMembershipId();
   }
-  getPaymentsByUserIdService() {
-    return this.paymentsCustomRepository.getPaymentsByUserId();
+  async getPaymentsByUserIdService() {
+    return await this.paymentsCustomRepository.getPaymentsByUserId();
   }
 }

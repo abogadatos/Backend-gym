@@ -8,30 +8,30 @@ export class ClassesController {
     constructor(private readonly classService:ClassesService){}
 
     @Get()
-    getAllClass(@Query('page') page: string, @Query('limit') limit: string){
+    async getAllClass(@Query('page') page: string, @Query('limit') limit: string){
         const pageNumber = page ? parseInt(page, 10) : 1; // Valor por defecto: 1
         const limitNumber = limit ? parseInt(limit, 10) : 5; // Valor por defecto: 5
 
-        return this.classService.getAllClasses(pageNumber, limitNumber);
+        return await this.classService.getAllClasses(pageNumber, limitNumber);
     }
     @Get(':id')
-    getClassByID(@Param("id") id :string){
-        return this.classService.getClassByID(id);
+    async getClassByID(@Param("id") id :string){
+        return await this.classService.getClassByID(id);
     }
 
     @Post()
-    postClass(@Body() classe: CreateClassDto) {
-      return this.classService.createClass(classe);
+    async postClass(@Body() classe: CreateClassDto) {
+      return await this.classService.createClass(classe);
     }
 
     @Put(":id")
-    updateClass(@Param("id") id :string, @Body()classe:UpdateClassDto ){
-        return this.classService.updateClass(id,classe)
+    async updateClass(@Param("id") id :string, @Body()classe:UpdateClassDto ){
+        return await this.classService.updateClass(id,classe)
 
     }
     @Delete(':id')
-    deleteClass(@Param("id") id:string){
-        return this.classService.deleteClass(id);
+    async deleteClass(@Param("id") id:string){
+        return await this.classService.deleteClass(id);
     }
     
 }

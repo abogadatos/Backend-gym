@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -36,23 +35,23 @@ export class UsersService implements OnModuleInit {
   }
 
   async userSeeder() {
-    return this.usersCustomRepository.initializeUser();
+    return await this.usersCustomRepository.initializeUser();
   }
 
- create(createUserDto: CreateUserDto) {
-    const newUser = this.usersCustomRepository.createUser(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const newUser = await this.usersCustomRepository.createUser(createUserDto);
     return newUser;
   }
 
-  getUserById(id: string) {
-    return this.usersCustomRepository.getUserById(id);
+  async getUserById(id: string) {
+    return await this.usersCustomRepository.getUserById(id);
   }
 
-  updateUser(id:string,user:any){
-    return this.usersCustomRepository.updateUser(id,user);
+  async updateUser(id:string,user:any){
+    return await this.usersCustomRepository.updateUser(id,user);
   }
 
-  delete(id: string) {
-    return this.usersCustomRepository.remove(id);
+  async delete(id: string) {
+    return await this.usersCustomRepository.remove(id);
   }
 }
