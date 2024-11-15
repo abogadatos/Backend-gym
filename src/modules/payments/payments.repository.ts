@@ -10,31 +10,31 @@ export class PaymentsCustomRepository {
     private paymentRepository: Repository<Payment>,
   ) {}
 
-  getAllPayments() {
+  async getAllPayments() {
     return 'obtiene todos los pagos';
   }
 
-  getPaymentsById() {
+  async getPaymentsById() {
     return 'obtiene los pagos por id';
   }
 
-  createPayments() {
+  async createPayments() {
     return 'crea un nuevo pago';
   }
 
-  upDatePayments() {
+  async upDatePayments() {
     return 'actualiza los pagos por id';
   }
 
-  deletePayments() {
+  async deletePayments() {
     return 'elimina  los pagos por id';
   }
 
-  getPaymentsByMembershipId() {
+  async getPaymentsByMembershipId() {
     return 'obtiene los pagos de una membresia especifica';
   }
 
-  getPaymentsByUserId() {
+  async getPaymentsByUserId() {
     return 'obtiene los pagos de un user especifico';
   }
 }

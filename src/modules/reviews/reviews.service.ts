@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ReviewsService {
-  deleteReviews() {
+  async deleteReviews() {
     return 'This action adds a new user';
   }
-  updateReviews() {
+  async  updateReviews() {
     return 'This action adds a new user';
   }
-  postReviews() {
+  async postReviews() {
     return 'This action adds a new user';
   }
-  getByidReviews() {
+  async getByidReviews() {
     return 'This action adds a new user';
   }
-  getReviews() {
+  async getReviews() {
     return 'This action adds a new user';
   }
 }

@@ -9,20 +9,20 @@ export class ProductsService {
     return 'This action adds a new product';
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all products`;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} product`;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
     updateProductDto;
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} product`;
   }
 }

@@ -5,25 +5,25 @@ import { UpdateTrainerDto } from './dto/update-trainer.dto';
 
 @Injectable()
 export class TrainersService {
-  create(createTrainerDto: CreateTrainerDto) {
+  async create(createTrainerDto: CreateTrainerDto) {
     createTrainerDto;
     return 'This action adds a new trainer';
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all trainers`;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} trainer`;
   }
 
-  update(id: number, updateTrainerDto: UpdateTrainerDto) {
+  async update(id: number, updateTrainerDto: UpdateTrainerDto) {
     updateTrainerDto;
     return `This action updates a #${id} trainer`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} trainer`;
   }
 }

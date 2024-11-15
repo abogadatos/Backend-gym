@@ -1,5 +1,5 @@
 import { UsersService } from './../users/users.service';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
 import { LoginUserDto } from './dto/loginUser.dto';

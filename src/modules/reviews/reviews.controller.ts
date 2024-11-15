@@ -6,26 +6,26 @@ export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Get()
-  findAllReviews() {
+  async findAllReviews() {
     return this.reviewsService.getReviews();
   }
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     id;
     return this.reviewsService.getByidReviews();
   }
   @Post()
-  create() {
+  async create() {
     return this.reviewsService.postReviews();
   }
 
   @Put(':id')
-  update() {
+  async update() {
     return this.reviewsService.updateReviews();
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     id;
     return this.reviewsService.deleteReviews();
   }
