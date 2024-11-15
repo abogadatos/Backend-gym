@@ -24,12 +24,12 @@ export class UsersController {
 
   // Proteger con roles y guards > nechodev
   @Get()
-  userGetter(@Query('page') page: string, @Query('limit') limit: string) {
+  async userGetter(@Query('page') page: string, @Query('limit') limit: string) {
     try {
       const pageQuery = Number(page);
       const limitQuery = Number(limit);
       if (pageQuery && limitQuery) {
-        return this.usersService.getUsers(pageQuery, limitQuery);
+        return await this.usersService.getUsers(pageQuery, limitQuery);
       } else return this.usersService.getUsers(1, 5);
     } catch (error) {
       throw new HttpException(
@@ -44,22 +44,23 @@ export class UsersController {
   }
 
   @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return this.usersService.getUserById(id);
+  async getUserById(@Param('id') id: string) {
+    return await this.usersService.getUserById(id);
   }
   @Post() 
   async create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto); 
+    return await this.usersService.create(createUserDto); 
   }
   @Put(":id")
-  updateUser(
+  async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    return await this.usersService.updateUser(id, updateUserDto);
   }
+  
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    return this.usersService.delete(id);
+  asyn deleteUser(@Param('id') id: string) {
+    return await this.usersService.delete(id);
   }
 }
