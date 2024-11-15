@@ -83,6 +83,20 @@ export class User {
   password: string;
 
   /**
+   * User's phone number for contact purposes.
+   *
+   * @remarks
+   * Stored as a varchar due to potential international formats and length requirements.
+   *
+   * @example "+1-202-555-0173"
+   */
+  @Column({
+    type: 'varchar',
+    length: 15,
+  })
+  phone: string;
+
+  /**
    * Roles assigned to the user, which dictate their permissions within the platform.
    *
    * @remarks
@@ -112,20 +126,6 @@ export class User {
     default: MembershipStatus.Inactive,
   })
   membership_status: MembershipStatus;
-
-  /**
-   * User's phone number for contact purposes.
-   *
-   * @remarks
-   * Stored as a varchar due to potential international formats and length requirements.
-   *
-   * @example "+1-202-555-0173"
-   */
-  @Column({
-    type: 'varchar',
-    length: 15,
-  })
-  phone: string;
 
   /**
    * Full address of the user.
