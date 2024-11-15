@@ -39,3 +39,4 @@ export class TrainersController {
     return this.trainersService.findTrainerClasses(id);
   }
 }
+
