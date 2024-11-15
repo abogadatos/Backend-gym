@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Classes } from 'src/database/entities/classes.entity';
+import { BookedClasses } from 'src/database/entities/booked_classes.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class BookedClassesCustomRepository {
   constructor(
-    @InjectRepository(Classes)
-    private classesRepository: Repository<Classes>,
+    @InjectRepository(BookedClasses)
+    private classesRepository: Repository<BookedClasses>,
   ) {}
 
   getAllBookedClasses() {

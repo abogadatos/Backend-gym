@@ -131,6 +131,21 @@ export class User {
   membership_status: MembershipStatus;
 
   /**
+   * Country of residence for the user.
+   *
+   * @remarks
+   * Optional field, up to 50 characters in length.
+   *
+   * @example "Colombia"
+   */
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  country?: string;
+
+  /**
    * Full address of the user.
    *
    * @remarks
