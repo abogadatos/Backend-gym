@@ -10,8 +10,9 @@ export class ClassesCustomRepository {
     private classesRepository: Repository<Classes>,
   ) {}
 
-  getAllBookedClasses() {
-    return 'retorna todas las reservas de clases';
+  async getAllBookedClasses() {
+    const clases=await this.classesRepository.find()
+    return clases;
   }
 
   getBookedClassById() {

@@ -9,4 +9,9 @@ export class ClassesService {
     @InjectRepository(Classes)
     private classesCustomRepository: ClassesCustomRepository,
   ) {}
+  getAllBookedClasses(){
+    return this.classesCustomRepository.getAllBookedClasses();
+  }
+
+  
 }

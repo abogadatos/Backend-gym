@@ -107,9 +107,12 @@ export class User {
   @Column({
     type: 'enum',
     enum: Role,
-    default: Role.User,
+    array: true,  
+    default: [Role.User],
   })
   roles: Role[];
+
+
 
   /**
    * Membership status assigned to the user, indicating the current state of their membership.
