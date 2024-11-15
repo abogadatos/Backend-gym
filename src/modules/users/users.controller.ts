@@ -30,7 +30,7 @@ export class UsersController {
       const limitQuery = Number(limit);
       if (pageQuery && limitQuery) {
         return await this.usersService.getUsers(pageQuery, limitQuery);
-      } else return this.usersService.getUsers(1, 5);
+      } else return await this.usersService.getUsers(1, 5);
     } catch (error) {
       throw new HttpException(
         {
@@ -47,20 +47,20 @@ export class UsersController {
   async getUserById(@Param('id') id: string) {
     return await this.usersService.getUserById(id);
   }
-  @Post() 
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.create(createUserDto); 
+    return await this.usersService.create(createUserDto);
   }
-  @Put(":id")
+  @Put(':id')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
-  
+
   @Delete(':id')
-  asyn deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: string) {
     return await this.usersService.delete(id);
   }
 }

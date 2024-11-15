@@ -1,32 +1,36 @@
-import { Controller, Get, Post, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+  Body,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginUserDto } from './dto/loginUser.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CleanDataPipe } from 'src/pipes/cleanName.pipe';
 
 @Controller('auth')
 export class AuthController {
+  private credentials: LoginUserDto = { email: '', password: '' };
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create() {
-    return this.authService.create();
+  // @Anahidia working here
+  @Post('signin')
+  async signIn(@Body() userData: LoginUserDto) {
+    userData;
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
+  // @nechodev working here
+  @Post('signup')
+  @UsePipes(new ValidationPipe())
+  async signup(@Body(CleanDataPipe) userData: CreateUserDto) {
+    const userWithoutPassword = await this.authService.signUp(userData);
+    const { password, email } = userData;
+    this.credentials.email = email;
+    this.credentials.password = password;
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id) {
-    return this.authService.update(id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+    const logStatus = await this.authService.signIn(this.credentials);
+    return { 'User Data': userWithoutPassword, 'Log Status': logStatus };
   }
 }
