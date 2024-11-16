@@ -11,6 +11,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserWithoutPassword } from '../users/types/userWithoutPassword.type';
+import { JwtService } from '@nestjs/jwt';
+
+
+
 
 @Injectable()
 export class AuthService {
@@ -18,7 +22,8 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private readonly userService: UsersService,
-  ) {}
+    private readonly jwtService: JwtService
+   ) {}
 
   create() {
     return 'This action adds a new auth';
@@ -51,13 +56,33 @@ export class AuthService {
     const user: UserWithoutPassword = await this.userService.getUser(
       newUser.id,
     );
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
     return user;
   }
 
   // @Anahidia working here
-  async signIn(userData: LoginUserDto) {}
+  async signIn(userData: LoginUserDto) {
+    const foundUser= await this.userService.getUsersByEmmail(userData.email)
+
+    if(!foundUser) throw new BadRequestException('invalid credentials')
+
+      const validatePassword= await bcrypt.compare(userData.password, foundUser.password);
+
+      if(!validatePassword) throw new BadRequestException('invalid credentials')
+
+        const payload={
+          id: foundUser.id,
+          email:foundUser.email,
+          rol:foundUser.rol
+        }
+    
+        const token = this.jwtService.sign(payload);
+
+        return {
+          message: 'load-in user',
+          token,
+        };
+  }
 
   findAll() {
     return `This action returns all auth`;

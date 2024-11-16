@@ -23,6 +23,7 @@ export class UsersService implements OnModuleInit {
     }, 2000);
   }
 
+
   async getUser(userID: string): Promise<UserWithoutPassword> {
     const foundUser: User | undefined = await this.usersRepository.findOne({
       where: { id: userID },
@@ -32,6 +33,9 @@ export class UsersService implements OnModuleInit {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...filteredUser } = foundUser;
     return filteredUser;
+
+  async getUsersByEmmail(email:string){
+    return await this.getUsersByEmmail(email)
   }
 
   async getUsers(page: number, limit: number) {
