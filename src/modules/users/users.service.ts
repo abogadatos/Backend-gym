@@ -23,6 +23,10 @@ export class UsersService implements OnModuleInit {
     }, 2000);
   }
 
+  async getUsersByEmmail(email:string){
+    return await this.getUsersByEmmail(email)
+  }
+
   async getUsers(page: number, limit: number) {
     let users = await this.usersRepository.find();
 
