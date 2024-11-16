@@ -4,10 +4,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserWithoutPassword } from './types/userWithoutPassword.type';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
-  
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -21,6 +21,17 @@ export class UsersService implements OnModuleInit {
     setTimeout(() => {
       this.userSeeder();
     }, 2000);
+  }
+
+  async getUser(userID: string): Promise<UserWithoutPassword> {
+    const foundUser: User | undefined = await this.usersRepository.findOne({
+      where: { id: userID },
+    });
+    if (!foundUser) throw new NotFoundException('user not found or not exist');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...filteredUser } = foundUser;
+    return filteredUser;
   }
 
   async getUsers(page: number, limit: number) {
@@ -47,8 +58,8 @@ export class UsersService implements OnModuleInit {
     return await this.usersCustomRepository.getUserById(id);
   }
 
-  async updateUser(id:string,user:any){
-    return await this.usersCustomRepository.updateUser(id,user);
+  async updateUser(id: string, user: any) {
+    return await this.usersCustomRepository.updateUser(id, user);
   }
 
   async delete(id: string) {

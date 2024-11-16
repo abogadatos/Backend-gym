@@ -1,17 +1,23 @@
 import { UsersService } from './../users/users.service';
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { UserWithoutPassword } from '../users/types/userWithoutPassword.type';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
   ) {}
 
   create() {
@@ -20,7 +26,7 @@ export class AuthService {
 
   //  @nechodev working here
   async signUp(userData: CreateUserDto): Promise<Partial<User>> {
-    const checkUser: User[] = await this..find({
+    const checkUser: User[] = await this.usersRepository.find({
       where: { email: userData.email },
     });
     if (checkUser.length)
@@ -42,13 +48,12 @@ export class AuthService {
     }
 
     await this.usersRepository.save(newUser);
-    const user: UserWithoutPassword = await this.usersService.getUser(
+    const user: UserWithoutPassword = await this.userService.getUser(
       newUser.id,
     );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { orders, ...UserWithoutPassword } = user;
 
-    return UserWithoutPassword;
+    return user;
   }
 
   // @Anahidia working here
