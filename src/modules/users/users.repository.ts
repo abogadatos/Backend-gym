@@ -54,9 +54,11 @@ export class UsersCustomRepository {
     return userNoPassword;
   }
 
+
   async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
+
 
   async getUserById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
@@ -64,6 +66,11 @@ export class UsersCustomRepository {
 
     return user;
   }
+
+  async getUsersByEmmail(email:string){
+    return await this.userRepository.findOneBy({email})
+   
+ }
 
   
   async updateUser(id: string, user: Partial<User>): Promise<any> {
@@ -87,4 +94,5 @@ export class UsersCustomRepository {
 
     return `Usuario con ${user.id} fue eliminado correctamente`;
   }
+
 }
