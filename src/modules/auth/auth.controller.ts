@@ -15,17 +15,6 @@ export class AuthController {
   private credentials: LoginUserDto = { email: '', password: '' };
   constructor(private readonly authService: AuthService) {}
 
-  // @Anahidia working here
-  @Post('signin')
-  async signIn(@Body() userData: LoginUserDto) {
-    
-    return await this.authService.signIn(userData)
-
-
-  }
-
-  
-
   // @nechodev working here
   @Post('signup')
   @UsePipes(new ValidationPipe())
@@ -37,5 +26,11 @@ export class AuthController {
 
     const logStatus = await this.authService.signIn(this.credentials);
     return { 'User Data': userWithoutPassword, 'Log Status': logStatus };
+  }
+
+  // @Anahidia working here
+  @Post('signin')
+  async signIn(@Body() userData: LoginUserDto) {
+    return await this.authService.signIn(userData);
   }
 }

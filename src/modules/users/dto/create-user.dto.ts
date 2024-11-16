@@ -21,19 +21,33 @@ export class CreateUserDto {
    * User's full name.
    *
    * - Must contain only letters (including accented letters) and spaces.
-   * - Must be between 3 and 80 characters long.
+   * - Must be between 3 and 50 characters long.
    *
-   * @example "Carlos Gregorio Márquez"
+   * @example "Nelson Enrique"
    */
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @MaxLength(80)
+  @MaxLength(50)
   @Matches(/^[a-zA-ZÀ-ÿ\s]+$/, {
     message: 'name must only contain letters and spaces',
   })
   //   @ApiProperty()
-  name: string;
+  firstName: string;
+
+  /**
+   * User's last name.
+   *
+   * - Must contain only letters (including accented letters) and spaces.
+   * - Must be between 3 and 50 characters long.
+   *
+   * @example "Arias Gámez"
+   */
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(50)
+  lastName: string;
 
   /**
    * User's email address.
@@ -120,7 +134,7 @@ export class CreateUserDto {
    */
   @IsOptional()
   @IsString()
-  @MinLength(3)
+  @MinLength(5)
   @MaxLength(80)
   //   @ApiProperty()
   address: string;

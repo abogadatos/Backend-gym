@@ -1,3 +1,4 @@
+import { ClassesCustomRepository } from './../classes/classes.repository';
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,17 +13,30 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private usersCustomRepository: UsersCustomRepository,
+    private classesCustomRepository: ClassesCustomRepository,
   ) {}
 
   async onModuleInit() {
     setTimeout(() => {
-      console.warn('seeding your database');
+      console.info('Seeding your database');
     }, 1000);
+    setTimeout(() => {
+      console.info('Seeding users');
+    }, 1500);
     setTimeout(() => {
       this.userSeeder();
     }, 2000);
+    setTimeout(() => {
+      console.info('Seeding classes');
+    }, 2500);
+    setTimeout(() => {
+      this.classesCustomRepository.initializeClasses();
+    }, 3000);
   }
 
+  async userSeeder() {
+    return await this.usersCustomRepository.initializeUser();
+  }
 
   async getUser(userID: string): Promise<UserWithoutPassword> {
     const foundUser: User | undefined = await this.usersRepository.findOne({
@@ -32,10 +46,7 @@ export class UsersService implements OnModuleInit {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...filteredUser } = foundUser;
-    return filteredUser;
-
-  async getUsersByEmmail(email:string){
-    return await this.getUsersByEmmail(email)
+    return foundUser;
   }
 
   async getUsers(page: number, limit: number) {
@@ -49,24 +60,24 @@ export class UsersService implements OnModuleInit {
     return users;
   }
 
-  async userSeeder() {
-    return await this.usersCustomRepository.initializeUser();
-  }
-
-  async create(createUserDto: CreateUserDto) {
-    const newUser = await this.usersCustomRepository.createUser(createUserDto);
-    return newUser;
-  }
-
   async getUserById(id: string) {
     return await this.usersCustomRepository.getUserById(id);
+  }
+
+  async getUsersByEmail(email: string) {
+    return email;
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    const newUser = await this.usersCustomRepository.createUser(createUserDto);
+    return newUser;
   }
 
   async updateUser(id: string, user: any) {
     return await this.usersCustomRepository.updateUser(id, user);
   }
 
-  async delete(id: string) {
+  async deleteUser(id: string) {
     return await this.usersCustomRepository.remove(id);
   }
 }

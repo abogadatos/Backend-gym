@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import * as data from '../../utils/mock-users.json';
 
 @Injectable()
@@ -54,11 +53,9 @@ export class UsersCustomRepository {
     return userNoPassword;
   }
 
-
   async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
-
 
   async getUserById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
@@ -67,14 +64,11 @@ export class UsersCustomRepository {
     return user;
   }
 
-  async getUsersByEmmail(email:string){
-    return await this.userRepository.findOneBy({email})
-   
- }
+  async getUsersByEmmail(email: string) {
+    return await this.userRepository.findOneBy({ email });
+  }
 
-  
   async updateUser(id: string, user: Partial<User>): Promise<any> {
-    
     const userExists = await this.userRepository.findOne({ where: { id } });
 
     if (!userExists) {
@@ -82,9 +76,9 @@ export class UsersCustomRepository {
     }
     await this.userRepository.update(id, user);
     const updatedUser = await this.userRepository.findOne({ where: { id } });
-    const { password, ...userNoPassword } = updatedUser;
+    // const { password, ...userNoPassword } = updatedUser;
 
-    return userNoPassword;
+    return updatedUser;
   }
 
   async remove(id: string) {
@@ -94,5 +88,4 @@ export class UsersCustomRepository {
 
     return `Usuario con ${user.id} fue eliminado correctamente`;
   }
-
 }
