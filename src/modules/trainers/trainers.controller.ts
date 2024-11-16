@@ -32,7 +32,10 @@ export class TrainersController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTrainerDto: UpdateTrainerDto,
+  ) {
     return await this.trainersService.update(+id, updateTrainerDto);
   }
 

@@ -5,7 +5,7 @@ export class ReviewsService {
   async deleteReviews() {
     return 'This action adds a new user';
   }
-  async  updateReviews() {
+  async updateReviews() {
     return 'This action adds a new user';
   }
   async postReviews() {

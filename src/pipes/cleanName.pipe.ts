@@ -14,9 +14,9 @@ export class CleanDataPipe implements PipeTransform {
   }
 
   transform(value: CreateUserDto) {
-    value.name = this.cleanField(value.name);
+    value.firstName = this.cleanField(value.firstName);
+    value.lastName = this.cleanField(value.lastName);
     value.address = this.cleanField(value.address);
-    value.city = this.cleanField(value.city);
     value.country = this.cleanField(value.country);
 
     return value;

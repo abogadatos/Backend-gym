@@ -43,14 +43,16 @@ export class UsersController {
     }
   }
 
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUser(createUserDto);
+  }
+
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     return await this.usersService.getUserById(id);
   }
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.create(createUserDto);
-  }
+
   @Put(':id')
   async updateUser(
     @Param('id') id: string,
@@ -61,6 +63,6 @@ export class UsersController {
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    return await this.usersService.delete(id);
+    return await this.usersService.deleteUser(id);
   }
 }
