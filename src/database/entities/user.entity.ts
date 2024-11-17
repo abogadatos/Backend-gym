@@ -110,7 +110,7 @@ export class User {
     type: 'enum',
     enum: Role,
     array: true,
-    default: [Role.User],
+    default: Role.User,
   })
   roles: Role[];
 
