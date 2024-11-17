@@ -110,7 +110,7 @@ export class User {
     type: 'enum',
     enum: Role,
     array: true,
-    default: Role.User,
+    default: [Role.User],
   })
   roles: Role[];
 
@@ -189,7 +189,7 @@ export class User {
   @UpdateDateColumn()
   updated_At: Date;
 
-  @OneToOne(() => Trainers, (trainers) => trainers.user)
+  @OneToOne(() => Trainers, (trainers) => trainers.userID)
   @OneToMany(() => BookedClasses, (bookedClasses) => bookedClasses.user)
   bookedClasses: BookedClasses[];
 

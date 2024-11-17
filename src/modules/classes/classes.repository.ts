@@ -15,11 +15,14 @@ export class ClassesCustomRepository {
   ) {}
 
   async initializeClasses() {
-    const trainers = await this.trainerRepository.find({ relations: ['user'] });
+    const trainers = await this.trainerRepository.find({
+      relations: ['userID'],
+    });
 
     for (const person of data) {
       const trainer = trainers.find(
-        (t) => `${t.user.firstName} ${t.user.lastName}` === person.trainerName,
+        (t) =>
+          `${t.userID.firstName} ${t.userID.lastName}` === person.trainerName,
       );
 
       if (!trainer) {
