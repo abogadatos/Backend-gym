@@ -12,7 +12,13 @@ async function bootstrap() {
 
   app.useGlobalFilters(new ValidationExceptionFilter());
 
-  await app.listen(3000);
-  console.log('Listening on port 3000');
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+    credentials: true,
+  });
+
+  await app.listen(process.env.APP_PORT);
+  console.log(`Listening on port ${process.env.APP_PORT}`);
 }
 bootstrap();

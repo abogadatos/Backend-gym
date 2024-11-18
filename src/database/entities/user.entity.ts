@@ -40,22 +40,7 @@ export class User {
     length: 50,
     nullable: false,
   })
-  firstName: string;
-
-  /**
-   * User's last name.
-   *
-   * @remarks
-   * Name must be unique and should not exceed 50 characters.
-   *
-   * @example "Torvalds"
-   */
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-  })
-  lastName: string;
+  name: string;
 
   /**
    * User's unique email address used for login and communication.
@@ -143,7 +128,7 @@ export class User {
     length: 50,
     nullable: true,
   })
-  country?: string;
+  country: string;
 
   /**
    * Full address of the user.
@@ -173,7 +158,7 @@ export class User {
     type: 'text',
     default: `https://res.cloudinary.com/dwhejzrua/image/upload/v1727710566/um0h7zmnozrblufpcikd.jpg`,
   })
-  profilePicture: string;
+  image: string;
 
   /**
    * Timestamp indicating when the user account was created.

@@ -21,8 +21,7 @@ export class ClassesCustomRepository {
 
     for (const person of data) {
       const trainer = trainers.find(
-        (t) =>
-          `${t.userID.firstName} ${t.userID.lastName}` === person.trainerName,
+        (t) => `${t.userID.name}` === person.trainerName,
       );
 
       if (!trainer) {
