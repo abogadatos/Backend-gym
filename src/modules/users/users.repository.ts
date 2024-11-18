@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as data from '../../utils/mock-users.json';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersCustomRepository {
@@ -25,7 +26,7 @@ export class UsersCustomRepository {
           .values({
             name: person.firstName,
             email: person.email,
-            password: person.password,
+            password: await bcrypt.hash(person.password, 10),
             phone: person.phone,
             country: person.country,
             address: person.address,
