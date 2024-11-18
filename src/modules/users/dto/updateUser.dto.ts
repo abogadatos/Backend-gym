@@ -74,14 +74,4 @@ export class UpdateUserDto {
   @IsString()
   //   @ApiProperty()
   address: string;
-
-  /**
-   * -Must be a string with a minimum of 4 characters and a maximum of 20
-   *
-   *@example "Puebla"
-   */
-  @IsOptional()
-  @IsString()
-  //   @ApiProperty()
-  city: string;
 }

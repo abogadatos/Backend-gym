@@ -33,21 +33,7 @@ export class CreateUserDto {
     message: 'name must only contain letters and spaces',
   })
   //   @ApiProperty()
-  firstName: string;
-
-  /**
-   * User's last name.
-   *
-   * - Must contain only letters (including accented letters) and spaces.
-   * - Must be between 3 and 50 characters long.
-   *
-   * @example "Arias Gámez"
-   */
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(50)
-  lastName: string;
+  name: string;
 
   /**
    * User's email address.
@@ -64,20 +50,17 @@ export class CreateUserDto {
   /**
    * User's password.
    *
-   * - Must contain 8 to 15 characters.
-   * - Must include at least one lowercase letter, one uppercase letter, one number, and one special character.
+   * - Must be at least 8 characters long
+   * - Must include at least one letter and one number.
    *
-   * @example "P@ssw0rd!"
+   * @example "password123"
    */
   @IsNotEmpty()
   @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/,
-    {
-      message:
-        'The password must contain at least one lowercase letter, one uppercase letter, one number, one special character, and be between 8 and 15 characters long.',
-    },
-  )
+  @Matches(/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/, {
+    message:
+      'The password must be at least 8 characters long and include at least one letter and one number.',
+  })
   //   @ApiProperty()
   password: string;
 
@@ -89,10 +72,10 @@ export class CreateUserDto {
    * @example "P@ssw0rd!"
    */
   @Match('password', { message: 'Password confirmation must match password' })
-  @Matches(/^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/)
+  @Matches(/^(?=.\d)(?=.[a-zA-Z]).{8,}$/)
   @Length(8, 15)
   //   @ApiProperty()
-  passwordConfirmation: string;
+  confirmPassword: string;
 
   /**
    * User's phone number.

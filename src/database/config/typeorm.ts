@@ -21,10 +21,7 @@ export default registerAs(
       synchronize: process.env.DB_SYNC === 'true',
       logging: true,
       dropSchema: false,
-      retryAttempts: parseInt(process.env.DB_RETRY_ATTEMPTS, 10) || 5, // Add retryAttempts
-      retryDelay: parseInt(process.env.DB_RETRY_DELAY, 10) || 3000, // Add retryDelay
+      retryAttempts: parseInt(process.env.DB_RETRY_ATTEMPTS, 10) || 5,
+      retryDelay: parseInt(process.env.DB_RETRY_DELAY, 10) || 3000,
     }) as DataSourceOptions,
-
-    
 );
- 

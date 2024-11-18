@@ -23,8 +23,7 @@ export class UsersCustomRepository {
           .insert()
           .into(User)
           .values({
-            firstName: person.firstName,
-            lastName: person.lastName,
+            name: person.firstName,
             email: person.email,
             password: person.password,
             phone: person.phone,
