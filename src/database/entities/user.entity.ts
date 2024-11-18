@@ -94,10 +94,9 @@ export class User {
   @Column({
     type: 'enum',
     enum: Role,
-    array: true,
-    default: [Role.User],
+    default: Role.User,
   })
-  roles: Role[];
+  roles: Role;
 
   /**
    * Membership status assigned to the user, indicating the current state of their membership.
@@ -109,7 +108,7 @@ export class User {
    * @example ["inactive", "active", "expired", "canceled", "trial", "pending", "suspended"]
    */
   @Column({
-    type: 'varchar',
+    type: 'enum',
     enum: MembershipStatus,
     default: MembershipStatus.Inactive,
   })

@@ -18,10 +18,7 @@ export class Trainers {
   bio: string;
 
   @Column({ type: 'varchar' })
-  firstName: string;
-
-  @Column({ type: 'varchar' })
-  lastName: string;
+  name: string;
 
   @OneToOne(() => User)
   @JoinColumn({ name: 'user_id' })
