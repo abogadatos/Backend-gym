@@ -1,332 +1,37 @@
 [
   {
-    "id": "f4a580b0-4bb6-4c8a-9e36-0c4e6de9e1b1",
-    "user": {
-      "id": "d2900c39-2e9c-40fa-914f-b7c2a91b779f",
-      "first_name": "Carlos",
-      "last_name": "Mendoza",
-      "email": "carlos.mendoza@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenador de fútbol con más de 10 años de experiencia trabajando con jugadores de todas las edades y niveles. Apasionado por el desarrollo de habilidades técnicas y tácticas.",
-    "specialties": "Fútbol, Técnicas de Jugadores, Preparación Física",
-    "experience_years": 10,
-    "classes": [
-      {
-        "id": "c1d913f0-c96a-4cc7-9d7d-dc4a6a32eecf",
-        "name": "Fútbol Avanzado",
-        "description": "Clase de fútbol dirigida a jugadores con experiencia que quieren mejorar su técnica y tácticas en el campo.",
-        "start_time": "2024-11-20T08:00:00Z",
-        "end_time": "2024-11-20T09:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "a1b2337b-f7be-462d-8c6f-bdbbbb74ed45",
-    "user": {
-      "id": "5d14a944-fb4a-4606-bd93-871c9c289107",
-      "first_name": "Lucía",
-      "last_name": "Vega",
-      "email": "lucia.vega@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Especialista en yoga y meditación. Trabajo con personas que buscan mejorar su bienestar físico y mental.",
-    "specialties": "Yoga, Mindfulness, Respiración",
-    "experience_years": 8,
-    "classes": [
-      {
-        "id": "a1c8cb9d-22ae-4752-b992-2b498c77a37d",
-        "name": "Yoga para Principiantes",
-        "description": "Clase introductoria para personas que quieren comenzar con la práctica del yoga.",
-        "start_time": "2024-11-22T06:30:00Z",
-        "end_time": "2024-11-22T07:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "123e4567-e89b-12d3-a456-426614174001",
-    "user": {
-      "id": "987bdb6b-65e2-42a1-8fa5-33819f1cc9d6",
-      "first_name": "Javier",
-      "last_name": "Ruiz",
-      "email": "javier.ruiz@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Experto en nutrición deportiva y entrenamiento personalizado. Ayudo a atletas a alcanzar sus metas de rendimiento físico.",
-    "specialties": "Nutrición Deportiva, Entrenamiento Funcional, Suplementación",
+    "bio": "Experienced fitness coach with a passion for helping clients achieve their health goals.",
+    "name": "Stephen Hamilton",
+    "specialties": "Strength Training, Cardio",
     "experience_years": 5,
-    "classes": [
-      {
-        "id": "b1d55a6e-9846-40b0-aad3-c46217a708fa",
-        "name": "Entrenamiento Funcional",
-        "description": "Entrenamiento que mejora la fuerza, flexibilidad y resistencia con movimientos naturales.",
-        "start_time": "2024-11-18T17:00:00Z",
-        "end_time": "2024-11-18T18:30:00Z"
-      }
-    ]
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer1.jpg"
   },
   {
-    "id": "d89f4f91-772a-4b92-9c4a-41fd82b2a2b2",
-    "user": {
-      "id": "1c1ff9db-e953-47ad-a3c1-5a827d089876",
-      "first_name": "Ana",
-      "last_name": "González",
-      "email": "ana.gonzalez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenadora de pilates y bienestar. Ayudo a mis estudiantes a mejorar su flexibilidad, postura y equilibrio.",
-    "specialties": "Pilates, Rehabilitación, Postura",
+    "bio": "Certified yoga instructor specializing in flexibility and mindfulness training.",
+    "name": "Cecelia Reid",
+    "specialties": "Yoga, Pilates",
+    "experience_years": 3,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer2.jpg"
+  },
+  {
+    "bio": "Personal trainer focused on weight loss and nutrition planning.",
+    "name": "Randy Miller",
+    "specialties": "Weight Loss, Nutrition",
+    "experience_years": 7,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer3.jpg"
+  },
+  {
+    "bio": "Athlete with a background in HIIT and functional training.",
+    "name": "Allie Price",
+    "specialties": "HIIT, Functional Training",
+    "experience_years": 4,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer4.jpg"
+  },
+  {
+    "bio": "Specializes in strength and conditioning for competitive athletes.",
+    "name": "Alice Wagner",
+    "specialties": "Strength & Conditioning",
     "experience_years": 6,
-    "classes": [
-      {
-        "id": "c342f3e9-1edb-4921-8f6d-d60c11d7b6c7",
-        "name": "Pilates para Rehabilitación",
-        "description": "Clase enfocada en la rehabilitación de lesiones y mejora de la postura.",
-        "start_time": "2024-11-19T10:00:00Z",
-        "end_time": "2024-11-19T11:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "b5d3ac9e-3956-4a79-80d2-2e99c3a3d8f2",
-    "user": {
-      "id": "f62b93c5-b506-4ac0-a941-bde6c8c1c648",
-      "first_name": "Pedro",
-      "last_name": "Ramírez",
-      "email": "pedro.ramirez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenador personal con enfoque en la musculación y acondicionamiento físico. Diseño rutinas personalizadas para cada cliente.",
-    "specialties": "Musculación, Acondicionamiento Físico, Entrenamiento Personalizado",
-    "experience_years": 12,
-    "classes": [
-      {
-        "id": "fbe96e42-b51c-4b6b-8edb-8b4a60c1b6cf",
-        "name": "Musculación Avanzada",
-        "description": "Clase dirigida a personas que desean aumentar su masa muscular de manera efectiva.",
-        "start_time": "2024-11-18T16:00:00Z",
-        "end_time": "2024-11-18T17:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "c8f8d01f-2e9c-46b4-9e0d-455bb3ecb79b",
-    "user": {
-      "id": "e55c69fd-9f42-40cf-8d84-35e9b4e9d343",
-      "first_name": "Mariana",
-      "last_name": "Jiménez",
-      "email": "mariana.jimenez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Profesora de natación, con especialización en técnicas de respiración y eficiencia en el agua.",
-    "specialties": "Natación, Respiración, Técnicas Acuáticas",
-    "experience_years": 7,
-    "classes": [
-      {
-        "id": "a3d1e32b-bf16-47ca-8b55-8fc11c676f5b",
-        "name": "Natación para Principiantes",
-        "description": "Clase para aprender las bases de la natación, incluyendo la respiración y las técnicas más básicas.",
-        "start_time": "2024-11-25T07:30:00Z",
-        "end_time": "2024-11-25T08:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "5f3b8f4d-2a9c-4d5b-9232-57ec24b3d3e3",
-    "user": {
-      "id": "33f3224d-9262-4b61-847b-78830cb21e6f",
-      "first_name": "Rafael",
-      "last_name": "Martínez",
-      "email": "rafael.martinez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Coach de tenis con más de 15 años de experiencia, enfocado en el desarrollo de jugadores competitivos.",
-    "specialties": "Tenis, Desarrollo Competitivo, Técnica de Juego",
-    "experience_years": 15,
-    "classes": [
-      {
-        "id": "04f88c2c-6a1b-4bfe-bdd5-710b6d515b17",
-        "name": "Tenis para Avanzados",
-        "description": "Clase dirigida a jugadores avanzados que buscan mejorar su técnica y tácticas en la cancha.",
-        "start_time": "2024-11-23T14:00:00Z",
-        "end_time": "2024-11-23T15:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "65a80d6a-b2a7-40c2-a56e-92eae4060cde",
-    "user": {
-      "id": "5db1e688-6072-47e2-a347-e7176bb3a9d4",
-      "first_name": "Carla",
-      "last_name": "Sánchez",
-      "email": "carla.sanchez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Profesional en entrenamiento de fuerza y resistencia, especializada en entrenamientos para mejorar el rendimiento atlético.",
-    "specialties": "Fuerza, Resistencia, Rendimiento Atlético",
-    "experience_years": 10,
-    "classes": [
-      {
-        "id": "0f1d34eb-3b52-4d5b-bbb0-b18c4b93d989",
-        "name": "Entrenamiento de Fuerza",
-        "description": "Clase enfocada en mejorar la fuerza general a través de ejercicios funcionales y de resistencia.",
-        "start_time": "2024-11-21T09:00:00Z",
-        "end_time": "2024-11-21T10:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "a79f2c5a-1fa5-42a1-99c3-dc9b290b3fe7",
-    "user": {
-      "id": "1c8c24bc-0d4d-41fa-8c1f-f9396f17b1f4",
-      "first_name": "Laura",
-      "last_name": "Torres",
-      "email": "laura.torres@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenadora de CrossFit con experiencia en la mejora del acondicionamiento físico general.",
-    "specialties": "CrossFit, Acondicionamiento Físico, Movimientos Funcionales",
-    "experience_years": 9,
-    "classes": [
-      {
-        "id": "d2cc7e1b-6edb-42c8-9758-e60fef402d64",
-        "name": "CrossFit para Todos",
-        "description": "Clase diseñada para todos los niveles, enfocada en mejorar el acondicionamiento físico con movimientos funcionales.",
-        "start_time": "2024-11-24T08:00:00Z",
-        "end_time": "2024-11-24T09:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "c5a338f1-72da-4269-833d-68d9493324d4",
-    "user": {
-      "id": "bcb2e206-0e69-4294-9f8d-732c347b78da",
-      "first_name": "David",
-      "last_name": "Alvarez",
-      "email": "david.alvarez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Instructor de boxeo con un enfoque en la técnica y el acondicionamiento físico para mejorar el rendimiento en el ring.",
-    "specialties": "Boxeo, Acondicionamiento Físico, Técnica de Boxeo",
-    "experience_years": 12,
-    "classes": [
-      {
-        "id": "6b9c7ec0-d566-43a1-9c98-ff06c41f8d45",
-        "name": "Boxeo para Principiantes",
-        "description": "Clase para aprender los fundamentos del boxeo, incluyendo técnicas de golpeo y defensa.",
-        "start_time": "2024-11-21T17:30:00Z",
-        "end_time": "2024-11-21T18:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "6825f925-0b1c-4e4a-9a1b-cb74b0d10e8f",
-    "user": {
-      "id": "03e7fd33-ea33-44d4-aed2-5fa7b5d0cce3",
-      "first_name": "Sofía",
-      "last_name": "Hernández",
-      "email": "sofia.hernandez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenadora especializada en yoga para la flexibilidad y la salud mental. Combino posturas tradicionales con prácticas de respiración.",
-    "specialties": "Yoga, Flexibilidad, Salud Mental",
-    "experience_years": 7,
-    "classes": [
-      {
-        "id": "9f6a3f3d-d8d3-4313-b42e-631de736918b",
-        "name": "Yoga para Flexibilidad",
-        "description": "Clase centrada en mejorar la flexibilidad del cuerpo a través de técnicas de estiramiento y posturas.",
-        "start_time": "2024-11-19T08:00:00Z",
-        "end_time": "2024-11-19T09:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "bc32f465-7d66-4f1d-bdb7-3c58e424adf9",
-    "user": {
-      "id": "da2d30fc-3acb-4b3d-981b-3f1ed0a8b271",
-      "first_name": "Eduardo",
-      "last_name": "Ruiz",
-      "email": "eduardo.ruiz@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Coach especializado en entrenamiento de resistencia y fuerza para personas de todas las edades.",
-    "specialties": "Resistencia, Fuerza, Salud Física",
-    "experience_years": 10,
-    "classes": [
-      {
-        "id": "8d55876a-b9c5-4299-b7ae-513e57c149b3",
-        "name": "Entrenamiento de Resistencia",
-        "description": "Clase enfocada en la mejora de la resistencia física a través de ejercicios funcionales y cardiovasculares.",
-        "start_time": "2024-11-20T18:00:00Z",
-        "end_time": "2024-11-20T19:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "a1f2c5db-62f8-4b90-9224-d7a5bb6a87d6",
-    "user": {
-      "id": "6c81a980-f96b-4abf-a2d4-987c5c42f808",
-      "first_name": "Iván",
-      "last_name": "López",
-      "email": "ivan.lopez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenador especializado en entrenamiento de alta intensidad para personas que buscan mejorar su rendimiento y resistencia.",
-    "specialties": "Entrenamiento de Alta Intensidad, Resistencia, Acondicionamiento",
-    "experience_years": 9,
-    "classes": [
-      {
-        "id": "f8a9f0fe-b8b2-4ad5-80b3-cd3bce29a1a9",
-        "name": "HIIT para Todos",
-        "description": "Clase de entrenamiento de alta intensidad diseñada para mejorar la resistencia cardiovascular y la fuerza general.",
-        "start_time": "2024-11-22T08:30:00Z",
-        "end_time": "2024-11-22T09:30:00Z"
-      }
-    ]
-  },
-  {
-    "id": "fdf6f8f0-8ad4-438d-9d87-5f6fd4bb22b2",
-    "user": {
-      "id": "b6ccbb15-092b-4634-a389-16b938960539",
-      "first_name": "Patricia",
-      "last_name": "Gómez",
-      "email": "patricia.gomez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenadora en artes marciales y defensa personal, especializada en técnicas de combate para mujeres y niños.",
-    "specialties": "Artes Marciales, Defensa Personal, Combate",
-    "experience_years": 14,
-    "classes": [
-      {
-        "id": "feab0d88-ada6-48b2-a7ea-f0e3c572ad6f",
-        "name": "Defensa Personal para Mujeres",
-        "description": "Clase de defensa personal diseñada específicamente para mujeres que buscan aprender técnicas de autodefensa.",
-        "start_time": "2024-11-23T10:00:00Z",
-        "end_time": "2024-11-23T11:00:00Z"
-      }
-    ]
-  },
-  {
-    "id": "f3f0c9ff-b6ff-4fd1-8fba-cbc0c041249f",
-    "user": {
-      "id": "72baf745-395e-4712-a5d2-e5669cfbb905",
-      "first_name": "Antonio",
-      "last_name": "Pérez",
-      "email": "antonio.perez@gmail.com",
-      "role": "trainer"
-    },
-    "bio": "Entrenador de entrenamiento funcional con énfasis en la movilidad y el rendimiento físico.",
-      "specialties": "Entrenamiento Funcional, Movilidad, Rendimiento",
-      "experience_years": 8,
-      "classes": [
-        {
-          "id": "55c9c56f-b129-4687-b0a5-80d7d24db551",
-          "name": "Entrenamiento Funcional",
-          "description": "Clase que combina movimientos funcionales para mejorar la fuerza, movilidad y resistencia.",
-          "start_time": "2024-11-21T11:00:00Z",
-          "end_time": "2024-11-21T12:00:00Z"
-        }
-      ]
-    }
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer5.jpg"
+  }
 ]

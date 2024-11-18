@@ -4,6 +4,7 @@ import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as data from '../../utils/mock-users.json';
 import * as bcrypt from 'bcrypt';
+import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
 export class UsersCustomRepository {
@@ -17,24 +18,36 @@ export class UsersCustomRepository {
 
     if (existingUsers === 0) {
       for (const person of data) {
-        console.log(`${person.firstName} was added`);
+        // Convert the string role to the Role enum
+        const roleEnum =
+          Role[
+            (person.roles.charAt(0).toUpperCase() +
+              person.roles.slice(1).toLowerCase()) as keyof typeof Role
+          ];
 
-        this.userRepository
+        await this.userRepository
           .createQueryBuilder()
           .insert()
           .into(User)
           .values({
-            name: person.firstName,
+            name: person.name,
             email: person.email,
             password: await bcrypt.hash(person.password, 10),
+            roles: roleEnum,
             phone: person.phone,
             country: person.country,
             address: person.address,
           })
           .orIgnore()
           .execute();
+        console.info(`
+            ${person.name} was added
+            _____________________________
+            `);
       }
-      console.log(`Users were added from users' custom repo`);
+      console.log(
+        `Users' database populated successfully from users' custom repo`,
+      );
       return {
         message: `Users were added from users' custom repo`,
       };

@@ -28,7 +28,6 @@ export class AuthController {
     return { 'User Data': userWithoutPassword, 'Log Status': logStatus };
   }
 
-  // @Anahidia working here
   @Post('signin')
   async signIn(@Body() userData: LoginUserDto) {
     return await this.authService.signIn(userData);
