@@ -72,8 +72,6 @@ export class CreateUserDto {
    * @example "P@ssw0rd!"
    */
   @Match('password', { message: 'Password confirmation must match password' })
-  @Matches(/^(?=.\d)(?=.[a-zA-Z]).{8,}$/)
-  @Length(8, 15)
   //   @ApiProperty()
   confirmPassword: string;
 
