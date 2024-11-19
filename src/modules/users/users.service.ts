@@ -6,6 +6,7 @@ import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserWithoutPassword } from './types/userWithoutPassword.type';
+import { TrainersCustomRepository } from '../trainers/trainers.repository';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -13,6 +14,7 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private usersCustomRepository: UsersCustomRepository,
+    private trainersCustomRepository: TrainersCustomRepository,
     private classesCustomRepository: ClassesCustomRepository,
   ) {}
 
@@ -22,17 +24,19 @@ export class UsersService implements OnModuleInit {
     }, 1000);
     setTimeout(() => {
       console.info('Seeding users');
-    }, 1500);
+    }, 1200);
     setTimeout(() => {
       this.userSeeder();
     }, 2000);
     setTimeout(() => {
-      console.info('Seeding classes');
+      console.info('Seeding trainers');
     }, 2500);
     setTimeout(() => {
-      this.classesCustomRepository.initializeClasses();
+      this.trainersCustomRepository.initializeTrainers();
     }, 3000);
   }
+
+  //   this.classesCustomRepository.initializeClasses();
 
   async userSeeder() {
     return await this.usersCustomRepository.initializeUser();

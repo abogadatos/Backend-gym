@@ -82,15 +82,19 @@ export class AuthService {
     if (validatedPassword === true) {
       const userPayload = {
         id: userFound.id,
+        name: userFound.name,
         email: userFound.email,
         roles: userFound.roles,
+        phone: userFound.phone,
+        country: userFound.country,
+        address: userFound.address,
       };
 
       const token = this.jwtService.sign(userPayload);
       return {
         message: 'User logged in successfuly',
         userID: userFound.id,
-        roles: userFound.roles,
+        usedData: userFound,
         token: token,
         expires_in: process.env.JWT_EXPIRES_IN,
       };
