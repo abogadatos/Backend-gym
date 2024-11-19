@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException , InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as data from '../../utils/mock-users.json';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
+import { validate } from 'class-validator'
 
 @Injectable()
 export class UsersCustomRepository {
@@ -81,18 +82,35 @@ export class UsersCustomRepository {
     return await this.userRepository.findOneBy({ email });
   }
 
-  async updateUser(id: string, user: Partial<User>): Promise<any> {
+  async updateUser(id: string, user: Partial<User>){
+   
     const userExists = await this.userRepository.findOne({ where: { id } });
-
     if (!userExists) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    await this.userRepository.update(id, user);
-    const updatedUser = await this.userRepository.findOne({ where: { id } });
-    // const { password, ...userNoPassword } = updatedUser;
 
-    return updatedUser;
+
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      throw new InternalServerErrorException('Validation failed', errors.toString());
+    }
+
+    try {
+      
+      Object.assign(userExists, user);
+
+      
+      const savedUser = await this.userRepository.save(userExists);
+
+     
+      const { password, ...userWithoutSensitiveData } = savedUser;
+
+      return userWithoutSensitiveData;
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update user', error.message);
+    }
   }
+
 
   async remove(id: string) {
     const user = await this.userRepository.findOneBy({ id });
