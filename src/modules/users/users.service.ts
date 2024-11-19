@@ -34,6 +34,11 @@ export class UsersService implements OnModuleInit {
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
     }, 3000);
+    setTimeout(() => {
+      console.info('Seeding class');
+    }, 4000);
+    setTimeout(()=>{
+      this.classesCustomRepository.initializeClasses()},5000)
   }
 
   //   this.classesCustomRepository.initializeClasses();
