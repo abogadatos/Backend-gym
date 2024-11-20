@@ -22,7 +22,7 @@ export class ClassesController {
     @Query('limit') limit: string,
   ) {
     const pageNumber = page ? parseInt(page, 10) : 1; // Valor por defecto: 1
-    const limitNumber = limit ? parseInt(limit, 10) : 5; // Valor por defecto: 5
+    const limitNumber = limit ? parseInt(limit, 10) : 6; // Valor por defecto: 5
 
     return await this.classService.getAllClasses(pageNumber, limitNumber);
   }
