@@ -2,39 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Memberships } from 'src/database/entities/membership.entity';
 import { Repository } from 'typeorm';
-
+import * as data from "../../utils/mock-memberships.json"
 @Injectable()
 export class MembershipsCustomRepository {
   constructor(
     @InjectRepository(Memberships)
     private membershipsRepository: Repository<Memberships>,
   ) {}
+  async addMemberships(){
+    for (const element of data) {
+      await this.membershipsRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Memberships)
+        .values({
+          id: element.id,
+          name: element.name,
+          price: element.price,
+          duration: element.duration,
+          description: element.description,
+          created_at: element.created_at,
+        })
+        .orIgnore() 
+        .execute();
+    }
+    console.log("Memberships agregadas")
+    return "Memberships agregadas";
+}
 
-  YvqEemmR() {
-    return 'retorna';
-  }
-
-  VHY89fK051Jfgw1XXbu() {
-    return 'retorna';
-  }
-
-  UcSdXDgMiQ4pQQeXjJ8() {
-    return 'retorna';
-  }
-
-  yyHrtZsEIaFWZ29K0pd() {
-    return 'retorna';
-  }
-
-  nPARsMtxS9kJ() {
-    return 'retorna';
-  }
-
-  aEKOvg01Pmc5I() {
-    return 'retorna';
-  }
-
-  zCP52kHMJ() {
-    return 'retorna';
-  }
+async getAllMemberships() {
+    return await this.membershipsRepository.find();
+}
+  
 }
