@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserWithoutPassword } from '../users/types/userWithoutPassword.type';
 import { JwtService } from '@nestjs/jwt';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,7 @@ export class AuthService {
     private usersRepository: Repository<User>,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService
   ) {}
 
   //  @nechodev working here
@@ -52,6 +54,12 @@ export class AuthService {
     }
 
     await this.usersRepository.save(newUser);
+
+    try {
+      await this.emailService.sendWelcomeEmail(newUser.email, newUser.name);
+    } catch (error) {
+      console.error('No se pudo enviar el email de bienvenida:', error.message);
+    }
     const user: UserWithoutPassword = await this.userService.getUser(
       newUser.id,
     );
