@@ -14,6 +14,8 @@ import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { EmailService } from './modules/email/email.service';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
@@ -38,9 +40,10 @@ import { AppService } from './app.service';
     ReviewsModule,
     TrainersModule,
     UsersModule,
+    EmailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EmailService],
   exports: [],
 })
 export class AppModule {}

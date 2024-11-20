@@ -6,7 +6,7 @@
       "capacity": 20,
       "current_participants": 10,
       "schedule": "2024-11-20T19:00:00Z",
-      "imgUrl": "https://example.com/images/yoga.jpg",
+      "imgUrl": "https://i.pinimg.com/736x/0f/20/d7/0f20d777a38d8fc5325b3fbbf35afc76.jpg",
       "trainerName": "Jane Doe"
     },
     {
@@ -16,7 +16,7 @@
       "capacity": 15,
       "current_participants": 12,
       "schedule": "2024-11-21T08:00:00Z",
-      "imgUrl": "https://example.com/images/functional.jpg",
+      "imgUrl": "https://i.pinimg.com/736x/00/89/28/008928c25d5ffff93c103fca13327000.jpg",
       "trainerName": "John Smith"
     },
     {
@@ -26,7 +26,7 @@
       "capacity": 25,
       "current_participants": 18,
       "schedule": "2024-11-22T17:30:00Z",
-      "imgUrl": "https://example.com/images/zumba.jpg",
+      "imgUrl": "https://i.pinimg.com/736x/80/83/16/8083168c6a41880314e6d388ddb218ec.jpg",
       "trainerName": "Maria Gonzalez"
     },
     {
@@ -36,7 +36,7 @@
       "capacity": 12,
       "current_participants": 8,
       "schedule": "2024-11-23T06:30:00Z",
-      "imgUrl": "https://example.com/images/crossfit.jpg",
+      "imgUrl": "https://i.pinimg.com/736x/b9/0f/8b/b90f8b6b94bd9682a8f1f96644c04a41.jpg",
       "trainerName": "Alex Turner"
     },
     {
@@ -46,7 +46,7 @@
       "capacity": 10,
       "current_participants": 6,
       "schedule": "2024-11-24T10:00:00Z",
-      "imgUrl": "https://example.com/images/pilates.jpg",
+      "imgUrl": "https://i.pinimg.com/736x/bb/2a/c1/bb2ac189fabd62c9ed1b2531d51be2d9.jpg",
       "trainerName": "Sofia Ruiz"
     }
   ]
