@@ -2,6 +2,7 @@ import { LoggerMiddleware } from './middlewares/UsersLogger.middleware';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationExceptionFilter } from './filters/validation-exception.filter';
+import { MembershipsService } from './modules/memberships/memberships.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,5 +21,8 @@ async function bootstrap() {
 
   await app.listen(process.env.APP_PORT);
   console.log(`Listening on port ${process.env.APP_PORT}`);
+
+  const membership = app.get(MembershipsService);
+  membership.addMemberships();
 }
 bootstrap();
