@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
 
-@Controller('payments')
+@Controller('payment')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
@@ -12,11 +12,13 @@ export class PaymentsController {
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
     return this.paymentsService.createCustomer(createCustomerDto);
   }
-  @Get('pay/success/checkout/session')
-  paymentSuccess(@Res({ passthrough: true }) res ) {
-
-    return this.paymentsService.successSession(res);
-
+  @Get('success')
+  async paymentSuccess(
+    @Query('session_id') sessionId: string,  
+    @Res() res: any,
+  ) {
+   
+    return this.paymentsService.handlePaymentSuccess(sessionId, res);
   }
   
 }
