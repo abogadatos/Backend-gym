@@ -22,6 +22,8 @@ export class MembershipsCustomRepository {
           duration: element.duration,
           description: element.description,
           created_at: element.created_at,
+          stripeProductId:element.stripeProductId,
+          stripePriceId:element.stripePriceId
         })
         .orIgnore() 
         .execute();

@@ -1,42 +1,17 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
+import { CreateCustomerDto } from './dto/createCustomer.dto';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get()
-  async getAllPayments() {
-    return await this.paymentsService.getAllPaymentsService();
+  
+ 
+  @Post('create-customer')
+  async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
+    return this.paymentsService.createCustomer(createCustomerDto);
   }
-
-  @Get(':id')
-  async getPaymentsById() {
-    return await this.paymentsService.getPaymentsByIdService();
-  }
-
-  @Post()
-  async createPayments() {
-    return await this.paymentsService.createPaymentsService;
-  }
-
-  @Put(':id')
-  async upDatePayments() {
-    return await this.paymentsService.upDatePaymentsService();
-  }
-
-  @Delete()
-  async deletePayments() {
-    return await this.paymentsService.deletePaymentsService();
-  }
-
-  @Get('membership/:membershipId')
-  async getPaymentsByMembershipId() {
-    return await this.paymentsService.getPaymentsByMembershipIdService();
-  }
-
-  @Get('user/:userId')
-  async getPaymentsByUserId() {
-    return await this.paymentsService.getPaymentsByUserIdService();
-  }
+  
+  
 }
