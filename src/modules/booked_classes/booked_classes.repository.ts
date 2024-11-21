@@ -1,40 +1,123 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookedClasses } from 'src/database/entities/booked_classes.entity';
+import { Classes } from 'src/database/entities/classes.entity';
+import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateBookedClassDto } from './dto/createBookedDto';
+import { EmailService } from '../email/email.service';
+import { Status } from 'src/enum/bookingStatus.enum';
 
 @Injectable()
 export class BookedClassesCustomRepository {
   constructor(
+    private readonly EmailService:EmailService,
     @InjectRepository(BookedClasses)
-    private classesRepository: Repository<BookedClasses>,
+    private readonly bookedClassesRepository: Repository<BookedClasses>,
+
+    @InjectRepository(User)
+    private readonly usersRepostory:Repository<User>,
+
+    @InjectRepository(Classes)
+    private readonly classRepository:Repository<Classes>
   ) {}
 
-  getAllBookedClasses() {
-    return 'retorna todas las reservas de clases';
+  async getAllBookedClasses() {
+    return await this.bookedClassesRepository.find({ relations: ['user', 'class'] });
   }
 
-  getBookedClassById() {
-    return 'retorna las reservas de clases por id';
+  async getBookedClassById(id:string) {
+    const bookedClass = await this.bookedClassesRepository.findOne({ where: { id }, relations: ['user', 'class'] });
+  if (!bookedClass) {
+    throw new NotFoundException(`Reserva con ID ${id} no encontrada.`);
   }
+  return bookedClass;
+}
+  
 
-  createBooked() {
-    return 'crea una reserva';
+  async createBooked(bookClass:CreateBookedClassDto) {
+    const { userId, classId} = bookClass
+
+    const user= await this.usersRepostory.findOne({
+      where:{id:userId}
+    })
+    if (!user) throw new NotFoundException('Usuario no encontrado.');
+    const selectedClass= await this.classRepository.findOne({
+      where:{id:classId}
+    })
+    if (!selectedClass) throw new NotFoundException('Clase no encontrada.');
+
+    const existingBooking = await this.bookedClassesRepository.findOne({
+      where: { user: { id: userId }, class: { id: classId } },
+    });
+  
+    if (existingBooking) throw new BadRequestException('El usuario ya tiene una reserva para esta clase');
+
+
+
+    if (selectedClass.current_participants >= selectedClass.capacity) {
+      throw new BadRequestException('La clase ya está completa.');
+    }
+
+    const booking = await this.bookedClassesRepository.create({
+      user,
+      class: selectedClass,
+      booking_date: selectedClass.schedule
+    });
+  
+    await this.bookedClassesRepository.save(booking);
+
+      await this.EmailService.sendReservatioemail(
+        user.email,
+        selectedClass.name,
+        selectedClass.schedule,
+      )
+    
+    
+    selectedClass.current_participants++;
+    await this.classRepository.save(selectedClass)
+
+    return booking
   }
 
   upDateBooked() {
     return 'editar una reserva';
   }
 
-  deleteBooked() {
-    return 'eliminar una reserva';
+  async deleteBooked(bookingId:string) {
+     const booking = await this.bookedClassesRepository.findOne({ 
+          where: { id: bookingId },
+           relations: ['user', 'class'] 
+          })
+      if(!booking) throw new BadRequestException('no se encontro la reserva')
+    
+    booking.status = Status.Canceled;
+    await this.bookedClassesRepository.save(booking)
+
+    await this.EmailService.sendCancellationEmail(
+      booking.user.email,
+      booking.class.name,
+      booking.class.schedule,
+    )
+
+    return booking
+
   }
 
-  getBooketsByUserId() {
-    return 'obtener las reservas de un usuario especifiico';
+  async getBooketsByUserId(userId:string) {
+    return await this.bookedClassesRepository.find({
+      where: { user: { id: userId } },
+      relations: ['class'],
+    });
   }
 
-  getBooketsByclassId() {
-    return 'busca las reservas de una clase ';
+  async getBooketsByclassId(classId:string) {
+    return await this.bookedClassesRepository.find({
+      where: { class: { id: classId } },
+      relations: ['user'],
+    });
   }
 }
+
+
+
