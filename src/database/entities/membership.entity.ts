@@ -39,12 +39,11 @@ export class Memberships {
   })
   created_at: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
+  @Column({ nullable: true })
+  stripeProductId: string;
+
+  @Column({ nullable: true })
+  stripePriceId: string;
 
   @OneToMany(() => Payment, (payment) => payment.membership)
   payments: Payment[];
