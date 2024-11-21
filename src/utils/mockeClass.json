@@ -1,53 +1,52 @@
 [
-    {
-      "name": "Yoga al Atardecer",
-      "description": "Una clase relajante para terminar el día con vistas al atardecer.",
-      "location": "Terraza del gimnasio",
-      "capacity": 20,
-      "current_participants": 10,
-      "schedule": "2024-11-20T19:00:00Z",
-      "imgUrl": "https://i.pinimg.com/736x/0f/20/d7/0f20d777a38d8fc5325b3fbbf35afc76.jpg",
-      "trainerName": "Jane Doe"
-    },
-    {
-      "name": "Entrenamiento Funcional",
-      "description": "Circuitos intensos para mejorar fuerza, resistencia y flexibilidad.",
-      "location": "Sala de pesas",
-      "capacity": 15,
-      "current_participants": 12,
-      "schedule": "2024-11-21T08:00:00Z",
-      "imgUrl": "https://i.pinimg.com/736x/00/89/28/008928c25d5ffff93c103fca13327000.jpg",
-      "trainerName": "John Smith"
-    },
-    {
-      "name": "Zumba Energizante",
-      "description": "Baila y ejercítate al ritmo de música vibrante y divertida.",
-      "location": "Sala de danza",
-      "capacity": 25,
-      "current_participants": 18,
-      "schedule": "2024-11-22T17:30:00Z",
-      "imgUrl": "https://i.pinimg.com/736x/80/83/16/8083168c6a41880314e6d388ddb218ec.jpg",
-      "trainerName": "Maria Gonzalez"
-    },
-    {
-      "name": "CrossFit de Alto Rendimiento",
-      "description": "Sesiones intensas para los amantes del fitness extremo.",
-      "location": "Zona de entrenamiento al aire libre",
-      "capacity": 12,
-      "current_participants": 8,
-      "schedule": "2024-11-23T06:30:00Z",
-      "imgUrl": "https://i.pinimg.com/736x/b9/0f/8b/b90f8b6b94bd9682a8f1f96644c04a41.jpg",
-      "trainerName": "Alex Turner"
-    },
-    {
-      "name": "Pilates para Principiantes",
-      "description": "Movimientos básicos para mejorar postura y flexibilidad.",
-      "location": "Sala de pilates",
-      "capacity": 10,
-      "current_participants": 6,
-      "schedule": "2024-11-24T10:00:00Z",
-      "imgUrl": "https://i.pinimg.com/736x/bb/2a/c1/bb2ac189fabd62c9ed1b2531d51be2d9.jpg",
-      "trainerName": "Sofia Ruiz"
-    }
-  ]
-  
+  {
+    "name": "Yoga al Atardecer",
+    "description": "Una clase relajante para terminar el día con vistas al atardecer.",
+    "location": "Terraza del gimnasio",
+    "capacity": 20,
+    "current_participants": 10,
+    "schedule": "2024-11-20T19:00:00Z",
+    "imgUrl": "https://imgur.com/VLNjzIU",
+    "trainerName": "Jane Doe"
+  },
+  {
+    "name": "Entrenamiento Funcional",
+    "description": "Circuitos intensos para mejorar fuerza, resistencia y flexibilidad.",
+    "location": "Sala de pesas",
+    "capacity": 15,
+    "current_participants": 12,
+    "schedule": "2024-11-21T08:0:00Z",
+    "imgUrl": "https://imgur.com/2oafcMa",
+    "trainerName": "John Smith"
+  },
+  {
+    "name": "Zumba Energizante",
+    "description": "Baila y ejercítate al ritmo de música vibrante y divertida.",
+    "location": "Sala de danza",
+    "capacity": 25,
+    "current_participants": 18,
+    "schedule": "2024-11-22T17:30:00Z",
+    "imgUrl": "https://imgur.com/3J2VUPZ",
+    "trainerName": "Maria Gonzalez"
+  },
+  {
+    "name": "CrossFit de Alto Rendimiento",
+    "description": "Sesiones intensas para los amantes del fitness extremo.",
+    "location": "Zona de entrenamiento al aire libre",
+    "capacity": 12,
+    "current_participants": 8,
+    "schedule": "2024-11-23T06:30:00Z",
+    "imgUrl": "https://imgur.com/8DpxtRA",
+    "trainerName": "Alex Turner"
+  },
+  {
+    "name": "Pilates para Principiantes",
+    "description": "Movimientos básicos para mejorar postura y flexibilidad.",
+    "location": "Sala de pilates",
+    "capacity": 10,
+    "current_participants": 6,
+    "schedule": "2024-11-24T10:00:00Z",
+    "imgUrl": "https://imgur.com/krZ9HnK",
+    "trainerName": "Sofia Ruiz"
+  }
+]
