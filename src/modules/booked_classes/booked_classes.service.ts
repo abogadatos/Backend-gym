@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BookedClassesCustomRepository } from './booked_classes.repository';
+import { CreateBookedClassDto } from './dto/createBookedDto';
 
 @Injectable()
 export class BookedClassesService {
@@ -11,23 +12,23 @@ export class BookedClassesService {
     return this.bookedClassesCustomRepository.getAllBookedClasses();
   }
 
-  getBookedClassByIdService() {
-    return this.bookedClassesCustomRepository.getBookedClassById();
+  getBookedClassByIdService(id:string) {
+    return this.bookedClassesCustomRepository.getBookedClassById(id);
   }
 
-  createBookedService() {
-    return this.bookedClassesCustomRepository.createBooked();
+  createBookedService(bookClassDto:CreateBookedClassDto) {
+    return this.bookedClassesCustomRepository.createBooked(bookClassDto);
   }
   upDateBookedService() {
     return this.bookedClassesCustomRepository.upDateBooked();
   }
-  deleteBookedService() {
-    return this.bookedClassesCustomRepository.deleteBooked();
+  deleteBookedService(bookingId: string) {
+    return this.bookedClassesCustomRepository.deleteBooked(bookingId);
   }
-  getBooketsByUserIdService() {
-    return this.bookedClassesCustomRepository.getBooketsByUserId();
+  getBooketsByUserIdService(userId:string) {
+    return this.bookedClassesCustomRepository.getBooketsByUserId(userId);
   }
-  getBooketsByclassIdService() {
-    return this.bookedClassesCustomRepository.getBooketsByclassId();
+  getBooketsByclassIdService(classId:string) {
+    return this.bookedClassesCustomRepository.getBooketsByclassId(classId);
   }
 }

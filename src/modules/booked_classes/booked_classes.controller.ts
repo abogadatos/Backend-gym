@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { BookedClassesService } from './booked_classes.service';
+import { CreateBookedClassDto } from './dto/createBookedDto';
 
 @Controller('booked-classes')
 export class BookedClassesController {
@@ -10,13 +11,13 @@ export class BookedClassesController {
     return await this.bookendClassesService.getAllBookedClassesService();
   }
   @Get(':id')
-  async getBookedClassById() {
-    return await this.bookendClassesService.getBookedClassByIdService();
+  async getBookedClassById(@Param('id')id:string  ) {
+    return await this.bookendClassesService.getBookedClassByIdService(id);
   }
 
   @Post()
-  async createBooked() {
-    return await this.bookendClassesService.createBookedService();
+  async createBooked(@Body()bookClassDto:CreateBookedClassDto) {
+    return await this.bookendClassesService.createBookedService(bookClassDto);
   }
 
   @Put(':id')
@@ -25,17 +26,17 @@ export class BookedClassesController {
   }
 
   @Delete(':id')
-  async deleteBooked() {
-    return await this.bookendClassesService.deleteBookedService();
+  async deleteBooked(@Param('bookingId') bookingId:string) {
+    return await this.bookendClassesService.deleteBookedService(bookingId)
   }
 
   @Get('user/:userId')
-  async getBooketsByUserId() {
-    return await this.bookendClassesService.getBooketsByUserIdService();
+  async getBooketsByUserId(@Param('userId')userId:string) {
+    return await this.bookendClassesService.getBooketsByUserIdService(userId);
   }
 
   @Get('class/:classId')
-  async getBooketsByclassId() {
-    return await this.bookendClassesService.getBooketsByclassIdService();
+  async getBooketsByclassId(@Param('classId')classId:string) {
+    return await this.bookendClassesService.getBooketsByclassIdService(classId);
   }
 }
