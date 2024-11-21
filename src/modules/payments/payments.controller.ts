@@ -12,6 +12,11 @@ export class PaymentsController {
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
     return this.paymentsService.createCustomer(createCustomerDto);
   }
-  
+  @Get('pay/success/checkout/session')
+  paymentSuccess(@Res({ passthrough: true }) res ) {
+
+    return this.paymentsService.successSession(res);
+
+  }
   
 }
