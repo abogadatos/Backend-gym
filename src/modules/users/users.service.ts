@@ -1,3 +1,4 @@
+import { MembershipsCustomRepository } from './../memberships/memberships.repository';
 import { ClassesCustomRepository } from './../classes/classes.repository';
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
@@ -16,6 +17,7 @@ export class UsersService implements OnModuleInit {
     private usersCustomRepository: UsersCustomRepository,
     private trainersCustomRepository: TrainersCustomRepository,
     private classesCustomRepository: ClassesCustomRepository,
+    private membershipsCustomRepository: MembershipsCustomRepository,
   ) {}
 
   async onModuleInit() {
@@ -23,25 +25,48 @@ export class UsersService implements OnModuleInit {
       console.info('Seeding your database');
     }, 1000);
     setTimeout(() => {
-      console.info('Seeding users');
-    }, 1200);
+      console.info(`
+            Seeding users
+              👧🧑👱👨
+        `);
+    }, 1500);
     setTimeout(() => {
       this.userSeeder();
     }, 2000);
     setTimeout(() => {
-      console.info('Seeding trainers');
-    }, 2500);
+      console.info(`
+        Seeding trainers
+          🏃🏽💥🏋‍♀🔥💪🏼
+        `);
+    }, 10000);
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
-    }, 3000);
+    }, 10500);
     setTimeout(() => {
-      console.info('Seeding class');
-    }, 4000);
-    setTimeout(()=>{
-      this.classesCustomRepository.initializeClasses()},5000)
+      console.info(`
+        Seeding class
+         ⏳⏳⏳⏳⌛
+        `);
+    }, 11000);
+    setTimeout(() => {
+      this.classesCustomRepository.initializeClasses();
+    }, 11500);
+    setTimeout(() => {
+      console.info(`
+        Seeding memberships
+            💎💎💎💎💎
+        `);
+    }, 12000);
+    setTimeout(() => {
+      this.membershipsCustomRepository.addMemberships();
+    }, 13000);
+    setTimeout(() => {
+      console.info(`
+            Database seeding completed
+              ✅✅✅✅✅✅✅✅✅✅
+        `);
+    }, 15000);
   }
-
-  //   this.classesCustomRepository.initializeClasses();
 
   async userSeeder() {
     return await this.usersCustomRepository.initializeUser();
