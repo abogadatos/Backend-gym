@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Classes } from 'src/database/entities/classes.entity';
 import { Trainers } from 'src/database/entities/trainer.entity';
-import { Repository, DataSource} from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import * as data from '../../utils/mockeClass.json';
 
 @Injectable()
@@ -12,12 +12,12 @@ export class ClassesCustomRepository {
     private classesRepository: Repository<Classes>,
     @InjectRepository(Trainers)
     private readonly trainerRepository: Repository<Trainers>,
-    private readonly dataSource:DataSource
+    private readonly dataSource: DataSource,
   ) {}
 
   async initializeClasses() {
     const trainers = await this.dataSource
-      .getRepository('Trainers') 
+      .getRepository('Trainers')
       .createQueryBuilder('trainers')
       .leftJoinAndSelect('trainers.userID', 'user')
       .getMany();
@@ -30,11 +30,10 @@ export class ClassesCustomRepository {
       const trainerId = trainer ? trainer.id : null;
       const trainerName = trainer ? trainer.userID.name : 'Sin entrenador';
 
-    
-      await this.dataSource
+      await this.classesRepository
         .createQueryBuilder()
         .insert()
-        .into('classes') 
+        .into('classes')
         .values({
           name: person.name,
           description: person.description,
@@ -45,19 +44,17 @@ export class ClassesCustomRepository {
           imgUrl: person.imgUrl || null,
           created_at: new Date(),
           update_at: new Date(),
-          trainer: trainerId, 
+          trainer: trainerId,
         })
         .execute();
 
-    
       console.log(
         `Clase "${person.name}" creada con ${
           trainer ? `entrenador ${trainerName}` : '"Sin entrenador"'
-        }.`
+        }.`,
       );
     }
   }
-
 
   async getAllClasses(page: number, limit: number) {
     const skip = (page - 1) * limit;
