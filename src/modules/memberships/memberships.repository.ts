@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Memberships } from 'src/database/entities/membership.entity';
 import { Repository } from 'typeorm';
-import * as data from "../../utils/mock-memberships.json"
+import * as data from '../../utils/mock-memberships.json';
 @Injectable()
 export class MembershipsCustomRepository {
   constructor(
     @InjectRepository(Memberships)
     private membershipsRepository: Repository<Memberships>,
   ) {}
-  async addMemberships(){
+  async addMemberships() {
     for (const element of data) {
       await this.membershipsRepository
         .createQueryBuilder()
@@ -22,18 +22,17 @@ export class MembershipsCustomRepository {
           duration: element.duration,
           description: element.description,
           created_at: element.created_at,
-          stripeProductId:element.stripeProductId,
-          stripePriceId:element.stripePriceId
+          stripeProductId: element.stripeProductId,
+          stripePriceId: element.stripePriceId,
         })
-        .orIgnore() 
+        .orIgnore()
         .execute();
     }
-    console.log("Memberships agregadas")
-    return "Memberships agregadas";
-}
+    console.log('Memberships agregadas');
+    return 'Memberships agregadas';
+  }
 
-async getAllMemberships() {
+  async getAllMemberships() {
     return await this.membershipsRepository.find();
-}
-  
+  }
 }
