@@ -96,13 +96,24 @@ export class UsersService implements OnModuleInit {
       .orderBy(sortBy, order)
       .getManyAndCount();
 
+    const totalPages = Math.ceil(total / limit);
+    const hasPrevPage = page > 1;
+    const hasNextPage = page < totalPages;
+    const prevPage = hasPrevPage ? page - 1 : null;
+    const nextPage = hasNextPage ? page + 1 : null;
+
     return {
       users,
       sortedBy: sortBy,
       ordered: order,
+      totalElements: total,
       page,
       limit,
-      total,
+      totalPages,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
     };
   }
 
