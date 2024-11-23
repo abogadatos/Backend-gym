@@ -9,6 +9,7 @@ import {
 import { Memberships } from './membership.entity';
 import { User } from './user.entity';
 
+
 @Entity({ name: 'payments' })
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
@@ -40,12 +41,12 @@ export class Payment {
   })
   amount: number;
 
-  @Column({
-    type: 'enum',
-    enum: ['credit_card', 'paypal', 'bank_transfer', 'cash'],
-    nullable: false,
-  })
+  @Column({ 
+    type: 'varchar', 
+    length: 50, 
+    nullable: false })
   payment_method: string;
+  
 
   @Column({
     type: 'enum',
