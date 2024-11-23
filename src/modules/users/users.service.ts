@@ -83,15 +83,27 @@ export class UsersService implements OnModuleInit {
     return foundUser;
   }
 
-  async getUsers(page: number, limit: number) {
-    let users = await this.usersRepository.find();
+  async getUsers(
+    page: number,
+    limit: number,
+    sortBy: string,
+    order: 'ASC' | 'DESC',
+  ) {
+    const [users, total] = await this.usersRepository
+      .createQueryBuilder('users')
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy(sortBy, order)
+      .getManyAndCount();
 
-    const startingIndex = (page - 1) * limit;
-    const endingIndex = startingIndex + +limit;
-
-    users = users.slice(startingIndex, endingIndex);
-
-    return users;
+    return {
+      users,
+      sortedBy: sortBy,
+      ordered: order,
+      page,
+      limit,
+      total,
+    };
   }
 
   async getUserById(id: string) {
