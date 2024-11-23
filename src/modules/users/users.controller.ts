@@ -24,13 +24,23 @@ export class UsersController {
 
   // Proteger con roles y guards > nechodev
   @Get()
-  async userGetter(@Query('page') page: string, @Query('limit') limit: string) {
+  async userGetter(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+    @Query('sortBy') sortBy: string = 'roles',
+    @Query('order') order: 'ASC' | 'DESC' = 'ASC',
+  ) {
     try {
       const pageQuery = Number(page);
       const limitQuery = Number(limit);
       if (pageQuery && limitQuery) {
-        return await this.usersService.getUsers(pageQuery, limitQuery);
-      } else return await this.usersService.getUsers(1, 5);
+        return await this.usersService.getUsers(
+          pageQuery,
+          limitQuery,
+          sortBy,
+          order,
+        );
+      } else return await this.usersService.getUsers(1, 5, sortBy, order);
     } catch (error) {
       throw new HttpException(
         {
