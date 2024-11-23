@@ -17,6 +17,6 @@ import { MembershipsModule } from '../memberships/memberships.module';
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersCustomRepository],
-  exports: [UsersService],
+  exports: [UsersService,UsersCustomRepository,TypeOrmModule],
 })
 export class UsersModule {}

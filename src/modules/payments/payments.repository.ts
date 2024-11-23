@@ -18,23 +18,14 @@ export class PaymentsCustomRepository {
     return 'obtiene los pagos por id';
   }
 
-  async createPayments() {
-    return 'crea un nuevo pago';
+  async createPayments(paymentData: Partial<Payment>) {
+    try {
+      const newPayment = this.paymentRepository.create(paymentData);
+      return await this.paymentRepository.save(newPayment);
+    } catch (error) {
+      throw new Error(`Error creando el pago: ${error.message}`);
+    }
   }
-
-  async upDatePayments() {
-    return 'actualiza los pagos por id';
-  }
-
-  async deletePayments() {
-    return 'elimina  los pagos por id';
-  }
-
-  async getPaymentsByMembershipId() {
-    return 'obtiene los pagos de una membresia especifica';
-  }
-
-  async getPaymentsByUserId() {
-    return 'obtiene los pagos de un user especifico';
-  }
+  
+  
 }

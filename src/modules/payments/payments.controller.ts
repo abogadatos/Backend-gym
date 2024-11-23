@@ -6,8 +6,8 @@ import { CreateCustomerDto } from './dto/createCustomer.dto';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  
- 
+
+
   @Post('create-customer')
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
     return this.paymentsService.createCustomer(createCustomerDto);
@@ -15,10 +15,14 @@ export class PaymentsController {
   @Get('success')
   async paymentSuccess(
     @Query('session_id') sessionId: string,  
-    @Res() res: any,
   ) {
    
-    return this.paymentsService.handlePaymentSuccess(sessionId, res);
+    return this.paymentsService.handlePaymentSuccess(sessionId);
   }
+  @Get('check-payment-status')
+  async checkPaymentStatus(@Query('session_id') sessionId: string) {
+  return this.paymentsService.checkPaymentStatus(sessionId);
+}
+
   
 }
