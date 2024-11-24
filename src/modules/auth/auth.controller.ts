@@ -6,9 +6,9 @@ import {
   Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginUserDto } from './dto/loginUser.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { CleanDataPipe } from 'src/pipes/cleanName.pipe';
+import { LoginUserDto } from './dto/signInUser.dto';
+import { CreateUserDto } from './dto/signUpUser.dto';
+import { CleanDataPipe } from 'src/pipes/normalize-data.pipe';
 
 @Controller('auth')
 export class AuthController {

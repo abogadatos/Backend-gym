@@ -2,14 +2,17 @@ import { LoggerMiddleware } from './middlewares/UsersLogger.middleware';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationExceptionFilter } from './filters/validation-exception.filter';
+import { auth } from 'express-openid-connect';
+import { config as Auth0Config } from './database/config/auth0';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const loggerMiddlewre = new LoggerMiddleware();
-
   app.use(loggerMiddlewre.use);
 
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new ValidationExceptionFilter());
 
   app.enableCors({
@@ -17,6 +20,25 @@ async function bootstrap() {
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
     credentials: true,
   });
+
+  //   const swaggerConfig = new DocumentBuilder()
+  //     .setTitle('ecommerce - nechodev API')
+  //     .setDescription(
+  //       'Ecommerce demo with NestJS for SoyHenry Bootcamp Module 4 project',
+  //     )
+  //     .setVersion('1.0')
+  //     .addBearerAuth()
+  //     .build();
+
+  //   const document = SwaggerModule.createDocument(app, swaggerConfig);
+  //   SwaggerModule.setup('docs', app, document);
+
+  try {
+    app.use(auth(Auth0Config));
+  } catch (error) {
+    console.error('Auth0 configuration error:', error);
+    process.exit(1);
+  }
 
   await app.listen(process.env.APP_PORT);
   console.log(`Listening on port ${process.env.APP_PORT}`);

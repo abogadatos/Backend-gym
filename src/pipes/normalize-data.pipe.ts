@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { CreateUserDto } from 'src/modules/auth/dto/signUpUser.dto';
 
 @Injectable()
 export class CleanDataPipe implements PipeTransform {
@@ -15,8 +15,8 @@ export class CleanDataPipe implements PipeTransform {
 
   transform(value: CreateUserDto) {
     value.name = this.cleanField(value.name);
-    value.address = this.cleanField(value.address);
     value.country = this.cleanField(value.country);
+    value.address = this.cleanField(value.address);
 
     return value;
   }

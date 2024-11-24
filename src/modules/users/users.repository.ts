@@ -47,10 +47,7 @@ export class UsersCustomRepository {
           })
           .orIgnore()
           .execute();
-        console.info(`
-            ${person.name} was added succesfully
-              ______________✅_______________
-            `);
+        console.info(`✅${person.name} was added succesfully`);
       }
       console.log(
         `
