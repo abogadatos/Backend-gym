@@ -2,7 +2,7 @@ import { MembershipsCustomRepository } from './../memberships/memberships.reposi
 import { ClassesCustomRepository } from './../classes/classes.repository';
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../auth/dto/signUpUser.dto';
 import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -21,50 +21,54 @@ export class UsersService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
+    this.seedDatabase();
+  }
+
+  async seedDatabase() {
     setTimeout(() => {
       console.info('Seeding your database');
     }, 1000);
     setTimeout(() => {
       console.info(`
-            Seeding users
-              👧🧑👱👨
-        `);
+              Seeding users
+                👧🧑👱👨
+          `);
     }, 1500);
     setTimeout(() => {
       this.userSeeder();
     }, 2000);
     setTimeout(() => {
       console.info(`
-        Seeding trainers
-          🏃🏽💥🏋‍♀🔥💪🏼
-        `);
+          Seeding trainers
+            🏃🏽💥🏋‍♀🔥💪🏼
+          `);
     }, 10000);
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
     }, 10500);
     setTimeout(() => {
       console.info(`
-        Seeding class
-         ⏳⏳⏳⏳⌛
-        `);
+          Seeding class
+           ⏳⏳⏳⏳⌛
+          `);
     }, 11000);
     setTimeout(() => {
       this.classesCustomRepository.initializeClasses();
     }, 11500);
     setTimeout(() => {
       console.info(`
-        Seeding memberships
-            💎💎💎💎💎
-        `);
+          Seeding memberships
+              💎💎💎💎💎
+          `);
     }, 12000);
     setTimeout(() => {
       this.membershipsCustomRepository.addMemberships();
     }, 13000);
     setTimeout(() => {
       console.info(`
-            Database seeding completed
-              ✅✅✅✅✅✅✅✅✅✅
-        `);
+              Database seeding completed
+                ✅✅✅✅✅✅✅✅✅✅
+          `);
     }, 15000);
   }
 

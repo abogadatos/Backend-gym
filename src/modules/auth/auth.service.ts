@@ -5,9 +5,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from './dto/signUpUser.dto';
 import { User } from 'src/database/entities/user.entity';
-import { LoginUserDto } from './dto/loginUser.dto';
+import { LoginUserDto } from './dto/signInUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -22,7 +22,7 @@ export class AuthService {
     private usersRepository: Repository<User>,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
   ) {}
 
   //  @nechodev working here

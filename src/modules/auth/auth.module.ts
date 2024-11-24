@@ -20,7 +20,7 @@ import { EmailService } from '../email/email.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,EmailService],
+  providers: [AuthService, EmailService],
   exports: [],
 })
 export class AuthModule {}

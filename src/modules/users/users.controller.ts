@@ -10,9 +10,10 @@ import {
   HttpException,
   HttpStatus,
   Put,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../auth/dto/signUpUser.dto';
 import { UsrWtoutPasswdInterceptor } from 'src/interceptors/userPasswordRemoval.interceptor';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
@@ -20,9 +21,13 @@ import { UpdateUserDto } from './dto/updateUser.dto';
 // Este interceptor elimina la password para que no se muestre cuando se consulte info de users, si no funciona, avisar a @nechodev
 @UseInterceptors(UsrWtoutPasswdInterceptor)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
-  // Proteger con roles y guards > nechodev
+  @Get('seeder')
+  async seeder() {
+    return await this.usersService.userSeeder();
+  }
+
   @Get()
   async userGetter(
     @Query('page') page: string,
@@ -53,12 +58,17 @@ export class UsersController {
     }
   }
 
+  @Get('auth0/protected')
+  async getAuth0(@Req() request: any) {
+    return JSON.stringify(request.oidc.user);
+  }
+
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.createUser(createUserDto);
   }
 
-  @Get(':id')
+  @Get('/profile/:id')
   async getUserById(@Param('id') id: string) {
     return await this.usersService.getUserById(id);
   }

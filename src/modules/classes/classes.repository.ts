@@ -46,6 +46,7 @@ export class ClassesCustomRepository {
           update_at: new Date(),
           trainer: trainerId,
         })
+        .orIgnore()
         .execute();
 
       console.log(
