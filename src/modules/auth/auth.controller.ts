@@ -4,18 +4,33 @@ import {
   UsePipes,
   ValidationPipe,
   Body,
+  BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/signInUser.dto';
 import { CreateUserDto } from './dto/signUpUser.dto';
 import { CleanDataPipe } from 'src/pipes/normalize-data.pipe';
+import { AuthZeroDTO } from './dto/auth0-logIn.dto';
+import { addJWTInterceptor } from 'src/interceptors/addJWT.interceptor';
 
 @Controller('auth')
 export class AuthController {
   private credentials: LoginUserDto = { email: '', password: '' };
   constructor(private readonly authService: AuthService) {}
 
-  // @nechodev working here
+  @Post('third')
+  @UseInterceptors(addJWTInterceptor)
+  async signUpAuthZero(@Body() authZeroData: AuthZeroDTO) {
+    try {
+      return await this.authService.signUpAuthZero(authZeroData);
+    } catch (error) {
+      throw new BadRequestException(
+        `No pasa del controller porque: ${error.message}`,
+      );
+    }
+  }
+
   @Post('signup')
   @UsePipes(new ValidationPipe())
   async signup(@Body(CleanDataPipe) userData: CreateUserDto) {

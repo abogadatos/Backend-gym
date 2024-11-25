@@ -1,33 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
-
 @Injectable()
 export class EmailService {
   private transporter;
 
   constructor() {
-
     this.transporter = nodemailer.createTransport({
-      service: 'gmail', 
+      service: 'gmail',
       auth: {
-        user: 'justdoitgym12@gmail.com', 
-        pass: 'urfx wsxa pdhp htlc',     
+        user: 'justdoitgym12@gmail.com',
+        pass: 'urfx wsxa pdhp htlc',
       },
     });
   }
 
   async sendWelcomeEmail(to: string, name: string) {
     const mailOptions = {
-      from: '"Just Do It Gym" <tu-email@gmail.com>', 
-      to, 
-      subject: '¡Bienvenido a Just Do It Gym!', 
+      from: '"Just Do It Gym" <tu-email@gmail.com>',
+      to,
+      subject: '¡Bienvenido a Just Do It Gym!',
       html: `
         <h1>¡Hola, ${name}!</h1>
         <p>Gracias por unirte a nuestro gimnasio <strong>Just Do It</strong>.</p>
         <p>Estamos emocionados de tenerte como parte de nuestra comunidad.</p>
         <p>¡Prepárate para lograr tus metas y superar tus límites!</p>
-      `, 
+      `,
     };
 
     try {
@@ -42,7 +40,7 @@ export class EmailService {
   async sendReservatioemail(to: string, className: string, schedule: Date) {
     const formattedDate = schedule.toLocaleDateString();
     const formattedTime = schedule.toLocaleTimeString();
-  
+
     const mailOptions = {
       from: '"Just Do It Gym" <tu-email@example.com>',
       to,
@@ -55,15 +53,14 @@ export class EmailService {
         <p><strong>Hora:</strong> ${formattedTime}</p>
         <p>¡Te esperamos en el gimnasio Just Do It!</p>
       `,
-    }
-    await this.transporter.sendMail(mailOptions)
-  
+    };
+    await this.transporter.sendMail(mailOptions);
   }
 
   async sendCancellationEmail(to: string, className: string, schedule: Date) {
     const formattedDate = schedule.toLocaleDateString();
     const formattedTime = schedule.toLocaleTimeString();
-  
+
     const mailOptions = {
       from: '"Just Do It Gym" <tu-email@example.com>',
       to,
@@ -77,7 +74,7 @@ export class EmailService {
         <p>Si esto fue un error, puedes volver a reservar desde nuestro sistema.</p>
       `,
     };
-  
+
     await this.transporter.sendMail(mailOptions);
   }
 }

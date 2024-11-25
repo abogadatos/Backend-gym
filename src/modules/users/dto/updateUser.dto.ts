@@ -1,5 +1,5 @@
 // import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class UpdateUserDto {
   /**
@@ -74,4 +74,7 @@ export class UpdateUserDto {
   @IsString()
   //   @ApiProperty()
   address: string;
+
+  @IsUrl()
+  image: string;
 }
