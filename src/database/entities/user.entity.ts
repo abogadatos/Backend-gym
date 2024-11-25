@@ -14,6 +14,7 @@ import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
 import { Payment } from './payment.entity';
 import { Trainers } from './trainer.entity';
+import { status } from 'src/enum/status.enum';
 
 @Entity({
   name: 'users',
@@ -66,6 +67,7 @@ export class User {
   @Column({
     type: 'varchar',
     length: 60,
+    nullable: true,
   })
   password: string;
 
@@ -80,8 +82,24 @@ export class User {
   @Column({
     type: 'varchar',
     length: 15,
+    nullable: true,
   })
   phone: string;
+
+  /**
+   * Status assigned to the user, which dictate their status within the platform.
+   *
+   * @remarks
+   * Default status is 'Active'. Possible status are defined in the `status` enum file.
+   *
+   * @example ["Active", "Inactive", "PartialActive", "Pending", "Banned", "Rejected"]
+   */
+  @Column({
+    type: 'enum',
+    enum: status,
+    default: status.Active,
+  })
+  status: status;
 
   /**
    * Roles assigned to the user, which dictate their permissions within the platform.
