@@ -125,9 +125,16 @@ export class PaymentsService {
       user.membership_status = MembershipStatus.Active;
       const updatedUser = await this.usersRepository.save(user);
   
+      console.log({
+        message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
+        paymentData,
+        userData:updatedUser,
+        membershipStatus: updatedUser.membership_status,
+    })
       return {
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,
+        userData:updatedUser,
         membershipStatus: updatedUser.membership_status,
       };
     } catch (error) {
