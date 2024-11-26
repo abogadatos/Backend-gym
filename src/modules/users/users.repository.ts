@@ -85,7 +85,7 @@ export class UsersCustomRepository {
   }
 
   async getUsersByEmmail(email: string) {
-    return await this.userRepository.findOneBy({ email });
+    return await this.userRepository.findOne({ where: {email} });
   }
 
   async updateUser(id: string, user: Partial<User>) {
