@@ -2,8 +2,6 @@ import { LoggerMiddleware } from './middlewares/UsersLogger.middleware';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationExceptionFilter } from './filters/validation-exception.filter';
-import { auth } from 'express-openid-connect';
-import { config as Auth0Config } from './database/config/auth0';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -32,13 +30,6 @@ async function bootstrap() {
 
   //   const document = SwaggerModule.createDocument(app, swaggerConfig);
   //   SwaggerModule.setup('docs', app, document);
-
-  try {
-    app.use(auth(Auth0Config));
-  } catch (error) {
-    console.error('Auth0 configuration error:', error);
-    process.exit(1);
-  }
 
   await app.listen(process.env.APP_PORT);
   console.log(`Listening on port ${process.env.APP_PORT}`);
