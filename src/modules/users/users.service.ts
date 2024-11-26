@@ -10,7 +10,7 @@ import { UserWithoutPassword } from './types/userWithoutPassword.type';
 import { TrainersCustomRepository } from '../trainers/trainers.repository';
 
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -20,56 +20,57 @@ export class UsersService implements OnModuleInit {
     private membershipsCustomRepository: MembershipsCustomRepository,
   ) {}
 
-  async onModuleInit() {
-    this.seedDatabase();
-  }
-
   async seedDatabase() {
     setTimeout(() => {
       console.info('Seeding your database');
+    }, 200);
+
+    setTimeout(() => {
+      console.info(`
+            Seeding memberships
+                💎💎💎💎💎
+            `);
+    }, 500);
+    setTimeout(() => {
+      this.membershipsCustomRepository.addMemberships();
     }, 1000);
+
     setTimeout(() => {
       console.info(`
               Seeding users
                 👧🧑👱👨
           `);
-    }, 1500);
+    }, 3000);
     setTimeout(() => {
       this.userSeeder();
-    }, 2000);
+    }, 3500);
+
     setTimeout(() => {
       console.info(`
           Seeding trainers
             🏃🏽💥🏋‍♀🔥💪🏼
           `);
-    }, 10000);
+    }, 17000);
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
-    }, 10500);
+    }, 17500);
+
     setTimeout(() => {
       console.info(`
           Seeding class
            ⏳⏳⏳⏳⌛
           `);
-    }, 11000);
+    }, 19000);
     setTimeout(() => {
       this.classesCustomRepository.initializeClasses();
-    }, 11500);
-    setTimeout(() => {
-      console.info(`
-          Seeding memberships
-              💎💎💎💎💎
-          `);
-    }, 12000);
-    setTimeout(() => {
-      this.membershipsCustomRepository.addMemberships();
-    }, 13000);
+    }, 19500);
+
     setTimeout(() => {
       console.info(`
               Database seeding completed
                 ✅✅✅✅✅✅✅✅✅✅
           `);
-    }, 15000);
+    }, 20000);
   }
 
   async userSeeder() {

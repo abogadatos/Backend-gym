@@ -25,7 +25,6 @@ export class JsonWebTokenService {
       //! con esto se puede implementar un guardian que busque en base de datos la
       //! concordancia entre los datos del token y los datos la DB
       id: user.id,
-      creatorId: user.creatorId,
       role: user.roles, //! ==> INCLUCION DEL ROL
     };
     const secret = this.configService.get<string>('jwt.secret');
