@@ -1,6 +1,6 @@
 import { MembershipsCustomRepository } from './../memberships/memberships.repository';
 import { ClassesCustomRepository } from './../classes/classes.repository';
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
 import { CreateUserDto } from '../auth/dto/signUpUser.dto';
 import { User } from 'src/database/entities/user.entity';
@@ -125,8 +125,21 @@ export class UsersService implements OnModuleInit {
     return await this.usersCustomRepository.getUserById(id);
   }
 
-  async getUsersByEmail(email: string) {
-    return email;
+  async getUserByEmail(email: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { email },
+        relations: [ 'payments',]  // Obtener todas las relaciones, si es necesario
+      });
+
+      if (!user) {
+        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
+    } catch (error) {
+      throw new HttpException('Error al buscar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async createUser(createUserDto: CreateUserDto) {

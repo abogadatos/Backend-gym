@@ -11,7 +11,7 @@ import { requiresAuth } from 'express-openid-connect';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,UsersCustomRepository]),
     TrainersModule,
     ClassesModule,
     MembershipsModule,

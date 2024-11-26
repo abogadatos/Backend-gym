@@ -16,6 +16,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/signUpUser.dto';
 import { UsrWtoutPasswdInterceptor } from 'src/interceptors/userPasswordRemoval.interceptor';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { User } from 'src/database/entities/user.entity';
 
 @Controller('users')
 // Este interceptor elimina la password para que no se muestre cuando se consulte info de users, si no funciona, avisar a @nechodev
@@ -73,6 +74,10 @@ export class UsersController {
     return await this.usersService.getUserById(id);
   }
 
+  @Get('email/:email')
+  async getUserByEmail(@Param('email') email: string): Promise<User> {
+    return await this.usersService.getUserByEmail(email);
+  }
   @Put(':id')
   async updateUser(
     @Param('id') id: string,
