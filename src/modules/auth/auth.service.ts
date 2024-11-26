@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 // import { status } from 'src/enum/status.enum';
 import { authCustomRepository } from './auth.repository';
+import { AuthZeroDTO } from './dto/auth0-logIn.dto';
 // import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
@@ -28,24 +29,37 @@ export class AuthService {
     private readonly emailService: EmailService,
   ) {}
 
-  async signUpAuthZero(authZeroData) {
+  async signUpAuthZero(authZeroData: AuthZeroDTO) {
     // check if user exists within database
     const userExists: User = await this.usersRepository.findOne({
       where: { email: authZeroData.email },
     });
-    console.log(` Usuario existente: ${userExists}`);
 
-    if (userExists) {
+    const { name, email, image } = authZeroData;
+    console.info(`
+    User trying to signUp:
+    name: ${name},
+    email: ${email},
+    image: ${image}
+    `);
+
+    if (userExists !== null) {
+      console.log(typeof userExists);
       console.warn(`
-        User with this email already exists from authZeroSignUp: ${userExists}
-        `);
-      throw new ConflictException(`
-        User with this email already exists from authZeroSignUp: ${userExists}
-        `);
+          User with this email already exists from authZeroSignUp:
+          id: ${userExists.id},
+          name: ${userExists.name},
+          email: ${userExists.email},
+          password: ${userExists.password},
+          roles: ${userExists.roles},
+          status: ${userExists.status},
+          membershipStatus: ${userExists.membership_status}
+          `);
+      throw new ConflictException(
+        'User with this email already exists from authZeroSignUp',
+      );
     } else if (userExists === null) {
       try {
-        const { name, email, image } = authZeroData;
-
         const userData = {
           name: name,
           email: email,
@@ -54,13 +68,17 @@ export class AuthService {
           //   roles: authZeroData.roles || Role.User,
         };
 
+        // console.info(
+        //   `Inserting new user from authZeroSignUp: ${userExists.name}`,
+        // );
+
         const newUserFromAuthZero = await this.signUp(userData);
-        console.info(`
-            Inserting new user from authZeroSignUp: ${userExists}
-            `);
-        return await this.authCustomRepo.justRegisteredUser(`
-            Inserting new user from authZeroSignUp: ${newUserFromAuthZero}
-            `);
+
+        // return await this.authCustomRepo.justRegisteredUser(`
+        //     Inserting new user from authZeroSignUp: ${newUserFromAuthZero}
+        //     `);
+
+        return newUserFromAuthZero;
       } catch (error) {
         throw new BadRequestException('User insertion within databse error.');
       }
@@ -107,9 +125,12 @@ export class AuthService {
       throw new ConflictException(
         'user with this email already exists from signUp',
       );
-    } else if (checkUser === null) {
+    }
+
+    if (checkUser === null) {
       const newUser = this.usersRepository.create(userData);
       await this.usersRepository.save(newUser);
+      console.log(`newUserData is${newUser}`);
 
       const user = this.authCustomRepo.justRegisteredUser(newUser);
 

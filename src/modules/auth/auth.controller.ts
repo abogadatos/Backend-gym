@@ -22,8 +22,8 @@ export class AuthController {
   @Post('third')
   @UseInterceptors(addJWTInterceptor)
   async signUpAuthZero(@Body() authZeroData: AuthZeroDTO) {
+    return await this.authService.signUpAuthZero(authZeroData);
     try {
-      return await this.authService.signUpAuthZero(authZeroData);
     } catch (error) {
       throw new BadRequestException(
         `No pasa del controller porque: ${error.message}`,
