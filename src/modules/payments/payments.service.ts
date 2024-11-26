@@ -8,14 +8,15 @@ import { User } from 'src/database/entities/user.entity';
 import { Memberships } from 'src/database/entities/membership.entity';
 import { Payment } from 'src/database/entities/payment.entity';
 import { MembershipStatus } from 'src/enum/membership_status.enum';
+import { UsersCustomRepository } from '../users/users.repository';
 const stripe = require('stripe')(process.env.SECRET_STRIPE)
  
 
 @Injectable()
 export class PaymentsService {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly usersCustomRepository: UsersCustomRepository,  // Inyección correcta
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,  // Este es el repositorio estándar de TypeORM
     @InjectRepository(Memberships)
     private readonly membershipsCustomRepository: Repository<Memberships>,
     @InjectRepository(Payment)
@@ -87,11 +88,16 @@ export class PaymentsService {
         throw new HttpException('El pago no se completó', HttpStatus.BAD_REQUEST);
       }
   
-      // Buscar al usuario por su email
-      const user = await this.usersRepository.findOneBy({ email: session.customer_email });
+      // Verifica si el correo está siendo recibido correctamente
+      console.log('Correo electrónico del cliente:', session.metadata.userEmail);
+  
+      // Buscar al usuario por su correo electrónico
+      const user = await this.usersRepository.findOne({
+        where: { email: session.metadata.userEmail },
+      });
   
       if (!user) {
-        console.error('No se encontró el usuario con el email:', session.customer_email);
+        console.error('No se encontró el usuario con el email:', session.metadata.userEmail);
         throw new HttpException('No se encontró el usuario con el email proporcionado', HttpStatus.NOT_FOUND);
       }
   
@@ -123,28 +129,29 @@ export class PaymentsService {
   
       // Actualizar el estado de la membresía del usuario a "active"
       user.membership_status = MembershipStatus.Active;
-      const updatedUser = await this.usersRepository.save(user);
+  
+      // Guardar el usuario con la membresía actualizada
+      const updatedUser = await this.usersCustomRepository.updateUser(user.id,user);  // Aquí usamos `save`, que actualizará el usuario correctamente
   
       console.log({
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,
-        userData:updatedUser,
+        userData: updatedUser,
         membershipStatus: updatedUser.membership_status,
-    })
+      });
+  
       return {
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,
-        userData:updatedUser,
+        userData: updatedUser,
         membershipStatus: updatedUser.membership_status,
       };
     } catch (error) {
       console.error('Error procesando el pago:', error);
       throw new HttpException(`Error procesando el pago: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
+  }  
   
-  
-
   async checkPaymentStatus(sessionId: string) {
     if (!sessionId) {
       throw new HttpException('sessionId no proporcionado', HttpStatus.BAD_REQUEST);

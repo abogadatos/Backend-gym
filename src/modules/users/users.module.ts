@@ -10,7 +10,7 @@ import { MembershipsModule } from '../memberships/memberships.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,UsersCustomRepository]),
     TrainersModule,
     ClassesModule,
     MembershipsModule,
