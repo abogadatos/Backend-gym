@@ -85,15 +85,26 @@ export class ClassesCustomRepository {
   
   async getAllClasses(page: number, limit: number) {
     const skip = (page - 1) * limit;
-    const classes = await this.classesRepository.find({
-      take: limit,
-      skip: skip,
-    });
-    return classes;
+      const [data,total] = await this.classesRepository.findAndCount({
+        relations: ['schedules', 'trainer', 'bookedClasses'], 
+        skip,
+        take:limit,
+      });
+    
+    return {data,total}
+       
   }
 
   async getClassById(id: string) {
-    const classe = await this.classesRepository.findOne({ where: { id } });
+    const classe = await this.classesRepository.findOne({
+      where: { id },
+      relations: ['schedules', 'trainer', 'bookedClasses'],
+    });
+  
+    if (!classe) {
+      throw new NotFoundException(`Class with ID "${id}" not found`);
+    }
+  
     return classe;
   }
 
