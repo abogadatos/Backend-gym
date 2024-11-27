@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Classes } from 'src/database/entities/classes.entity';
 import { ClassesCustomRepository } from './classes.repository';
 import { UpdateClassDto } from './dto/update-classes.dto';
+import { CreateClassDto } from './dto/create-classes.dto';
 
 @Injectable()
 export class ClassesService {
@@ -17,8 +18,8 @@ export class ClassesService {
   getClassByID(id: string) {
     return this.classesCustomRepository.getClassById(id);
   }
-  createClass(classe: Partial<Classes>) {
-    return this.classesCustomRepository.createClass(classe);
+  createClass(createClassDto:CreateClassDto) {
+    return this.classesCustomRepository.createClass(createClassDto);
   }
   updateClass(id: string, classe: UpdateClassDto) {
     return this.classesCustomRepository.updateClass(id, classe);

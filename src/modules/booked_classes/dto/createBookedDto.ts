@@ -7,5 +7,8 @@ export class CreateBookedClassDto {
 
   @IsUUID()
   classId: string;
+  
+  @IsUUID()
+  scheduleId: string;
 
 }

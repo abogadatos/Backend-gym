@@ -17,7 +17,7 @@ export class EmailService {
 
   async sendWelcomeEmail(to: string, name: string) {
     const mailOptions = {
-      from: '"Just Do It Gym" <tu-email@gmail.com>',
+      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
       to,
       subject: '¡Bienvenido a Just Do It Gym!',
       html: `
@@ -37,20 +37,18 @@ export class EmailService {
     }
   }
 
-  async sendReservatioemail(to: string, className: string, schedule: Date) {
-    const formattedDate = schedule.toLocaleDateString();
-    const formattedTime = schedule.toLocaleTimeString();
+  async sendReservationEmail( email: string, className:string, day:string, startTime:string,) {
 
     const mailOptions = {
-      from: '"Just Do It Gym" <tu-email@example.com>',
-      to,
+      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
+      to:email,
       subject: 'Confirmación de reserva de clase',
       html: `
         <h1>¡Reserva Confirmada!</h1>
-        <p>Hola,</p>
+        <p>Hola</p>
         <p>Tu clase <strong>"${className}"</strong> ha sido reservada con éxito.</p>
-        <p><strong>Fecha:</strong> ${formattedDate}</p>
-        <p><strong>Hora:</strong> ${formattedTime}</p>
+        <p><strong>Fecha:</strong> ${day}</p>
+        <p><strong>Hora:</strong> ${startTime}</p>
         <p>¡Te esperamos en el gimnasio Just Do It!</p>
       `,
     };
@@ -62,7 +60,7 @@ export class EmailService {
     const formattedTime = schedule.toLocaleTimeString();
 
     const mailOptions = {
-      from: '"Just Do It Gym" <tu-email@example.com>',
+      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
       to,
       subject: 'Reserva Cancelada',
       html: `
@@ -76,5 +74,48 @@ export class EmailService {
     };
 
     await this.transporter.sendMail(mailOptions);
+  }
+
+  async sendClassUpdateEmail(recipients: string[],className: string,newSchedule: string,) {
+ 
+    const mailOptions={
+          from:'"Just Do It Gym" <justdoitgym12@gmail.com>' ,
+          to: recipients,
+          subject:`Actualización en la clase "${className}"`,
+          text:`Queremos informarte que tu clase de "${className}" ha cambiado de horario. Ahora se dará el día ${newSchedule}.`,
+          html:`
+      <p>Queremos informarte que tu clase de <strong>"${className}"</strong> ha cambiado de horario.</p>
+      <p>Ahora se dará el día <strong>${newSchedule}</strong>.</p>
+      <p>Gracias por ser parte de nuestro gimnasio. ¡Nos vemos en la clase!</p>`
+    }
+    try {
+      await this.transporter.sendMail(mailOptions)
+      console.log(`Correos enviados a los inscritos de la clase "${className}".`);
+    } catch (error) {
+      console.error('Error al enviar correos: ', error);
+    }
+  }
+  async sendClassCancellationEmail(recipients: string[], className: string){
+    const mailOptions={
+      from:'"Just Do It Gym" <justdoitgym12@gmail.com>' ,
+      to: recipients,
+      subject:`cancelacion de la clase "${className}"`,
+      text:`Queremos informarte que tu clase de "${className}" ha sido cancelada y ya no estará disponible.`,
+      html:`
+  <p>Por favor, consulta otras opciones en nuestro calendario de actividades.</p>
+  <p>Disculpa las molestias ocasionadas.<br></p>
+  <p><br>
+    Saludos cordiales,<br>
+    El equipo de gestión del gimnasio.
+    </p>
+
+  `
+}
+  try {
+      await this.transporter.sendMail(mailOptions)
+      console.log(`Correos enviados a los inscritos de la clase "${className}".`);
+    } catch (error) {
+      console.error('Error al enviar correos: ', error);
+    }
   }
 }

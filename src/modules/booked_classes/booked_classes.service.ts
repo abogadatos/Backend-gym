@@ -19,9 +19,7 @@ export class BookedClassesService {
   createBookedService(bookClassDto:CreateBookedClassDto) {
     return this.bookedClassesCustomRepository.createBooked(bookClassDto);
   }
-  upDateBookedService() {
-    return this.bookedClassesCustomRepository.upDateBooked();
-  }
+  
   deleteBookedService(bookingId: string) {
     return this.bookedClassesCustomRepository.deleteBooked(bookingId);
   }

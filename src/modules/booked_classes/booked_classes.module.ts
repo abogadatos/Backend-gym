@@ -7,11 +7,21 @@ import { BookedClassesCustomRepository } from './booked_classes.repository';
 import { Classes } from 'src/database/entities/classes.entity';
 import { User } from 'src/database/entities/user.entity';
 import { EmailService } from '../email/email.service';
+import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
+import { EmailModule } from '../email/email.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BookedClasses, Classes,User])],
+  imports: [
+    TypeOrmModule.forFeature([BookedClasses, Classes, User, ClassSchedule]),
+    EmailModule, 
+  ],
   controllers: [BookedClassesController],
-  providers: [BookedClassesService, BookedClassesCustomRepository,EmailService],
-  exports: [],
+  providers: [
+    BookedClassesService,
+    BookedClassesCustomRepository,
+    EmailService, 
+  ],
+  exports: [], 
 })
 export class BookedClassesModule {}
+

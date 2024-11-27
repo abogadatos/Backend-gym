@@ -1,4 +1,6 @@
-import { IsString, IsInt, IsDate, IsUUID, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsInt, IsUUID, IsOptional, IsPositive, ValidateNested} from 'class-validator';
+import { CreateClassScheduleDto } from './createSchedule.dto';
 
 export class CreateClassDto {
   @IsString()
@@ -11,18 +13,18 @@ export class CreateClassDto {
   location: string;
 
   @IsInt()
+  @IsPositive()
   capacity: number;
 
-  @IsInt()
-  current_participants: number;
-
-  @IsDate()
-  schedule: Date;
-
   @IsString()
-  @IsOptional()
-  imgUrl?: string;
+  imgUrl: string;
 
   @IsUUID()
   trainerId: string;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreateClassScheduleDto)
+  scheduleClass?: CreateClassScheduleDto[];
 }
+
