@@ -1,6 +1,6 @@
 import {  Body, Controller, Get, Post,  } from '@nestjs/common';
 import { MembershipsService } from './memberships.service';
-import { CreateMembershipDto } from './dto/createmermership.dto';
+import { CreateMembershipDto } from './dto/createMermership.dto';
 
 
 @Controller('memberships')
