@@ -10,7 +10,7 @@ import { User } from 'src/database/entities/user.entity';
 import { LoginUserDto } from './dto/signInUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 // import { status } from 'src/enum/status.enum';
@@ -44,76 +44,51 @@ export class AuthService {
     `);
 
     if (userExists !== null) {
-      console.log(typeof userExists);
-      console.warn(`
-          User with this email already exists from authZeroSignUp:
-          id: ${userExists.id},
-          name: ${userExists.name},
-          email: ${userExists.email},
-          password: ${userExists.password},
-          roles: ${userExists.roles},
-          status: ${userExists.status},
-          membershipStatus: ${userExists.membership_status}
-          `);
-      throw new ConflictException(
-        'User with this email already exists from authZeroSignUp',
-      );
+      if (userExists.auth === 'form') {
+        // esta info se va a addJWT.interceptor.ts
+        return {
+          userID: userExists.id,
+          userName: userExists.name,
+          userEmail: userExists.email,
+          userRol: userExists.roles,
+          userAuth: userExists.auth,
+          userMembershipStatus: userExists.membership_status,
+          userCreatedAt: userExists.created_At,
+        };
+        throw new ConflictException(
+          'User is already registered within database with form',
+        );
+      } else if (userExists !== null && userExists.auth === 'google') {
+        if (userExists.password === null) {
+          return 'user must complete its profile';
+        } else if (userExists.password.length === 60) {
+          console.log(userExists.password.length);
+          return {
+            message: 'User log in successful',
+            userData: userExists,
+          };
+        }
+        return userExists;
+      }
     } else if (userExists === null) {
       try {
         const userData = {
           name: name,
           email: email,
           image: image,
-          //   status: status.Pending,
-          //   roles: authZeroData.roles || Role.User,
+          auth: 'google',
         };
-
-        // console.info(
-        //   `Inserting new user from authZeroSignUp: ${userExists.name}`,
-        // );
 
         const newUserFromAuthZero = await this.signUp(userData);
 
-        // return await this.authCustomRepo.justRegisteredUser(`
-        //     Inserting new user from authZeroSignUp: ${newUserFromAuthZero}
-        //     `);
-
         return newUserFromAuthZero;
       } catch (error) {
-        throw new BadRequestException('User insertion within databse error.');
+        throw new BadRequestException(
+          'User insertion within database error.',
+          error.message,
+        );
       }
     }
-
-    // if (userExists[0].status === status.Pending) {
-    //   const hashedIDComparision = await bcrypt.compare(
-    //     authZeroData.id,
-    //     userExists[0].id,
-    //   );
-    //   if (hashedIDComparision === false) {
-    //     throw new BadRequestException('Invalid Credentials in auth 1');
-    //   }
-    //   return await this.authCustomRepo.justRegisteredUser(userExists[0].id);
-    // }
-
-    // if (userExists[0].status === status.PartialActive) {
-    //   const hashedUserID = await bcrypt.hashSync(authZeroData.id, 10);
-    //   await this.usersRepository.update(userExists[0].id, {
-    //     status: status.Active,
-    //     id: hashedUserID,
-    //     image: authZeroData.image,
-    //   });
-    //   return await this.authCustomRepo.justRegisteredUser(userExists[0].id);
-    // }
-
-    // if (userExists[0].status === status.Active) {
-    //   const hashedUserIDComparison = await bcrypt.compare(
-    //     authZeroData.id,
-    //     userExists[0].id,
-    //   );
-    //   if (hashedUserIDComparison === false) {
-    //     throw new BadRequestException('Invalid Credentials in auth 2');
-    //   }
-    // }
   }
 
   async signUp(userData): Promise<Partial<User>> {
@@ -130,7 +105,6 @@ export class AuthService {
     if (checkUser === null) {
       const newUser = this.usersRepository.create(userData);
       await this.usersRepository.save(newUser);
-      console.log(`newUserData is${newUser}`);
 
       const user = this.authCustomRepo.justRegisteredUser(newUser);
 
