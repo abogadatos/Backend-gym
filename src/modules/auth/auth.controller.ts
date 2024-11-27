@@ -19,10 +19,10 @@ export class AuthController {
   private credentials: LoginUserDto = { email: '', password: '' };
   constructor(private readonly authService: AuthService) {}
 
-  @Post('third')
+  @Post('signup/third')
   @UseInterceptors(addJWTInterceptor)
   async signUpAuthZero(@Body() authZeroData: AuthZeroDTO) {
-    return await this.authService.signUpAuthZero(authZeroData);
+    return await this.authService.signUpAuth(authZeroData);
     try {
     } catch (error) {
       throw new BadRequestException(
@@ -34,13 +34,13 @@ export class AuthController {
   @Post('signup')
   @UsePipes(new ValidationPipe())
   async signup(@Body(CleanDataPipe) userData: CreateUserDto) {
-    const userWithoutPassword = await this.authService.signUp(userData);
+    await this.authService.signUpForm(userData);
     const { password, email } = userData;
     this.credentials.email = email;
     this.credentials.password = password;
 
     const logStatus = await this.authService.signIn(this.credentials);
-    return { 'User Data': userWithoutPassword, 'Log Status': logStatus };
+    return { 'Log Status': logStatus };
   }
 
   @Post('signin')

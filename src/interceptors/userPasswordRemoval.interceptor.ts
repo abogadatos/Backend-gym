@@ -5,10 +5,11 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
+import { User } from 'src/database/entities/user.entity';
 
 @Injectable()
 export class UsrWtoutPasswdInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<User> {
     return next.handle().pipe(
       map((data) => {
         if (Array.isArray(data)) {
