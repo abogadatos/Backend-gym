@@ -3,7 +3,7 @@ import { MembershipsCustomRepository } from './memberships.repository';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Memberships } from 'src/database/entities/membership.entity';
-import { CreateMembershipDto } from './dto/createmermership.dto';
+import { CreateMembershipDto } from "./dto/createMermership.dto";
 
 const stripe = require('stripe')(process.env.SECRET_STRIPE)
 

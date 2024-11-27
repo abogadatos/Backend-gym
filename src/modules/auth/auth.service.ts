@@ -10,7 +10,7 @@ import { User } from 'src/database/entities/user.entity';
 import { LoginUserDto } from './dto/signInUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 // import { status } from 'src/enum/status.enum';

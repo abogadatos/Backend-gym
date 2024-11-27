@@ -1,7 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { PaymentsCustomRepository } from './payments.repository';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
-import { MembershipsCustomRepository } from '../memberships/memberships.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/database/entities/user.entity';
@@ -15,8 +13,8 @@ const stripe = require('stripe')(process.env.SECRET_STRIPE)
 @Injectable()
 export class PaymentsService {
   constructor(
-    private readonly usersCustomRepository: UsersCustomRepository,  // Inyección correcta
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,  // Este es el repositorio estándar de TypeORM
+    private readonly usersCustomRepository: UsersCustomRepository, 
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,  
     @InjectRepository(Memberships)
     private readonly membershipsCustomRepository: Repository<Memberships>,
     @InjectRepository(Payment)
@@ -88,10 +86,8 @@ export class PaymentsService {
         throw new HttpException('El pago no se completó', HttpStatus.BAD_REQUEST);
       }
   
-      // Verifica si el correo está siendo recibido correctamente
       console.log('Correo electrónico del cliente:', session.metadata.userEmail);
   
-      // Buscar al usuario por su correo electrónico
       const user = await this.usersRepository.findOne({
         where: { email: session.metadata.userEmail },
       });
@@ -101,7 +97,6 @@ export class PaymentsService {
         throw new HttpException('No se encontró el usuario con el email proporcionado', HttpStatus.NOT_FOUND);
       }
   
-      // Buscar la membresía por el ID proporcionado
       const membership = await this.membershipsCustomRepository.findOne({
         where: { stripePriceId: session.metadata.stripePriceId },
       });
@@ -114,7 +109,6 @@ export class PaymentsService {
         );
       }
   
-      // Crear el registro del pago
       const paymentData = {
         user_id: user.id,
         membership_id: membership.id,
@@ -127,10 +121,8 @@ export class PaymentsService {
   
       await this.paymentsCustomRepository.save(paymentData);
   
-      // Actualizar el estado de la membresía del usuario a "active"
       user.membership_status = MembershipStatus.Active;
   
-      // Guardar el usuario con la membresía actualizada
       const updatedUser = await this.usersCustomRepository.updateUser(user.id,user);  // Aquí usamos `save`, que actualizará el usuario correctamente
   
       console.log({
