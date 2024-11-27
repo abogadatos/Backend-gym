@@ -2,28 +2,32 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
+import { TrainersCustomRepository } from './trainers.repository';
 
 @Injectable()
 export class TrainersService {
+
+constructor(
+  private readonly trainerRepository:TrainersCustomRepository
+){}
   async create(createTrainerDto: CreateTrainerDto) {
-    createTrainerDto;
-    return 'This action adds a new trainer';
+    return await this.trainerRepository.createTrainer(createTrainerDto)
+    
   }
 
-  async findAll() {
-    return `This action returns all trainers`;
+  async findAll(page: number, limit: number) {
+    return await this.trainerRepository.getAllTrainers(page,limit)
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} trainer`;
+  async findOne(id: string ) {
+    return await this.trainerRepository.getTrainerById(id)
   }
 
-  async update(id: number, updateTrainerDto: UpdateTrainerDto) {
-    updateTrainerDto;
-    return `This action updates a #${id} trainer`;
+  async update(id: string, updateTrainerDto: UpdateTrainerDto) {
+    return await this.trainerRepository.updateTrainers(id,updateTrainerDto)
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} trainer`;
+  async remove(id: string) {
+    return await this.trainerRepository.deleteTrainer(id)
   }
 }

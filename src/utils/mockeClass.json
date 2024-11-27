@@ -54,6 +54,11 @@
         "day": "jueves",
         "startTime": "06:30",
         "endTime": "07:30"
+      },
+      {
+        "day": "martes",
+        "startTime": "18:30",
+        "endTime": "19:30"
       }
     ],
     "imgUrl": "https://i.imgur.com/8DpxtRA.jpg",
@@ -70,6 +75,11 @@
         "startTime": "10:00",
         "endTime": "11:00"
         
+      },
+      {
+        "day": "lunes",
+        "startTime": "10:00",
+        "endTime": "11:00"
       }
     ],
     "imgUrl": "https://i.imgur.com/krZ9HnK.jpg",

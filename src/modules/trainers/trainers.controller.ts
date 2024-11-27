@@ -4,8 +4,9 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
+  Put,
   Post,
+  Query
 } from '@nestjs/common';
 
 import { CreateTrainerDto } from './dto/create-trainer.dto';
@@ -22,25 +23,28 @@ export class TrainersController {
   }
 
   @Get()
-  async findAll() {
-    return await this.trainersService.findAll();
-  }
-
+  async findAll(@Query('page') page: string,
+  @Query('limit') limit: string,
+) {
+  const pageNumber = page ? parseInt(page, 10) : 1; 
+  const limitNumber = limit ? parseInt(limit, 10) : 6; 
+return await this.trainersService.findAll(pageNumber,limitNumber)
+}
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.trainersService.findOne(+id);
+    return await this.trainersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateTrainerDto: UpdateTrainerDto,
   ) {
-    return await this.trainersService.update(+id, updateTrainerDto);
+    return await this.trainersService.update(id, updateTrainerDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.trainersService.remove(+id);
+    return await this.trainersService.remove(id);
   }
 }
