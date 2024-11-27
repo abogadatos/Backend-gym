@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Body } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -9,24 +10,24 @@ export class ReviewsController {
   async findAllReviews() {
     return this.reviewsService.getReviews();
   }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    id;
-    return this.reviewsService.getByidReviews();
+    return this.reviewsService.getByIdReviews(id);
   }
+
   @Post()
-  async create() {
-    return this.reviewsService.postReviews();
+  async create(@Body() createReviewDto: CreateReviewDto) {
+    return this.reviewsService.postReviews(createReviewDto);
   }
 
   @Put(':id')
-  async update() {
-    return this.reviewsService.updateReviews();
+  async update(@Param('id') id: string, @Body() createReviewDto: CreateReviewDto) {
+    return this.reviewsService.updateReviews(id, createReviewDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    id;
-    return this.reviewsService.deleteReviews();
+    return this.reviewsService.deleteReviews(id);
   }
 }

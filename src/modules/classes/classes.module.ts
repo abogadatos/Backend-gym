@@ -26,7 +26,7 @@ import { TrainersModule } from '../trainers/trainers.module';
     EmailService,
     
   ],
-  exports: [ClassesCustomRepository], 
+  exports: [ClassesCustomRepository, TypeOrmModule], 
 })
 export class ClassesModule {}
 
