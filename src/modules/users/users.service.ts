@@ -1,6 +1,11 @@
 import { MembershipsCustomRepository } from './../memberships/memberships.repository';
 import { ClassesCustomRepository } from './../classes/classes.repository';
-import { HttpException, HttpStatus, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersCustomRepository } from './users.repository';
 import { CreateUserDto } from '../auth/dto/signUpUser.dto';
 import { User } from 'src/database/entities/user.entity';
@@ -40,10 +45,10 @@ export class UsersService {
               Seeding users
                 👧🧑👱👨
           `);
-    }, 3000);
+    }, 2000);
     setTimeout(() => {
       this.userSeeder();
-    }, 3500);
+    }, 2500);
 
     setTimeout(() => {
       console.info(`
@@ -130,7 +135,7 @@ export class UsersService {
     try {
       const user = await this.usersRepository.findOne({
         where: { email },
-        relations: [ 'payments',]  // Obtener todas las relaciones, si es necesario
+        relations: ['payments'], // Obtener todas las relaciones, si es necesario
       });
 
       if (!user) {
@@ -139,7 +144,10 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      throw new HttpException('Error al buscar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Error al buscar el usuario',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

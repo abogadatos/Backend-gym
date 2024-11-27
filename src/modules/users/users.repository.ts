@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as data from '../../utils/mock-users.json';
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
 import { validate } from 'class-validator';
 
@@ -85,7 +85,7 @@ export class UsersCustomRepository {
   }
 
   async getUsersByEmmail(email: string) {
-    return await this.userRepository.findOne({ where: {email} });
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async updateUser(id: string, user: Partial<User>) {

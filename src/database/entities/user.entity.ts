@@ -14,7 +14,6 @@ import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
 import { Payment } from './payment.entity';
 import { Trainers } from './trainer.entity';
-import { status } from 'src/enum/status.enum';
 
 @Entity({
   name: 'users',
@@ -87,19 +86,21 @@ export class User {
   phone: string;
 
   /**
-   * Status assigned to the user, which dictate their status within the platform.
+   * Authentication method used by the user.
    *
    * @remarks
-   * Default status is 'Active'. Possible status are defined in the `status` enum file.
+   * Acceptable values are "google" or "form".
+   * The default value is "form".
    *
-   * @example ["Active", "Inactive", "PartialActive", "Pending", "Banned", "Rejected"]
+   * @example "google"
    */
   @Column({
-    type: 'enum',
-    enum: status,
-    default: status.Active,
+    type: 'varchar', // Store it as a simple string in the database
+    length: 10, // Limit length for validation purposes
+    nullable: false, // Ensure it's always set
+    default: 'form', // Set the default value
   })
-  status: status;
+  auth: 'google' | 'form'; // Define acceptable values as a TypeScript union type
 
   /**
    * Roles assigned to the user, which dictate their permissions within the platform.
