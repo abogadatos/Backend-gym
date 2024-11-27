@@ -16,6 +16,8 @@ import { EmailService } from '../email/email.service';
 // import { status } from 'src/enum/status.enum';
 import { authCustomRepository } from './auth.repository';
 import { AuthZeroDTO } from './dto/auth0-logIn.dto';
+import { CreateUserDto } from './dto/signUpUser.dto';
+import { UserWithoutPassword } from '../users/types/userWithoutPassword.type';
 // import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
@@ -29,7 +31,7 @@ export class AuthService {
     private readonly emailService: EmailService,
   ) {}
 
-  async signUpAuthZero(authZeroData: AuthZeroDTO) {
+  async signUpAuth(authZeroData: AuthZeroDTO) {
     // check if user exists within database
     const userExists: User = await this.usersRepository.findOne({
       where: { email: authZeroData.email },
@@ -79,7 +81,7 @@ export class AuthService {
           auth: 'google',
         };
 
-        const newUserFromAuthZero = await this.signUp(userData);
+        const newUserFromAuthZero = await this.signUpThirdParty(userData);
 
         return newUserFromAuthZero;
       } catch (error) {
@@ -91,12 +93,12 @@ export class AuthService {
     }
   }
 
-  async signUp(userData): Promise<Partial<User>> {
+  async signUpThirdParty(userData): Promise<Partial<User>> {
     const checkUser = await this.usersRepository.findOne({
       where: { email: userData.email },
     });
     if (checkUser) {
-      console.warn('User with this email already exists from signUp');
+      console.warn('User with this email already exists from signUpThirdParty');
       throw new ConflictException(
         'user with this email already exists from signUp',
       );
@@ -106,40 +108,42 @@ export class AuthService {
       const newUser = this.usersRepository.create(userData);
       await this.usersRepository.save(newUser);
 
-      const user = this.authCustomRepo.justRegisteredUser(newUser);
+      const user: UserWithoutPassword = await this.usersRepository.findOne({
+        where: { email: userData.email },
+      });
 
       return user;
     }
+  }
 
-    // if (newUser[0].roles !== Role.SuperAdmin) {
-    //   console.info('User is superAdmin');
-    //   //   await this.emailService.sendWelcomeEmail();
-    // }
+  async signUpForm(userData: CreateUserDto): Promise<Partial<User>> {
+    const checkUser: User[] = await this.usersRepository.find({
+      where: { email: userData.email },
+    });
+    if (checkUser.length)
+      throw new ConflictException('user with this email already exists');
 
-    // const { password, email } = newUser[0];
+    const newUser: User = this.usersRepository.create(userData);
 
-    // if (!password || !email) {
-    //   console.warn('Valid email and password are required');
-    //   throw new BadRequestException('Valid email and password are required');
-    // }
+    const { password, email } = newUser;
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    if (!password || !email)
+      throw new BadRequestException('Valid email and password are required');
 
-    // if (!hashedPassword) {
-    //   console.warn('Password encryption error');
-    //   throw new BadRequestException(`Password encryption error`);
-    // } else {
-    //   newUser.password = hashedPassword;
-    // }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // try {
-    //   await this.emailService.sendWelcomeEmail(
-    //     newUser[0].email,
-    //     newUser[0].name,
-    //   );
-    // } catch (error) {
-    //   console.error('No se pudo enviar el email de bienvenida:', error.message);
-    // }
+    if (!hashedPassword) {
+      throw new BadRequestException(`Password encryption error`);
+    } else {
+      newUser.password = hashedPassword;
+    }
+
+    await this.usersRepository.save(newUser);
+    const user: UserWithoutPassword = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+
+    return user;
   }
 
   // @Anahidia working here

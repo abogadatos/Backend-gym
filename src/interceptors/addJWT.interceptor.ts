@@ -20,7 +20,7 @@ export class addJWTInterceptor implements NestInterceptor {
             message:
               'User already exist within database. Must login with password',
             userData:
-                userID: ${result.id},
+                userID: ${result.userID},
                 userName: ${result.userName},
                 userEmail: ${result.userEmail},
                 userRol: ${result.userRol},
