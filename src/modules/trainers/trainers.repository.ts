@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Trainers } from 'src/database/entities/trainer.entity';
 import { User } from 'src/database/entities/user.entity';
 import { Role } from 'src/enum/roles.enum';
+import { UpdateTrainerDto } from './dto/update-trainer.dto';
+import { CreateTrainerDto } from './dto/create-trainer.dto';
 
 @Injectable()
 export class TrainersCustomRepository {
@@ -63,11 +65,79 @@ export class TrainersCustomRepository {
       return `Trainers already exist within the database`;
     }
   }
+  async getAllTrainers(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+      const [data,total] = await this.trainersRepository.findAndCount({
+        relations: ['userID','classes'], 
+        skip,
+        take:limit,
+      });
+    
+    return {data,total}
+       
+  }
 
   async getTrainerById(id: string) {
-    const trainer = await this.trainersRepository.findOne({ where: { id } });
+    const trainer = await this.trainersRepository.findOne({ 
+      where: { id },
+      relations:['userID','classes']
+    
+    });
     if (!trainer) throw new NotFoundException('No se Enontro el trainer');
     return trainer
   }
 
+  async createTrainer(createTrainerDto:CreateTrainerDto){
+ 
+    const {userID,...trainerData}=createTrainerDto
+
+    const user = await this.userRepository.findOneBy({ id: userID });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userID} not found`);
+    }
+
+      user.roles=Role.Trainer
+
+      await this.userRepository.save(user)
+
+      const trainer = this.trainersRepository.create({
+        ...trainerData,
+        userID: user,
+      })
+      return this.trainersRepository.save(trainer);
+
+  }
+
+  async updateTrainers(id: string, updateTrainerDto: UpdateTrainerDto): Promise<Trainers> {
+    const trainer = await this.trainersRepository.findOne({
+      where:{id},
+      relations:['userID','classes']
+    });
+    Object.assign(trainer, updateTrainerDto);
+    return this.trainersRepository.save(trainer);
+  }
+
+  async deleteTrainer(id:string){
+
+    const trainer= await this.trainersRepository.findOne({
+      where:{id},
+      relations:['userID']
+    })
+
+
+
+    if(!trainer) throw new NotFoundException(`trainer whit id${id} not found`)
+      await this.trainersRepository.manager.transaction(async (transactionalEntityManager) => {
+          await transactionalEntityManager.remove(Trainers, trainer);
+        if (trainer.userID) {
+          await transactionalEntityManager.remove(User, trainer.userID);
+        }
+      })
+      
+      console.log('trainer eliminado correctamente');
+      
+      return trainer
+  }
 }
+
+
