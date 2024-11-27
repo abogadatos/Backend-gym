@@ -4,53 +4,75 @@
     "description": "Una clase relajante para terminar el día con vistas al atardecer.",
     "location": "Terraza del gimnasio",
     "capacity": 20,
-    "current_participants": 10,
-    "schedule": "2024-11-20T19:00:00Z",
+    "schedule": [
+      {
+        "day": "lunes",
+        "startTime": "19:00",
+        "endTime": "20:00"
+      }
+    ],
     "imgUrl": "https://i.imgur.com/VLNjzIU.jpg",
-    "trainerName": "Jane Doe"
-    
+    "trainerId": "trainer-1" 
   },
   {
     "name": "Entrenamiento Funcional",
     "description": "Circuitos intensos para mejorar fuerza, resistencia y flexibilidad.",
     "location": "Sala de pesas",
     "capacity": 15,
-    "current_participants": 12,
-    "schedule": "2024-11-21T08:00:00Z",
+    "schedule": [
+      {
+        "day": "martes",
+        "startTime": "08:00",
+        "endTime": "09:00"
+      }
+    ],
     "imgUrl": "https://i.imgur.com/2oafcMa.jpg",
-    "trainerName": "John Smith"
-    
+    "trainerId": "trainer-2"  
   },
   {
     "name": "Zumba Energizante",
     "description": "Baila y ejercítate al ritmo de música vibrante y divertida.",
     "location": "Sala de danza",
     "capacity": 25,
-    "current_participants": 18,
-    "schedule": "2024-11-22T17:30:00Z",
+    "schedule": [
+      {
+        "day": "miercoles",
+        "startTime": "17:30",
+        "endTime": "18:30"
+      }
+    ],
     "imgUrl": "https://i.imgur.com/34WcY56.jpg",
-    "trainerName": "Maria Gonzalez"
+    "trainerId": "trainer-3"  
   },
   {
     "name": "CrossFit de Alto Rendimiento",
     "description": "Sesiones intensas para los amantes del fitness extremo.",
     "location": "Zona de entrenamiento al aire libre",
     "capacity": 12,
-    "current_participants": 8,
-    "schedule": "2024-11-23T06:30:00Z",
+    "schedule": [
+      {
+        "day": "jueves",
+        "startTime": "06:30",
+        "endTime": "07:30"
+      }
+    ],
     "imgUrl": "https://i.imgur.com/8DpxtRA.jpg",
-    "trainerName": "Alex Turner"
+    "trainerId": "trainer-4" 
   },
-  
   {
     "name": "Pilates para Principiantes",
     "description": "Movimientos básicos para mejorar postura y flexibilidad.",
     "location": "Sala de pilates",
     "capacity": 10,
-    "current_participants": 6,
-    "schedule": "2024-11-24T10:00:00Z",
+    "schedule": [
+      {
+        "day": "viernes",
+        "startTime": "10:00",
+        "endTime": "11:00"
+        
+      }
+    ],
     "imgUrl": "https://i.imgur.com/krZ9HnK.jpg",
-    "trainerName": "Sofia Ruiz"
+    "trainerId": "trainer-5"  
   }
-  
 ]

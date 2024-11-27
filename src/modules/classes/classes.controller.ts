@@ -21,8 +21,8 @@ export class ClassesController {
     @Query('page') page: string,
     @Query('limit') limit: string,
   ) {
-    const pageNumber = page ? parseInt(page, 10) : 1; // Valor por defecto: 1
-    const limitNumber = limit ? parseInt(limit, 10) : 6; // Valor por defecto: 5
+    const pageNumber = page ? parseInt(page, 10) : 1; 
+    const limitNumber = limit ? parseInt(limit, 10) : 6; 
 
     return await this.classService.getAllClasses(pageNumber, limitNumber);
   }
@@ -32,13 +32,13 @@ export class ClassesController {
   }
 
   @Post()
-  async postClass(@Body() classe: CreateClassDto) {
-    return await this.classService.createClass(classe);
+  async postClass(@Body() createClassDto:CreateClassDto ) {
+    return await this.classService.createClass(createClassDto);
   }
 
   @Put(':id')
-  async updateClass(@Param('id') id: string, @Body() classe: UpdateClassDto) {
-    return await this.classService.updateClass(id, classe);
+  async updateClass(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
+    return await this.classService.updateClass(id,updateClassDto );
   }
   @Delete(':id')
   async deleteClass(@Param('id') id: string) {

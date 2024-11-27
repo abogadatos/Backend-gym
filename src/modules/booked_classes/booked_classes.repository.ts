@@ -7,16 +7,20 @@ import { Repository } from 'typeorm';
 import { CreateBookedClassDto } from './dto/createBookedDto';
 import { EmailService } from '../email/email.service';
 import { Status } from 'src/enum/bookingStatus.enum';
+import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
 
 @Injectable()
 export class BookedClassesCustomRepository {
   constructor(
-    private readonly EmailService:EmailService,
+    private readonly emailService:EmailService,
     @InjectRepository(BookedClasses)
     private readonly bookedClassesRepository: Repository<BookedClasses>,
 
     @InjectRepository(User)
     private readonly usersRepostory:Repository<User>,
+
+    @InjectRepository(ClassSchedule)
+    private readonly classScheduleRepository:Repository<ClassSchedule>,
 
     @InjectRepository(Classes)
     private readonly classRepository:Repository<Classes>
@@ -35,74 +39,75 @@ export class BookedClassesCustomRepository {
 }
   
 
-  async createBooked(bookClass:CreateBookedClassDto) {
-    const { userId, classId} = bookClass
-
-    const user= await this.usersRepostory.findOne({
-      where:{id:userId}
-    })
-    if (!user) throw new NotFoundException('Usuario no encontrado.');
-    const selectedClass= await this.classRepository.findOne({
-      where:{id:classId}
-    })
-    if (!selectedClass) throw new NotFoundException('Clase no encontrada.');
-
-    const existingBooking = await this.bookedClassesRepository.findOne({
-      where: { user: { id: userId }, class: { id: classId } },
+async createBooked(bookClass: CreateBookedClassDto) {
+  const { userId, classId, scheduleId } = bookClass
+    const classEntity = await this.classRepository.findOne({
+      where: { id: classId },
+      relations: ['schedules'],
     });
   
-    if (existingBooking) throw new BadRequestException('El usuario ya tiene una reserva para esta clase');
-
-
-
-    if (selectedClass.current_participants >= selectedClass.capacity) {
-      throw new BadRequestException('La clase ya está completa.');
+    if (!classEntity) throw new NotFoundException('Class not found');
+  
+    
+    const availableSchedule = classEntity.schedules.find(
+      (schedule) => schedule.remainingCapacity > 0
+    );
+  
+    if (!availableSchedule) {
+      throw new Error('No remaining capacity in any schedule');
     }
-
-    const booking = await this.bookedClassesRepository.create({
-      user,
-      class: selectedClass,
-      booking_date: selectedClass.schedule
+  
+    const newBookedClass = this.bookedClassesRepository.create({
+      user: { id: userId }, 
+      schedule: availableSchedule,
+      class: classEntity,
     });
   
-    await this.bookedClassesRepository.save(booking);
-
-      await this.EmailService.sendReservatioemail(
-        user.email,
-        selectedClass.name,
-        selectedClass.schedule,
-      )
     
+    await this.bookedClassesRepository.save(newBookedClass);
+  
     
-    selectedClass.current_participants++;
-    await this.classRepository.save(selectedClass)
+    availableSchedule.remainingCapacity -= 1;
+  
+  
+    await this.classScheduleRepository.save(availableSchedule);
+  
+    return classEntity;
+  
+}  
 
-    return booking
+async deleteBooked(bookingId: string) {
+  const booking = await this.bookedClassesRepository.findOne({
+    where: { id: bookingId },
+    relations: ['user', 'class', 'class.schedules'],
+    
+  });
+
+  if (!booking) {
+    throw new BadRequestException('No se encontró la reserva.');
   }
 
-  upDateBooked() {
-    return 'editar una reserva';
+
+  const classSchedule = booking.class.schedules[0];
+  if (!classSchedule) {
+    throw new BadRequestException('La clase no tiene un horario asignado.');
   }
 
-  async deleteBooked(bookingId:string) {
-     const booking = await this.bookedClassesRepository.findOne({ 
-          where: { id: bookingId },
-           relations: ['user', 'class'] 
-          })
-      if(!booking) throw new BadRequestException('no se encontro la reserva')
-    
-    booking.status = Status.Canceled;
-    await this.bookedClassesRepository.save(booking)
+  const classDate = new Date(`${classSchedule.day}T${classSchedule.startTime}`);
 
-    await this.EmailService.sendCancellationEmail(
-      booking.user.email,
-      booking.class.name,
-      booking.class.schedule,
-    )
+  await this.bookedClassesRepository.save(booking);
 
-    return booking
+  await this.emailService.sendCancellationEmail(
+    booking.user.email,
+    booking.class.name,
+    classDate,  
+  );
 
-  }
+  
+  return booking;
+}
+
+
 
   async getBooketsByUserId(userId:string) {
     return await this.bookedClassesRepository.find({

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Trainers } from 'src/database/entities/trainer.entity';
@@ -63,4 +63,11 @@ export class TrainersCustomRepository {
       return `Trainers already exist within the database`;
     }
   }
+
+  async getTrainerById(id: string) {
+    const trainer = await this.trainersRepository.findOne({ where: { id } });
+    if (!trainer) throw new NotFoundException('No se Enontro el trainer');
+    return trainer
+  }
+
 }

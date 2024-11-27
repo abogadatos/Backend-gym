@@ -9,17 +9,14 @@ import {
 import { Classes } from './classes.entity';
 import { User } from './user.entity';
 import { Status } from 'src/enum/bookingStatus.enum';
+import { ClassSchedule } from './ClassSchedule.entity';
 
 @Entity('booked_classes')
 export class BookedClasses {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'timestamp' })
-  booking_date: Date;
-
-  @Column({ type: 'enum', enum: Status, default: Status.Pending })
-  status: string;
+  
 
   @CreateDateColumn()
   created_at: Date;
@@ -31,4 +28,8 @@ export class BookedClasses {
   @ManyToOne(() => Classes, (classEntity) => classEntity.bookedClasses)
   @JoinColumn({ name: 'class_id' })
   class: Classes;
+
+  @ManyToOne(() => ClassSchedule, (schedule) => schedule.bookedClasses)
+  @JoinColumn({ name: 'schedule_id' }) 
+  schedule: ClassSchedule;
 }

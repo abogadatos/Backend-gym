@@ -20,10 +20,6 @@ export class BookedClassesController {
     return await this.bookendClassesService.createBookedService(bookClassDto);
   }
 
-  @Put(':id')
-  async upDateBooked() {
-    return await this.bookendClassesService.upDateBookedService();
-  }
 
   @Delete(':id')
   async deleteBooked(@Param('bookingId') bookingId:string) {
