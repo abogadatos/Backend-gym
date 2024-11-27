@@ -15,6 +15,7 @@ export class Reviews {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  
   @Column({
     type: 'int',
     nullable: false,
