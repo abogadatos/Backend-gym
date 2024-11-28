@@ -32,7 +32,6 @@ export class ReviewsService {
   async postReviews(createReviewDto: CreateReviewDto) {
     const { rating, comment, user_id, class_id } = createReviewDto;
 
-
     const user = await this.usersRepository.findOne({ where: { id: user_id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${user_id} not found`);
@@ -48,6 +47,7 @@ export class ReviewsService {
       comment,
       user,
       class: classEntity,
+      created_at: new Date(),
     });
 
     return await this.reviewsRepository.save(review);
