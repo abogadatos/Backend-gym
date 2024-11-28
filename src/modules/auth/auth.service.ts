@@ -5,7 +5,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-// import { CreateUserDto } from './dto/signUpUser.dto';
 import { User } from 'src/database/entities/user.entity';
 import { LoginUserDto } from './dto/signInUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,12 +12,10 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
-// import { status } from 'src/enum/status.enum';
 import { authCustomRepository } from './auth.repository';
 import { AuthZeroDTO } from './dto/auth0-logIn.dto';
 import { CreateUserDto } from './dto/signUpUser.dto';
 import { UserWithoutPassword } from '../users/types/userWithoutPassword.type';
-// import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -37,15 +34,19 @@ export class AuthService {
       where: { email: authZeroData.email },
     });
 
-    const { name, email, image } = authZeroData;
-    console.info(`
-    User trying to signUp:
-    name: ${name},
-    email: ${email},
-    image: ${image}
-    `);
-
     if (userExists !== null) {
+      if (userExists.auth === 'google') {
+        return {
+          userID: userExists.id,
+          userName: userExists.name,
+          userEmail: userExists.email,
+          userRol: userExists.roles,
+          userAuth: userExists.auth,
+          userMembershipStatus: userExists.membership_status,
+          userCreatedAt: userExists.created_At,
+        };
+      }
+
       if (userExists.auth === 'form') {
         // esta info se va a addJWT.interceptor.ts
         return {
@@ -60,24 +61,49 @@ export class AuthService {
         throw new ConflictException(
           'User is already registered within database with form',
         );
-      } else if (
-        userExists !== null &&
-        userExists.auth === 'googleIncomplete'
-      ) {
-        if (userExists.password === null) {
-          console.log('Usuario debe actualizar datos');
+      }
+
+      if (userExists !== null && userExists.auth === 'googleIncomplete') {
+        if (
+          userExists.password === null ||
+          userExists.phone === null ||
+          userExists.country === null ||
+          userExists.address === null
+        ) {
+          console.log('User may update his profile to complete its data');
           return userExists;
-        } else if (userExists.password.length === 60) {
-          console.log(userExists.password.length);
+        }
+
+        if (
+          userExists.password.length === 60 &&
+          userExists.phone !== null &&
+          userExists.country !== null &&
+          userExists.address !== null
+        ) {
+          console.log('Cae en auth.service.ts linea 83');
           return {
-            message: 'User log in successful',
-            userData: userExists,
+            userID: userExists.id,
+            userName: userExists.name,
+            userEmail: userExists.email,
+            userRol: userExists.roles,
+            userAuth: userExists.auth,
+            userMembershipStatus: userExists.membership_status,
+            userCreatedAt: userExists.created_At,
           };
         }
-        return userExists;
+        // return userExists;
       }
     } else if (userExists === null) {
       try {
+        const { name, email, image } = authZeroData;
+
+        console.info(`
+        User Signing Up Data:
+        name: ${name},
+        email: ${email},
+        image: ${image}
+        `);
+
         const userData = {
           name: name,
           email: email,
@@ -97,15 +123,13 @@ export class AuthService {
     }
   }
 
-  async signUpThirdParty(userData): Promise<Partial<User>> {
+  async signUpThirdParty(userData: AuthZeroDTO): Promise<Partial<User>> {
     const checkUser = await this.usersRepository.findOne({
       where: { email: userData.email },
     });
     if (checkUser) {
-      console.warn('User with this email already exists from signUpThirdParty');
-      throw new ConflictException(
-        'user with this email already exists from signUp',
-      );
+      console.warn('User with this email already exists');
+      throw new ConflictException('User with this email already exists');
     }
 
     if (checkUser === null) {
@@ -124,8 +148,10 @@ export class AuthService {
     const checkUser: User[] = await this.usersRepository.find({
       where: { email: userData.email },
     });
-    if (checkUser.length)
+    if (checkUser.length) {
+      console.warn('user with this email already exists');
       throw new ConflictException('user with this email already exists');
+    }
 
     const newUser: User = this.usersRepository.create(userData);
 

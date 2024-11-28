@@ -1,18 +1,19 @@
-import { MembershipsCustomRepository } from './../memberships/memberships.repository';
-import { ClassesCustomRepository } from './../classes/classes.repository';
 import {
   HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UsersCustomRepository } from './users.repository';
-import { CreateUserDto } from '../auth/dto/signUpUser.dto';
-import { User } from 'src/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserWithoutPassword } from './types/userWithoutPassword.type';
 import { TrainersCustomRepository } from '../trainers/trainers.repository';
+import { ClassesCustomRepository } from './../classes/classes.repository';
+import { MembershipsCustomRepository } from './../memberships/memberships.repository';
+import { UpdateUserDto } from './dto/updateUser.dto';
+import { UserWithoutPassword } from './types/userWithoutPassword.type';
+import { UsersCustomRepository } from './users.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -55,42 +56,31 @@ export class UsersService {
           Seeding trainers
             🏃🏽💥🏋‍♀🔥💪🏼
           `);
-    }, 12000);
+    }, 10000);
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
-    }, 12500);
+    }, 10500);
 
     setTimeout(() => {
       console.info(`
           Seeding class
            ⏳⏳⏳⏳⌛
           `);
-    }, 14000);
+    }, 12000);
     setTimeout(() => {
       this.classesCustomRepository.initializeClasses();
-    }, 14500);
+    }, 12500);
 
     setTimeout(() => {
       console.info(`
               Database seeding completed
                 ✅✅✅✅✅✅✅✅✅✅
           `);
-    }, 16000);
+    }, 14000);
   }
 
   async userSeeder() {
     return await this.usersCustomRepository.initializeUser();
-  }
-
-  async getUser(userID: string): Promise<UserWithoutPassword> {
-    const foundUser: User | undefined = await this.usersRepository.findOne({
-      where: { id: userID },
-    });
-    if (!foundUser) throw new NotFoundException('user not found or not exist');
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...filteredUser } = foundUser;
-    return foundUser;
   }
 
   async getUsers(
@@ -127,8 +117,57 @@ export class UsersService {
     };
   }
 
-  async getUserById(id: string) {
-    return await this.usersCustomRepository.getUserById(id);
+  async updateUser(userID: string, userData: UpdateUserDto) {
+    const foundUser = await this.usersRepository.findOne({
+      where: { id: userID },
+    });
+    if (!foundUser) throw new NotFoundException('user not found or not exist');
+
+    if (foundUser.auth === 'form') {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+      const updatedUser = this.usersRepository.merge(foundUser, userData);
+      updatedUser.password = hashedPassword;
+      await this.usersRepository.save(updatedUser);
+
+      return { message: 'User Update Successfully', updatedUser };
+    } else if (foundUser.auth === 'googleIncomplete') {
+      if (
+        foundUser.password === null ||
+        foundUser.phone === null ||
+        foundUser.country === null ||
+        foundUser.address === null
+      ) {
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        userData.password = hashedPassword;
+
+        const updatedUser = this.usersRepository.merge(foundUser, userData);
+        updatedUser.auth = 'google';
+        await this.usersRepository.save(updatedUser);
+
+        return { message: 'User Update Successfully', updatedUser };
+      }
+    } else if (foundUser.auth === 'google') {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+      userData.password = hashedPassword;
+      const updatedUser = this.usersRepository.merge(foundUser, userData);
+
+      await this.usersRepository.save(updatedUser);
+
+      return { message: 'User Update Successfully', updatedUser };
+    }
+  }
+
+  async getUserById(userID: string): Promise<UserWithoutPassword> {
+    const foundUser: User | undefined = await this.usersRepository.findOne({
+      where: { id: userID },
+    });
+    if (!foundUser) throw new NotFoundException('user not found or not exist');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...filteredUser } = foundUser;
+    return foundUser;
   }
 
   async getUserByEmail(email: string): Promise<User> {
@@ -151,16 +190,11 @@ export class UsersService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto) {
-    const newUser = await this.usersCustomRepository.createUser(createUserDto);
-    return newUser;
-  }
+  async deleteUser(id: string): Promise<Partial<User>> {
+    const user = await this.usersRepository.findOneBy({ id });
+    this.usersRepository.remove(user);
+    // const { password, ...userWithoutPass } = user;
 
-  async updateUser(id: string, user: any) {
-    return await this.usersCustomRepository.updateUser(id, user);
-  }
-
-  async deleteUser(id: string) {
-    return await this.usersCustomRepository.remove(id);
+    return user;
   }
 }
