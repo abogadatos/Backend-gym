@@ -1,4 +1,39 @@
-node_modules
-node_modules
-dist 
+# Node.js
+node_modules/
+dist/
+build/
+tmp/
+coverage/
+
+# Environment variable files
 .env
+.development.env
+
+# Logs
+*.log
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.atom/
+
+# TypeScript
+*.tsbuildinfo
+
+# Miscellaneous
+*.swp
+
+# Test files
+/coverage/
+jest/
+
+# Custom or build tool specific files
+.eslintcache
+.nyc_output/

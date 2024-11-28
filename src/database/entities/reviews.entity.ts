@@ -30,14 +30,15 @@ export class Reviews {
   @Column({
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  created_at: number;
-
-  @ManyToOne(() => Classes, (classEntity) => classEntity.reviews)
-  @JoinColumn({ name: 'class_id' })
-  class: Classes;
+  created_at: Date;
 
   @ManyToOne(() => User, (user) => user.reviews)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Classes, (classEntity) => classEntity.reviews)
+  @JoinColumn({ name: 'class_id' })
+  class: Classes;
 }

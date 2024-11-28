@@ -14,12 +14,15 @@ export class Trainers {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
   @Column('text')
   bio: string;
+
+  @Column({ type: 'varchar' })
+  name: string;
+
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  userID: User;
 
   @Column('varchar', { length: 255 })
   specialties: string;

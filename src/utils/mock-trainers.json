@@ -1,0 +1,37 @@
+[
+  {
+    "bio": "Experienced fitness coach with a passion for helping clients achieve their health goals.",
+    "name": "Stephen Hamilton",
+    "specialties": "Strength Training, Cardio",
+    "experience_years": 5,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer1.jpg"
+  },
+  {
+    "bio": "Certified yoga instructor specializing in flexibility and mindfulness training.",
+    "name": "Cecelia Reid",
+    "specialties": "Yoga, Pilates",
+    "experience_years": 3,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer2.jpg"
+  },
+  {
+    "bio": "Personal trainer focused on weight loss and nutrition planning.",
+    "name": "Randy Miller",
+    "specialties": "Weight Loss, Nutrition",
+    "experience_years": 7,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer3.jpg"
+  },
+  {
+    "bio": "Athlete with a background in HIIT and functional training.",
+    "name": "Allie Price",
+    "specialties": "HIIT, Functional Training",
+    "experience_years": 4,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer4.jpg"
+  },
+  {
+    "bio": "Specializes in strength and conditioning for competitive athletes.",
+    "name": "Alice Wagner",
+    "specialties": "Strength & Conditioning",
+    "experience_years": 6,
+    "imgUrl": "https://res.cloudinary.com/sample/image/upload/trainer5.jpg"
+  }
+]

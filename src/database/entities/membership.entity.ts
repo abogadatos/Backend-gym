@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Payment } from './payment.entity';
 
 @Entity({ name: 'memberships' })
 export class Memberships {
@@ -38,13 +39,12 @@ export class Memberships {
   })
   created_at: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
+  @Column({ nullable: true })
+  stripeProductId: string;
 
-  //@OneToMany(()=>Payments,(payment)=>payment.membership)
-  //payments:Payments[]
+  @Column({ nullable: true })
+  stripePriceId: string;
+
+  @OneToMany(() => Payment, (payment) => payment.membership)
+  payments: Payment[];
 }

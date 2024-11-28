@@ -5,12 +5,15 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BookedClasses } from './booked_classes.entity';
 import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
+import { Payment } from './payment.entity';
+import { Trainers } from './trainer.entity';
 
 @Entity({
   name: 'users',
@@ -37,22 +40,7 @@ export class User {
     length: 50,
     nullable: false,
   })
-  firstName: string;
-
-  /**
-   * User's last name.
-   *
-   * @remarks
-   * Name must be unique and should not exceed 50 characters.
-   *
-   * @example "Torvalds"
-   */
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-  })
-  lastName: string;
+  name: string;
 
   /**
    * User's unique email address used for login and communication.
@@ -78,8 +66,41 @@ export class User {
   @Column({
     type: 'varchar',
     length: 60,
+    nullable: true,
   })
   password: string;
+
+  /**
+   * User's phone number for contact purposes.
+   *
+   * @remarks
+   * Stored as a varchar due to potential international formats and length requirements.
+   *
+   * @example "+1-202-555-0173"
+   */
+  @Column({
+    type: 'varchar',
+    length: 15,
+    nullable: true,
+  })
+  phone: string;
+
+  /**
+   * Authentication method used by the user.
+   *
+   * @remarks
+   * Acceptable values are "google" or "form".
+   * The default value is "form".
+   *
+   * @example "google"
+   */
+  @Column({
+    type: 'varchar', // Store it as a simple string in the database
+    length: 16, // Limit length for validation purposes
+    nullable: false, // Ensure it's always set
+    default: 'form', // Set the default value
+  })
+  auth: 'google' | 'googleIncomplete' | 'form'; // Define acceptable values as a TypeScript union type
 
   /**
    * Roles assigned to the user, which dictate their permissions within the platform.
@@ -94,7 +115,7 @@ export class User {
     enum: Role,
     default: Role.User,
   })
-  roles: Role[];
+  roles: Role;
 
   /**
    * Membership status assigned to the user, indicating the current state of their membership.
@@ -106,25 +127,26 @@ export class User {
    * @example ["inactive", "active", "expired", "canceled", "trial", "pending", "suspended"]
    */
   @Column({
-    type: 'varchar',
+    type: 'enum',
     enum: MembershipStatus,
     default: MembershipStatus.Inactive,
   })
   membership_status: MembershipStatus;
 
   /**
-   * User's phone number for contact purposes.
+   * Country of residence for the user.
    *
    * @remarks
-   * Stored as a varchar due to potential international formats and length requirements.
+   * Optional field, up to 50 characters in length.
    *
-   * @example "+1-202-555-0173"
+   * @example "Colombia"
    */
   @Column({
     type: 'varchar',
-    length: 15,
+    length: 50,
+    nullable: true,
   })
-  phone: string;
+  country: string;
 
   /**
    * Full address of the user.
@@ -154,7 +176,7 @@ export class User {
     type: 'text',
     default: `https://res.cloudinary.com/dwhejzrua/image/upload/v1727710566/um0h7zmnozrblufpcikd.jpg`,
   })
-  profilePicture: string;
+  image: string;
 
   /**
    * Timestamp indicating when the user account was created.
@@ -170,14 +192,15 @@ export class User {
   @UpdateDateColumn()
   updated_At: Date;
 
+  @OneToOne(() => Trainers, (trainers) => trainers.userID)
   @OneToMany(() => BookedClasses, (bookedClasses) => bookedClasses.user)
   bookedClasses: BookedClasses[];
 
   @OneToMany(() => Attendance, (attendance) => attendance.user)
   attendanceRecords: Attendance[];
 
-  //@OneToMany(()=>Payments,(payment)=>payment.user)
-  //payments:Payments[]
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
   @OneToMany(() => Reviews, (reviews) => reviews.user)
   reviews: Reviews[];

@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Yoga al Atardecer",
+    "description": "Una clase relajante para terminar el día con vistas al atardecer.",
+    "location": "Terraza del gimnasio",
+    "capacity": 20,
+    "schedule": [
+      {
+        "day": "lunes",
+        "startTime": "19:00",
+        "endTime": "20:00"
+      },
+      {
+        "day": "miercoles",
+        "startTime": "09:00",
+        "endTime": "10:00"
+      }
+    ],
+    "imgUrl": "https://i.imgur.com/VLNjzIU.jpg",
+    "trainerId": "trainer-1" 
+  },
+  {
+    "name": "Entrenamiento Funcional",
+    "description": "Circuitos intensos para mejorar fuerza, resistencia y flexibilidad.",
+    "location": "Sala de pesas",
+    "capacity": 15,
+    "schedule": [
+      {
+        "day": "martes",
+        "startTime": "08:00",
+        "endTime": "09:00"
+      },
+      {
+        "day": "jueves",
+        "startTime": "19:00",
+        "endTime": "20:00"
+      }
+    ],
+    "imgUrl": "https://i.imgur.com/2oafcMa.jpg",
+    "trainerId": "trainer-2"  
+  },
+  {
+    "name": "Zumba Energizante",
+    "description": "Baila y ejercítate al ritmo de música vibrante y divertida.",
+    "location": "Sala de danza",
+    "capacity": 25,
+    "schedule": [
+      {
+        "day": "miercoles",
+        "startTime": "17:30",
+        "endTime": "18:30"
+      },
+      {
+        "day": "viernes",
+        "startTime": "09:00",
+        "endTime": "10:00"
+      }
+    ],
+    "imgUrl": "https://i.imgur.com/34WcY56.jpg",
+    "trainerId": "trainer-3"  
+  },
+  {
+    "name": "CrossFit de Alto Rendimiento",
+    "description": "Sesiones intensas para los amantes del fitness extremo.",
+    "location": "Zona de entrenamiento al aire libre",
+    "capacity": 12,
+    "schedule": [
+      {
+        "day": "jueves",
+        "startTime": "06:30",
+        "endTime": "07:30"
+      },
+      {
+        "day": "martes",
+        "startTime": "18:30",
+        "endTime": "19:30"
+      }
+    ],
+    "imgUrl": "https://i.imgur.com/8DpxtRA.jpg",
+    "trainerId": "trainer-4" 
+  },
+  {
+    "name": "Pilates para Principiantes",
+    "description": "Movimientos básicos para mejorar postura y flexibilidad.",
+    "location": "Sala de pilates",
+    "capacity": 10,
+    "schedule": [
+      {
+        "day": "viernes",
+        "startTime": "10:00",
+        "endTime": "11:00"
+        
+      },
+      {
+        "day": "lunes",
+        "startTime": "10:00",
+        "endTime": "11:00"
+      }
+    ],
+    "imgUrl": "https://i.imgur.com/krZ9HnK.jpg",
+    "trainerId": "trainer-5"  
+  }
+]

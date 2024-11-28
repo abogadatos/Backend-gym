@@ -10,6 +10,7 @@ import { Reviews } from './reviews.entity';
 import { BookedClasses } from './booked_classes.entity';
 import { Trainers } from './trainer.entity';
 import { Attendance } from './attendance.entity';
+import { ClassSchedule } from './ClassSchedule.entity';
 
 @Entity({
   name: 'classes',
@@ -43,17 +44,9 @@ export class Classes {
   })
   capacity: number;
 
-  @Column({
-    type: 'int',
-    nullable: false,
-  })
-  current_participants: number;
+ @OneToMany(()=>ClassSchedule,schedule =>schedule.class)
+ schedules:ClassSchedule[]
 
-  @Column({
-    type: 'timestamp',
-    nullable: false,
-  })
-  schedule: Date;
   @Column({
     type: 'text',
   })
@@ -62,13 +55,16 @@ export class Classes {
   @Column({
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  created_at: number;
+  created_at: Date;
+
   @Column({
-    type: 'text',
+    type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  update_at: number;
+  update_at: Date;
 
   @ManyToOne(() => Trainers, (trainer) => trainer.classes)
   @JoinColumn({ name: 'trainer_id' })

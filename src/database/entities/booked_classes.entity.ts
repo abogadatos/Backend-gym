@@ -8,11 +8,18 @@ import {
 } from 'typeorm';
 import { Classes } from './classes.entity';
 import { User } from './user.entity';
+import { Status } from 'src/enum/bookingStatus.enum';
+import { ClassSchedule } from './ClassSchedule.entity';
 
 @Entity('booked_classes')
 export class BookedClasses {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @ManyToOne(() => User, (user) => user.bookedClasses)
   @JoinColumn({ name: 'user_id' })
@@ -22,12 +29,7 @@ export class BookedClasses {
   @JoinColumn({ name: 'class_id' })
   class: Classes;
 
-  @Column({ type: 'timestamp' })
-  booking_date: Date;
-
-  @Column({ type: 'enum', enum: BookedClasses })
-  status: string;
-
-  @CreateDateColumn()
-  created_at: Date;
+  @ManyToOne(() => ClassSchedule, (schedule) => schedule.bookedClasses)
+  @JoinColumn({ name: 'schedule_id' }) 
+  schedule: ClassSchedule;
 }
