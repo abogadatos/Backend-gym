@@ -20,7 +20,7 @@ endTime: string
 @Column({ default: 0 })
 currentParticipants: number
 
-@Column()
+@Column({ type: 'int', nullable: false })
 remainingCapacity: number;
 
 @ManyToOne(() => Classes, (classes) => classes.schedules)

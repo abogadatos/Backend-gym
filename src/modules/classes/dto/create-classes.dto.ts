@@ -1,30 +1,36 @@
 import { Type } from 'class-transformer';
-import { IsString, IsInt, IsUUID, IsOptional, IsPositive, ValidateNested} from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsUUID,
+  IsPositive,
+  ValidateNested,
+  IsArray,
+} from 'class-validator';
 import { CreateClassScheduleDto } from './createSchedule.dto';
 
 export class CreateClassDto {
   @IsString()
-  name: string;
+  name: string; // Nombre de la clase
 
   @IsString()
-  description: string;
+  description: string; // Descripción de la clase
 
   @IsString()
-  location: string;
+  location: string; // Ubicación donde se llevará a cabo la clase
 
   @IsInt()
   @IsPositive()
-  capacity: number;
+  capacity: number; // Capacidad máxima de la clase
 
   @IsString()
-  imgUrl: string;
+  imgUrl: string; // URL de la imagen para la clase
 
   @IsUUID()
-  trainerId: string;
+  trainerId: string; // ID del entrenador asociado
 
-  @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateClassScheduleDto)
-  scheduleClass?: CreateClassScheduleDto[];
+  schedules: CreateClassScheduleDto[]; // Lista de horarios asociados a la clase
 }
-

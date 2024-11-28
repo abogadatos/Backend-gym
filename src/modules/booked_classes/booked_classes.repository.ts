@@ -38,40 +38,78 @@ export class BookedClassesCustomRepository {
   return bookedClass;
 }
   
-
 async createBooked(bookClass: CreateBookedClassDto) {
   const { userId, classId, scheduleId } = bookClass;
-  const classEntity = await this.classRepository.findOne({
-    where: { id: classId },
-    relations: ['schedules'],
+
+ 
+  const existingBooking = await this.bookedClassesRepository.findOne({
+    where: {
+      user: { id: userId },
+      class: { id: classId },
+      schedule: { id: scheduleId },
+    },
   });
 
-  if (!classEntity) throw new NotFoundException('Class not found');
+  if (existingBooking) {
+    throw new BadRequestException('User is already booked for this class and schedule');
+  }
 
-  const availableSchedule = classEntity.schedules.find(
-    (schedule) => schedule.id === scheduleId && schedule.remainingCapacity > 0
-  );
 
-  if (!availableSchedule) {
+  const user = await this.usersRepostory.findOne({ where: { id: userId } });
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+
+  
+  const classEntity = await this.classRepository.findOne({
+    where: { id: classId },
+    relations: ['schedules'],  
+  });
+
+  if (!classEntity) {
+    throw new NotFoundException('Class not found');
+  }
+
+  
+  const schedule = classEntity.schedules.find((schedule) => schedule.id === scheduleId);
+  if (!schedule) {
+    throw new NotFoundException('Schedule not found');
+  }
+
+  
+  if (schedule.remainingCapacity <= 0) {
     throw new Error('No remaining capacity in the selected schedule');
   }
 
+
+  const userExists = await this.usersRepostory.findOne({ where: { id: userId } });
+  const scheduleExists = await this.classScheduleRepository.findOne({ where: { id: scheduleId } });
+
+  if (!userExists) {
+    throw new NotFoundException('User not found in database');
+  }
+
+  if (!scheduleExists) {
+    throw new NotFoundException('Schedule not found in database');
+  }
+
+  
   const newBookedClass = this.bookedClassesRepository.create({
-    user: { id: userId },
-    schedule: availableSchedule,
-    class: classEntity,
+    user: userExists,      
+    schedule: scheduleExists,   
+    class: classEntity, 
   });
+
 
   await this.bookedClassesRepository.save(newBookedClass);
 
-  // Actualizar los campos en el Schedule
-  availableSchedule.remainingCapacity -= 1;
-  availableSchedule.currentParticipants += 1;
 
-  // Guardar la entidad Schedule actualizada
-  await this.classScheduleRepository.save(availableSchedule);
+  schedule.remainingCapacity -= 1;
+  schedule.currentParticipants += 1;
 
-  return classEntity;
+  await this.classScheduleRepository.save(schedule);
+
+  return newBookedClass;
 }
 
 

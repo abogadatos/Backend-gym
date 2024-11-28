@@ -12,12 +12,14 @@ import { TrainersCustomRepository } from '../trainers/trainers.repository';
 import { UsersCustomRepository } from '../users/users.repository';
 import { EmailModule } from '../email/email.module';
 import { TrainersModule } from '../trainers/trainers.module';
+import { ScheduleModule } from '../schedule/schedule.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Classes, ClassSchedule, Trainers]),
     EmailModule,
     TrainersModule,
+    ScheduleModule
   ],
   controllers: [ClassesController],
   providers: [
