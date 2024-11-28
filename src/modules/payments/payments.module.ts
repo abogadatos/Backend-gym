@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from 'src/database/entities/payment.entity';
 import { PaymentsService } from './payments.service';
@@ -12,11 +12,11 @@ import { UsersCustomRepository } from '../users/users.repository';
   imports: [
     TypeOrmModule.forFeature([Payment]),
     MembershipsModule,
-    UsersModule,
+    forwardRef(() => UsersModule),
     
   ],
   controllers: [PaymentsController],
   providers: [PaymentsService, PaymentsCustomRepository,UsersCustomRepository],
-  exports: [],
+  exports: [PaymentsCustomRepository],
 })
 export class PaymentsModule {}

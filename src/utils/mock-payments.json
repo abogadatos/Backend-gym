@@ -1,0 +1,24 @@
+[
+  {
+    
+    "user_id": "f768ea97-0856-44a9-ae76-51b0ed978b24",
+    "membership_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "payment_date": "2024-11-28T18:26:21.219Z",
+    "amount": "300.00",
+    "payment_method": "card",
+    "status": "completed",
+    "transaction_id": "cs_test_a1PDL5V4lIgsYgEE8rBfl6gTDZaQkxy2dcJ3YvAA9ZLoii03G2Bys2PNJO",
+    "created_at": "2024-11-28T18:26:21.223Z"
+  },
+  {
+    
+    "user_id": "31f137c3-3cb4-4e87-b82e-db218b0f584b",
+    "membership_id": "c9bf9e57-1685-4c89-bafb-ff5af830be8a",
+    "payment_date": "2024-11-28T18:26:23.878Z",
+    "amount": "350.00",
+    "payment_method": "card",
+    "status": "completed",
+    "transaction_id": "cs_test_a1Ak1g2eLG9bJnqGae3putHh6ZtvPiogb6Gej6stQjYJlf1Pth25xoAArB",
+    "created_at": "2024-11-28T18:26:23.879Z"
+  }
+]

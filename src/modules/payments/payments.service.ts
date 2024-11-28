@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Memberships } from 'src/database/entities/membership.entity';
 import { Payment } from 'src/database/entities/payment.entity';
 import { MembershipStatus } from 'src/enum/membership_status.enum';
 import { UsersCustomRepository } from '../users/users.repository';
+import { PaymentsCustomRepository } from './payments.repository';
 const stripe = require('stripe')(process.env.SECRET_STRIPE)
  
 
@@ -18,9 +19,13 @@ export class PaymentsService {
     @InjectRepository(Memberships)
     private readonly membershipsCustomRepository: Repository<Memberships>,
     @InjectRepository(Payment)
-    private readonly paymentsCustomRepository: Repository<Payment>,
+    private readonly paymentsRepository: Repository<Payment>,
+    private readonly paymentsCustomRepository: PaymentsCustomRepository,
   ) {}
 
+  async addMemberships() {
+    return await this.paymentsCustomRepository.initializePayments();
+}
   async createCustomer(createCustomerDto: CreateCustomerDto) {
     const { userEmail, userName, stripePriceId } = createCustomerDto;
 
@@ -119,7 +124,7 @@ export class PaymentsService {
         transaction_id: session.id,
       };
   
-      await this.paymentsCustomRepository.save(paymentData);
+      await this.paymentsRepository.save(paymentData);
   
       user.membership_status = MembershipStatus.Active;
   
@@ -177,6 +182,31 @@ export class PaymentsService {
     }
   }
 
+  async getAllPayments(
+    page: number,
+    limit: number,
+    amount?: string,      // Precio exacto
+    specificDate?: string,  // Fecha exacta (string, será convertida a Date)
+    status?: string,      // Estado del pago
+    orderDirection: 'ASC' | 'DESC' = 'ASC',  // Dirección del orden
+  ) {
+    // Convertir el string 'specificDate' a Date (si es necesario)
+    const parsedDate = specificDate ? new Date(specificDate) : undefined;
+
+    // Llamar al repositorio para obtener los pagos con los parámetros
+    return await this.paymentsCustomRepository.getAllPayments(
+      page,
+      limit,
+      amount,
+      parsedDate,   // Pasamos el 'parsedDate' como parámetro
+      status,
+      orderDirection,
+    );
+  }
+  
+  async getPaymentsById(id:string){
+    return await this.paymentsCustomRepository.getPaymentsById(id);
+  }
   }
 
 
