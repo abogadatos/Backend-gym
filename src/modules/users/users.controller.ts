@@ -1,26 +1,21 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Delete,
-  UseInterceptors,
   Query,
   HttpException,
   HttpStatus,
   Put,
-  Req,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../auth/dto/signUpUser.dto';
-import { UsrWtoutPasswdInterceptor } from 'src/interceptors/userPasswordRemoval.interceptor';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { User } from 'src/database/entities/user.entity';
 
 @Controller('users')
 // Este interceptor elimina la password para que no se muestre cuando se consulte info de users, si no funciona, avisar a @nechodev
-@UseInterceptors(UsrWtoutPasswdInterceptor)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -59,14 +54,12 @@ export class UsersController {
     }
   }
 
-  @Get('auth0/protected')
-  async getAuth0(@Req() request: any) {
-    return JSON.stringify(request.oidc.user);
-  }
-
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.createUser(createUserDto);
+  @Put(':id')
+  async updateUser(
+    @Param('id', ParseUUIDPipe) userID: string,
+    @Body() userData: UpdateUserDto,
+  ) {
+    return await this.usersService.updateUser(userID, userData);
   }
 
   @Get('/profile/:id')
@@ -78,16 +71,12 @@ export class UsersController {
   async getUserByEmail(@Param('email') email: string): Promise<User> {
     return await this.usersService.getUserByEmail(email);
   }
-  @Put(':id')
-  async updateUser(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return await this.usersService.updateUser(id, updateUserDto);
-  }
 
-  @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
-    return await this.usersService.deleteUser(id);
+  @Delete('delete/:id')
+  //   @ApiBearerAuth()
+  //   @Roles(Role.SuperAdmin, Role.Admin)
+  //   @UseGuards(AuthGuard, RolesGuard)
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.deleteUser(id);
   }
 }
