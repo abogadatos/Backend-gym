@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/updateUser.dto';
 import { UserWithoutPassword } from './types/userWithoutPassword.type';
 import { UsersCustomRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
+import { PaymentsCustomRepository } from '../payments/payments.repository';
 
 @Injectable()
 export class UsersService {
@@ -24,59 +25,53 @@ export class UsersService {
     private trainersCustomRepository: TrainersCustomRepository,
     private classesCustomRepository: ClassesCustomRepository,
     private membershipsCustomRepository: MembershipsCustomRepository,
+    private paymentsCustomRepository: PaymentsCustomRepository,
   ) {}
 
   async seedDatabase() {
-    setTimeout(() => {
-      console.info('Seeding your database');
-    }, 200);
-
-    setTimeout(() => {
-      console.info(`
-            Seeding memberships
-                💎💎💎💎💎
-            `);
-    }, 500);
-    setTimeout(() => {
-      this.membershipsCustomRepository.addMemberships();
-    }, 1000);
-
-    setTimeout(() => {
-      console.info(`
-              Seeding users
-                👧🧑👱👨
-          `);
-    }, 2000);
-    setTimeout(() => {
-      this.userSeeder();
-    }, 2500);
-
-    setTimeout(() => {
-      console.info(`
-          Seeding trainers
-            🏃🏽💥🏋‍♀🔥💪🏼
-          `);
-    }, 10000);
-    setTimeout(() => {
-      this.trainersCustomRepository.initializeTrainers();
-    }, 10500);
-
-    setTimeout(() => {
-      console.info(`
-          Seeding class
-           ⏳⏳⏳⏳⌛
-          `);
-    }, 12000);
-    setTimeout(() => {
-      this.classesCustomRepository.initializeClasses();
-    }, 12500);
-
-    setTimeout(() => {
-      console.info(`
-              Database seeding completed
-                ✅✅✅✅✅✅✅✅✅✅
-          `);
-    }, 14000);
+    // Paso 1: Mensaje inicial
+    console.info('Seeding your database');
+    
+    // Paso 2: Seeding memberships
+    console.info(`
+      Seeding memberships
+          💎💎💎💎💎
+    `);
+    await this.membershipsCustomRepository.addMemberships();  // Espera a que las membresías se inserten
+    
+    // Paso 3: Seeding users
+    console.info(`
+      Seeding users
+        👧🧑👱👨
+    `);
+    await this.userSeeder();  // Espera a que los usuarios se inserten
+  
+    // Paso 4: Seeding trainers
+    console.info(`
+      Seeding trainers
+        🏃🏽💥🏋‍♀🔥💪🏼
+    `);
+    await this.trainersCustomRepository.initializeTrainers();  // Espera a que los entrenadores se inserten
+  
+    // Paso 5: Seeding classes
+    console.info(`
+      Seeding class
+       ⏳⏳⏳⏳⌛
+    `);
+    await this.classesCustomRepository.initializeClasses();  // Espera a que las clases se inserten
+  
+    // Paso 6: Seeding payments
+    console.info(`
+      Seeding payments
+          💳💰💸
+    `);
+    await this.paymentsCustomRepository.initializePayments();  // Espera a que los pagos se inserten
+    
+    // Paso 7: Mensaje final de seeding completado
+    console.info(`
+      Database seeding completed
+        ✅✅✅✅✅✅✅✅✅✅
+    `);
   }
 
   async userSeeder() {
