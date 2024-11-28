@@ -29,45 +29,45 @@ export class UsersService {
   ) {}
 
   async seedDatabase() {
-    // Paso 1: Mensaje inicial
+    
     console.info('Seeding your database');
     
-    // Paso 2: Seeding memberships
+    
     console.info(`
       Seeding memberships
           💎💎💎💎💎
     `);
-    await this.membershipsCustomRepository.addMemberships();  // Espera a que las membresías se inserten
+    await this.membershipsCustomRepository.addMemberships();  
     
-    // Paso 3: Seeding users
+   
     console.info(`
       Seeding users
         👧🧑👱👨
     `);
-    await this.userSeeder();  // Espera a que los usuarios se inserten
+    await this.userSeeder();  
   
-    // Paso 4: Seeding trainers
+    
     console.info(`
       Seeding trainers
         🏃🏽💥🏋‍♀🔥💪🏼
     `);
-    await this.trainersCustomRepository.initializeTrainers();  // Espera a que los entrenadores se inserten
+    await this.trainersCustomRepository.initializeTrainers(); 
   
-    // Paso 5: Seeding classes
+  
     console.info(`
       Seeding class
        ⏳⏳⏳⏳⌛
     `);
-    await this.classesCustomRepository.initializeClasses();  // Espera a que las clases se inserten
+    await this.classesCustomRepository.initializeClasses(); 
   
-    // Paso 6: Seeding payments
+    
     console.info(`
       Seeding payments
           💳💰💸
     `);
-    await this.paymentsCustomRepository.initializePayments();  // Espera a que los pagos se inserten
+    await this.paymentsCustomRepository.initializePayments(); 
     
-    // Paso 7: Mensaje final de seeding completado
+   
     console.info(`
       Database seeding completed
         ✅✅✅✅✅✅✅✅✅✅
