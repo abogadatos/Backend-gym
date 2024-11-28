@@ -185,20 +185,20 @@ export class PaymentsService {
   async getAllPayments(
     page: number,
     limit: number,
-    amount?: string,      // Precio exacto
-    specificDate?: string,  // Fecha exacta (string, será convertida a Date)
-    status?: string,      // Estado del pago
-    orderDirection: 'ASC' | 'DESC' = 'ASC',  // Dirección del orden
+    amount?: string,      
+    specificDate?: string,  
+    status?: string,      
+    orderDirection: 'ASC' | 'DESC' = 'ASC',  
   ) {
-    // Convertir el string 'specificDate' a Date (si es necesario)
+    
     const parsedDate = specificDate ? new Date(specificDate) : undefined;
 
-    // Llamar al repositorio para obtener los pagos con los parámetros
+    
     return await this.paymentsCustomRepository.getAllPayments(
       page,
       limit,
       amount,
-      parsedDate,   // Pasamos el 'parsedDate' como parámetro
+      parsedDate,   
       status,
       orderDirection,
     );

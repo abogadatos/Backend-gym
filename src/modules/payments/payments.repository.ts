@@ -77,45 +77,45 @@ export class PaymentsCustomRepository {
   async getAllPayments(
     page: number,
     limit: number,
-    amount?: string,      // Precio exacto
-    specificDate?: Date,  // Fecha exacta (con hora)
-    status?: string,      // Estado del pago
-    orderDirection: 'ASC' | 'DESC' = 'ASC',  // Dirección del orden
+    amount?: string,      
+    specificDate?: Date,  
+    status?: string,      
+    orderDirection: 'ASC' | 'DESC' = 'ASC',  
 ) {
     const skip = (page - 1) * limit;
-    const where: any = {};  // Inicializa el objeto 'where' vacío
+    const where: any = {};  
 
-    // Filtrado por monto
+   
     if (amount) {
-        where.amount = parseFloat(amount);  // Solo usamos amount exacto
+        where.amount = parseFloat(amount);  
     }
 
-    // Filtrado por fecha específica
+    
     if (specificDate) {
-        // Convertimos la fecha a solo la parte de la fecha (sin la hora)
-        const startOfDay = new Date(specificDate.setHours(0, 0, 0, 0)); // Inicio del día (00:00:00)
-        const endOfDay = new Date(specificDate.setHours(23, 59, 59, 999)); // Fin del día (23:59:59)
         
-        // Usamos 'BETWEEN' para buscar todos los registros que estén entre el inicio y fin del día
-        where.payment_date = Between(startOfDay, endOfDay);  // Compara entre el inicio y fin del día
+        const startOfDay = new Date(specificDate.setHours(0, 0, 0, 0)); 
+        const endOfDay = new Date(specificDate.setHours(23, 59, 59, 999)); 
+        
+        
+        where.payment_date = Between(startOfDay, endOfDay); 
     }
 
-    // Filtrado por estado
+   
     if (status) {
         where.status = status;
     }
 
-    // Realiza la consulta con filtros, paginación y ordenación
+    
     const payments = await this.paymentRepository.find({
       where: where,
       order: {
-        created_at: orderDirection,  // Ordenar por fecha de creación
+        created_at: orderDirection, 
       },
       take: limit,
       skip: skip,
     });
 
-    // Obtener el total de elementos para la paginación
+   
     const totalElements = await this.paymentRepository.count({ where: where });
     const totalPages = Math.ceil(totalElements / limit);
 

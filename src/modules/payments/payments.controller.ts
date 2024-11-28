@@ -31,17 +31,17 @@ export class PaymentsController {
 async getAllPayments(
   @Query('page') page: number = 1,
   @Query('limit') limit: number = 10,
-  @Query('amount') amount?: string,      // Precio exacto
-  @Query('specificDate') specificDate?: string, // Fecha exacta (string)
-  @Query('status') status?: string,      // Estado del pago
+  @Query('amount') amount?: string,     
+  @Query('specificDate') specificDate?: string, 
+  @Query('status') status?: string,    
   @Query('orderDirection') orderDirection: 'ASC' | 'DESC' = 'ASC',
 ) {
-  // Llamamos al servicio y pasamos los parámetros correspondientes
+  
   return await this.paymentsService.getAllPayments(
     page,
     limit,
     amount,
-    specificDate,   // Pasamos la fecha como string
+    specificDate,  
     status,
     orderDirection,
   );
