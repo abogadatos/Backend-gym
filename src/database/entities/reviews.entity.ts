@@ -15,7 +15,6 @@ export class Reviews {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  
   @Column({
     type: 'int',
     nullable: false,
@@ -31,8 +30,9 @@ export class Reviews {
   @Column({
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
   })
-  created_at: number;
+  created_at: Date;
 
   @ManyToOne(() => User, (user) => user.reviews)
   @JoinColumn({ name: 'user_id' })
