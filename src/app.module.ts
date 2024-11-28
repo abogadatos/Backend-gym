@@ -16,6 +16,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmailService } from './modules/email/email.service';
 import { EmailModule } from './modules/email/email.module';
+import { ScheduleService } from './modules/schedule/schedule.service';
+import { ScheduleModule } from './modules/schedule/schedule.module';
 
 @Module({
   imports: [
@@ -41,9 +43,10 @@ import { EmailModule } from './modules/email/email.module';
     TrainersModule,
     UsersModule,
     EmailModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
-  providers: [AppService, EmailService],
+  providers: [AppService, EmailService, ScheduleService],
   exports: [],
 })
 export class AppModule {}

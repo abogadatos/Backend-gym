@@ -9,6 +9,7 @@ import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
 import { TrainersCustomRepository } from '../trainers/trainers.repository';
 import { UpdateClassDto } from './dto/update-classes.dto';
 import { EmailService } from '../email/email.service';
+import { ScheduleService } from '../schedule/schedule.service';
 
 @Injectable()
 export class ClassesCustomRepository {
@@ -19,6 +20,7 @@ export class ClassesCustomRepository {
     private readonly trainerRepository:TrainersCustomRepository,
     @InjectRepository(ClassSchedule)
     private readonly classScheduleRepository:Repository<ClassSchedule>,
+    private readonly scheduleService: ScheduleService,
 
     private readonly dataSource: DataSource,
   ) {}
@@ -107,30 +109,38 @@ export class ClassesCustomRepository {
     return classe;
   }
 
-  async createClass(createClassDto:CreateClassDto) {
-    const{trainerId,scheduleClass,...classData}=createClassDto
+  async createClass(createClassDto: CreateClassDto): Promise<Classes> {
+    const { schedules, trainerId, ...classData } = createClassDto;
 
-    const trainer= await this.trainerRepository.getTrainerById(trainerId)
-
-    const newClass= await this.classesRepository.create({
+   
+    const newClass = this.classesRepository.create({
       ...classData,
-      trainer
-    })
+      trainer: { id: trainerId }, 
+    });
 
-    if (scheduleClass && scheduleClass.length > 0) {
-      newClass.schedules = scheduleClass.map((schedule) => 
+    
+    const savedClass = await this.classesRepository.save(newClass);
+
+    if (schedules && schedules.length > 0) {
+      const scheduleEntities = schedules.map((schedule) =>
         this.classScheduleRepository.create({
-          day: schedule.day,
-          startTime: schedule.startTime,
-          endTime: schedule.endTime,
-          currentParticipants: schedule.currentParticipants || 0,
-          class: newClass, 
-        })
+          ...schedule,
+          remainingCapacity: createClassDto.capacity,
+          class: savedClass, 
+        }),
       );
+
+      
+      await this.classScheduleRepository.save(scheduleEntities);
     }
 
-    return await this.classesRepository.save(newClass)
+ 
+    return this.classesRepository.findOne({
+      where: { id: savedClass.id },
+      relations: ['schedules', 'trainer'],
+    });
   }
+
 
   async updateClass(id: string, updateClassDto: UpdateClassDto): Promise<Classes> {
     const { scheduleClass, ...updates } = updateClassDto;
