@@ -117,20 +117,20 @@ export class UsersService {
     };
   }
 
-  async updateUser(userID: string, userData: UpdateUserDto) {
+  async updateUser(userID: string, userInfo: UpdateUserDto) {
     const foundUser = await this.usersRepository.findOne({
       where: { id: userID },
     });
     if (!foundUser) throw new NotFoundException('user not found or not exist');
 
     if (foundUser.auth === 'form') {
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const hashedPassword = await bcrypt.hash(userInfo.password, 10);
 
-      const updatedUser = this.usersRepository.merge(foundUser, userData);
+      const updatedUser = this.usersRepository.merge(foundUser, userInfo);
       updatedUser.password = hashedPassword;
-      await this.usersRepository.save(updatedUser);
+      const userData = await this.usersRepository.save(updatedUser);
 
-      return { message: 'User Update Successfully', updatedUser };
+      return { message: 'User Updated Successfully', userData };
     } else if (foundUser.auth === 'googleIncomplete') {
       if (
         foundUser.password === null ||
@@ -138,24 +138,24 @@ export class UsersService {
         foundUser.country === null ||
         foundUser.address === null
       ) {
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
-        userData.password = hashedPassword;
+        const hashedPassword = await bcrypt.hash(userInfo.password, 10);
+        userInfo.password = hashedPassword;
 
-        const updatedUser = this.usersRepository.merge(foundUser, userData);
+        const updatedUser = this.usersRepository.merge(foundUser, userInfo);
         updatedUser.auth = 'google';
-        await this.usersRepository.save(updatedUser);
+        const userData = await this.usersRepository.save(updatedUser);
 
-        return { message: 'User Update Successfully', updatedUser };
+        return { message: 'User Updated Successfully', userData };
       }
     } else if (foundUser.auth === 'google') {
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const hashedPassword = await bcrypt.hash(userInfo.password, 10);
 
-      userData.password = hashedPassword;
-      const updatedUser = this.usersRepository.merge(foundUser, userData);
+      userInfo.password = hashedPassword;
+      const updatedUser = this.usersRepository.merge(foundUser, userInfo);
 
-      await this.usersRepository.save(updatedUser);
+      const userData = await this.usersRepository.save(updatedUser);
 
-      return { message: 'User Update Successfully', updatedUser };
+      return { message: 'User Updated Successfully', userData };
     }
   }
 

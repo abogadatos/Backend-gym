@@ -7,8 +7,8 @@ import {
   Query,
   HttpException,
   HttpStatus,
-  Put,
   ParseUUIDPipe,
+  Patch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -54,7 +54,7 @@ export class UsersController {
     }
   }
 
-  @Put(':id')
+  @Patch(':id')
   async updateUser(
     @Param('id', ParseUUIDPipe) userID: string,
     @Body() userData: UpdateUserDto,
