@@ -9,6 +9,11 @@
         "day": "lunes",
         "startTime": "19:00",
         "endTime": "20:00"
+      },
+      {
+        "day": "miercoles",
+        "startTime": "09:00",
+        "endTime": "10:00"
       }
     ],
     "imgUrl": "https://i.imgur.com/VLNjzIU.jpg",
@@ -24,6 +29,11 @@
         "day": "martes",
         "startTime": "08:00",
         "endTime": "09:00"
+      },
+      {
+        "day": "jueves",
+        "startTime": "19:00",
+        "endTime": "20:00"
       }
     ],
     "imgUrl": "https://i.imgur.com/2oafcMa.jpg",
@@ -39,6 +49,11 @@
         "day": "miercoles",
         "startTime": "17:30",
         "endTime": "18:30"
+      },
+      {
+        "day": "viernes",
+        "startTime": "09:00",
+        "endTime": "10:00"
       }
     ],
     "imgUrl": "https://i.imgur.com/34WcY56.jpg",

@@ -40,41 +40,40 @@ export class BookedClassesCustomRepository {
   
 
 async createBooked(bookClass: CreateBookedClassDto) {
-  const { userId, classId, scheduleId } = bookClass
-    const classEntity = await this.classRepository.findOne({
-      where: { id: classId },
-      relations: ['schedules'],
-    });
-  
-    if (!classEntity) throw new NotFoundException('Class not found');
-  
-    
-    const availableSchedule = classEntity.schedules.find(
-      (schedule) => schedule.remainingCapacity > 0
-    );
-  
-    if (!availableSchedule) {
-      throw new Error('No remaining capacity in any schedule');
-    }
-  
-    const newBookedClass = this.bookedClassesRepository.create({
-      user: { id: userId }, 
-      schedule: availableSchedule,
-      class: classEntity,
-    });
-  
-    
-    await this.bookedClassesRepository.save(newBookedClass);
-  
-    
-    availableSchedule.remainingCapacity -= 1;
-  
-  
-    await this.classScheduleRepository.save(availableSchedule);
-  
-    return classEntity;
-  
-}  
+  const { userId, classId, scheduleId } = bookClass;
+  const classEntity = await this.classRepository.findOne({
+    where: { id: classId },
+    relations: ['schedules'],
+  });
+
+  if (!classEntity) throw new NotFoundException('Class not found');
+
+  const availableSchedule = classEntity.schedules.find(
+    (schedule) => schedule.id === scheduleId && schedule.remainingCapacity > 0
+  );
+
+  if (!availableSchedule) {
+    throw new Error('No remaining capacity in the selected schedule');
+  }
+
+  const newBookedClass = this.bookedClassesRepository.create({
+    user: { id: userId },
+    schedule: availableSchedule,
+    class: classEntity,
+  });
+
+  await this.bookedClassesRepository.save(newBookedClass);
+
+  // Actualizar los campos en el Schedule
+  availableSchedule.remainingCapacity -= 1;
+  availableSchedule.currentParticipants += 1;
+
+  // Guardar la entidad Schedule actualizada
+  await this.classScheduleRepository.save(availableSchedule);
+
+  return classEntity;
+}
+
 
 async deleteBooked(bookingId: string) {
   const booking = await this.bookedClassesRepository.findOne({
