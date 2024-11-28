@@ -12,8 +12,8 @@ export class ClassesService {
     return await this.classesCustomRepository.initializeClasses();
   }
 
-  getAllClasses(page: number, limit: number) {
-    return this.classesCustomRepository.getAllClasses(page, limit);
+  getAllClasses() {
+    return this.classesCustomRepository.getAllClasses();
   }
   getClassByID(id: string) {
     return this.classesCustomRepository.getClassById(id);

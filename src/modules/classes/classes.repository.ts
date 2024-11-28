@@ -83,15 +83,14 @@ export class ClassesCustomRepository {
     }
   }
   
-  async getAllClasses(page: number, limit: number) {
-    const skip = (page - 1) * limit;
-      const [data,total] = await this.classesRepository.findAndCount({
+  async getAllClasses() {
+   
+      const classe = await this.classesRepository.findAndCount({
         relations: ['schedules', 'trainer', 'bookedClasses'], 
-        skip,
-        take:limit,
+      
       });
     
-    return {data,total}
+    return classe
        
   }
 

@@ -17,14 +17,9 @@ export class ClassesController {
   constructor(private readonly classService: ClassesService) {}
 
   @Get()
-  async getAllClass(
-    @Query('page') page: string,
-    @Query('limit') limit: string,
-  ) {
-    const pageNumber = page ? parseInt(page, 10) : 1; 
-    const limitNumber = limit ? parseInt(limit, 10) : 6; 
-
-    return await this.classService.getAllClasses(pageNumber, limitNumber);
+  async getAllClass() {
+ 
+    return await this.classService.getAllClasses();
   }
   @Get(':id')
   async getClassByID(@Param('id') id: string) {
