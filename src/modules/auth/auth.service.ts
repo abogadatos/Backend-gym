@@ -60,9 +60,13 @@ export class AuthService {
         throw new ConflictException(
           'User is already registered within database with form',
         );
-      } else if (userExists !== null && userExists.auth === 'google') {
+      } else if (
+        userExists !== null &&
+        userExists.auth === 'googleIncomplete'
+      ) {
         if (userExists.password === null) {
-          return 'user must complete its profile';
+          console.log('Usuario debe actualizar datos');
+          return userExists;
         } else if (userExists.password.length === 60) {
           console.log(userExists.password.length);
           return {
@@ -78,7 +82,7 @@ export class AuthService {
           name: name,
           email: email,
           image: image,
-          auth: 'google',
+          auth: 'googleIncomplete',
         };
 
         const newUserFromAuthZero = await this.signUpThirdParty(userData);
@@ -146,7 +150,6 @@ export class AuthService {
     return user;
   }
 
-  // @Anahidia working here
   async signIn(userData: LoginUserDto) {
     const userFound: User | undefined = await this.usersRepository.findOne({
       where: { email: userData.email },
@@ -180,11 +183,15 @@ export class AuthService {
       const token = this.jwtService.sign(userPayload);
       return {
         message: 'User logged in successfuly',
-        userID: userFound.id,
-        usedData: userFound,
+        userData: userFound,
         token: token,
         expires_in: process.env.JWT_EXPIRES_IN,
       };
     } else throw new BadRequestException('Incorrect Credentials');
+  }
+
+  async updateUserInformation(user: User, param: Partial<User>) {
+    await this.usersRepository.update(user.id, param);
+    return;
   }
 }

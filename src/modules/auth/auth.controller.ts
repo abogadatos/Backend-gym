@@ -6,6 +6,7 @@ import {
   Body,
   BadRequestException,
   UseInterceptors,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/signInUser.dto';
@@ -40,11 +41,14 @@ export class AuthController {
     this.credentials.password = password;
 
     const logStatus = await this.authService.signIn(this.credentials);
-    return { 'Log Status': logStatus };
+    return logStatus;
   }
 
   @Post('signin')
   async signIn(@Body() userData: LoginUserDto) {
     return await this.authService.signIn(userData);
   }
+
+  @Patch('signedUpModify')
+  async patchUser() {}
 }

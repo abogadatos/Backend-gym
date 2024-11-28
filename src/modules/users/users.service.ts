@@ -55,27 +55,27 @@ export class UsersService {
           Seeding trainers
             🏃🏽💥🏋‍♀🔥💪🏼
           `);
-    }, 17000);
+    }, 12000);
     setTimeout(() => {
       this.trainersCustomRepository.initializeTrainers();
-    }, 17500);
+    }, 12500);
 
     setTimeout(() => {
       console.info(`
           Seeding class
            ⏳⏳⏳⏳⌛
           `);
-    }, 19000);
+    }, 14000);
     setTimeout(() => {
       this.classesCustomRepository.initializeClasses();
-    }, 19500);
+    }, 14500);
 
     setTimeout(() => {
       console.info(`
               Database seeding completed
                 ✅✅✅✅✅✅✅✅✅✅
           `);
-    }, 20000);
+    }, 16000);
   }
 
   async userSeeder() {

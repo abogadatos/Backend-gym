@@ -96,11 +96,11 @@ export class User {
    */
   @Column({
     type: 'varchar', // Store it as a simple string in the database
-    length: 10, // Limit length for validation purposes
+    length: 16, // Limit length for validation purposes
     nullable: false, // Ensure it's always set
     default: 'form', // Set the default value
   })
-  auth: 'google' | 'form'; // Define acceptable values as a TypeScript union type
+  auth: 'google' | 'googleIncomplete' | 'form'; // Define acceptable values as a TypeScript union type
 
   /**
    * Roles assigned to the user, which dictate their permissions within the platform.
