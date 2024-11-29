@@ -18,6 +18,7 @@ import { EmailService } from './modules/email/email.service';
 import { EmailModule } from './modules/email/email.module';
 import { ScheduleService } from './modules/schedule/schedule.service';
 import { ScheduleModule } from './modules/schedule/schedule.module';
+import { RoutinesModule } from './modules/routines/routines.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
     UsersModule,
     EmailModule,
     ScheduleModule,
+    RoutinesModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService, ScheduleService],
