@@ -16,6 +16,11 @@ export class ReviewsController {
     return this.reviewsService.getByIdReviews(id);
   }
 
+  @Get('class/:classId')
+  async findByClass(@Param('classId') classId: string) {
+    return this.reviewsService.getReviewsByClass(classId);
+  }
+
   @Post()
   async create(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewsService.postReviews(createReviewDto);
