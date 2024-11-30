@@ -88,7 +88,7 @@ export class ClassesCustomRepository {
   async getAllClasses() {
    
       const classe = await this.classesRepository.findAndCount({
-        relations: ['schedules', 'trainer', 'bookedClasses'], 
+        relations: ['schedules', 'trainer', 'bookedClasses','reviews'], 
       
       });
     
@@ -99,7 +99,7 @@ export class ClassesCustomRepository {
   async getClassById(id: string) {
     const classe = await this.classesRepository.findOne({
       where: { id },
-      relations: ['schedules', 'trainer', 'bookedClasses'],
+      relations: ['schedules', 'trainer', 'bookedClasses','reviews'],
     });
   
     if (!classe) {
@@ -137,7 +137,7 @@ export class ClassesCustomRepository {
  
     return this.classesRepository.findOne({
       where: { id: savedClass.id },
-      relations: ['schedules', 'trainer'],
+      relations: ['schedules', 'trainer','reviews'],
     });
   }
 
