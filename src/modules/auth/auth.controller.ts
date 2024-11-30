@@ -14,7 +14,9 @@ import { CreateUserDto } from './dto/signUpUser.dto';
 import { CleanDataPipe } from 'src/pipes/normalize-data.pipe';
 import { AuthZeroDTO } from './dto/auth0-logIn.dto';
 import { addJWTInterceptor } from 'src/interceptors/addJWT.interceptor';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("auth")
 @Controller('auth')
 export class AuthController {
   private credentials: LoginUserDto = { email: '', password: '' };

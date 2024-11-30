@@ -13,7 +13,9 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { User } from 'src/database/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("users")
 @Controller('users')
 // Este interceptor elimina la password para que no se muestre cuando se consulte info de users, si no funciona, avisar a @nechodev
 export class UsersController {

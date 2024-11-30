@@ -26,6 +26,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "^2.0.6",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^8.0.7",
     "@nestjs/typeorm": "^10.0.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
