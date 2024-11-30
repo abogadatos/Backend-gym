@@ -29,49 +29,56 @@ export class UsersService {
   ) {}
 
   async seedDatabase() {
-    
-    console.info('Seeding your database');
-    
-    
-    console.info(`
-      Seeding memberships
-          💎💎💎💎💎
-    `);
-    await this.membershipsCustomRepository.addMemberships();  
-    
-   
-    console.info(`
-      Seeding users
-        👧🧑👱👨
-    `);
-    await this.userSeeder();  
-  
-    
-    console.info(`
-      Seeding trainers
-        🏃🏽💥🏋‍♀🔥💪🏼
-    `);
-    await this.trainersCustomRepository.initializeTrainers(); 
-  
-  
-    console.info(`
-      Seeding class
-       ⏳⏳⏳⏳⌛
-    `);
-    await this.classesCustomRepository.initializeClasses(); 
-  
-    
-    console.info(`
-      Seeding payments
-          💳💰💸
-    `);
-    await this.paymentsCustomRepository.initializePayments(); 
-    
-   
-    console.info(`
-      Database seeding completed
-        ✅✅✅✅✅✅✅✅✅✅
-    `);
+    setTimeout(() => {
+      console.info('Seeding your database');
+    }, 200);
+
+    setTimeout(() => {
+      console.info(`
+            Seeding memberships
+                💎💎💎💎💎
+            `);
+    }, 500);
+    setTimeout(() => {
+      this.membershipsCustomRepository.addMemberships();
+    }, 700);
+
+    setTimeout(() => {
+      console.info(`
+              Seeding users
+                👧🧑👱👨
+          `);
+    }, 1500);
+    setTimeout(() => {
+      this.userSeeder();
+    }, 1700);
+
+    setTimeout(() => {
+      console.info(`
+          Seeding trainers
+            🏃🏽💥🏋‍♀🔥💪🏼
+          `);
+    }, 9000);
+    setTimeout(() => {
+      this.trainersCustomRepository.initializeTrainers();
+    }, 9200);
+
+    setTimeout(() => {
+      console.info(`
+          Seeding class
+           ⏳⏳⏳⏳⌛
+          `);
+    }, 12000);
+    setTimeout(() => {
+      this.classesCustomRepository.initializeClasses();
+    }, 12500);
+
+    setTimeout(() => {
+      console.info(`
+              Database seeding completed
+                ✅✅✅✅✅✅✅✅✅✅
+          `);
+    }, 14000);
   }
 
   async userSeeder() {
