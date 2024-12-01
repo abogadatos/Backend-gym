@@ -5,6 +5,8 @@ import { Reviews } from 'src/database/entities/reviews.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { User } from 'src/database/entities/user.entity';
 import { Classes } from 'src/database/entities/classes.entity';
+import * as reviewsData from '../../utils/mock-review.json'
+import { log } from 'console';
 
 @Injectable()
 export class ReviewsService {
@@ -16,6 +18,37 @@ export class ReviewsService {
     @InjectRepository(Classes)
     private classesRepository: Repository<Classes>,
   ) {}
+
+  async initializeReviews(){
+    for (const reviewData of reviewsData ) {
+      const { rating, comment, class_name, user_name } = reviewData
+      const class_entity = await this.classesRepository.findOne({where:{name: class_name}})
+      if (!class_entity) {
+        throw new NotFoundException(`Class with name ${class_name} not found`);
+      }
+      const user_entity = await this.usersRepository.findOne({where:{name: user_name}})
+      if (!user_entity) {
+      throw new NotFoundException(`Class with name ${user_name} not found`);
+      }
+      const existingReview = await this.reviewsRepository.findOne({where:{class: { id: class_entity.id },
+        user: { id: user_entity.id },}})
+        if(!existingReview){ 
+          const new_review = this.reviewsRepository.create({
+            rating, 
+            comment,
+            class: class_entity,
+            user: user_entity,
+            created_at: new Date()
+          }
+        )
+        await this.reviewsRepository.save(new_review)
+        console.log (`Review added for class: ${class_name}, user: ${user_name}`)
+      }
+      else { console.log (`Review already exists for class: ${class_name}, user: ${user_name}`)}
+      console.log (`Review seeding completed!`)
+    }
+  }
+
 
   async getReviews() {
     return await this.reviewsRepository.find();

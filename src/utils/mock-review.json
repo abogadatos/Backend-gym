@@ -1,0 +1,62 @@
+ [
+      {
+        "rating": 5,
+        "comment": "Excelente clase, perfecta para iniciarse en Pilates.",
+        "user_name": "Harold Sutton",
+        "class_name": "Pilates para Principiantes"
+      },
+      {
+        "rating": 4,
+        "comment": "Muy buena clase, aunque me gustaría más variación en los ejercicios.",
+        "user_name": "Nelson Enrique Arias Gámez",
+        "class_name": "Pilates para Principiantes"
+      },
+      {
+        "rating": 5,
+        "comment": "¡Me encantó! Siento la energía al máximo después de cada sesión.",
+        "user_name": "Derrick Keller",
+        "class_name": "Zumba Energizante"
+      },
+      {
+        "rating": 4,
+        "comment": "Muy divertida, pero algunos pasos me costaron un poco al principio.",
+        "user_name": "Della McCarthy",
+        "class_name": "Zumba Energizante"
+      },
+      {
+        "rating": 5,
+        "comment": "Increíble nivel de exigencia, muy desafiante, pero me encanta.",
+        "user_name": "Lucas Sebastian",
+        "class_name": "CrossFit de Alto Rendimiento"
+      },
+      {
+        "rating": 5,
+        "comment": "Ideal para mejorar mi resistencia y fuerza. Muy recomendable.",
+        "user_name": "Sophia Curtis",
+        "class_name": "CrossFit de Alto Rendimiento"
+      },
+      {
+        "rating": 4,
+        "comment": "Me encanta la intensidad, aunque algunas rutinas son un poco difíciles.",
+        "user_name": "Leroy Wade",
+        "class_name": "Entrenamiento Funcional"
+      },
+      {
+        "rating": 5,
+        "comment": "Excelente entrenamiento, muy completo y efectivo para todo el cuerpo.",
+        "user_name": "Marcus Freeman",
+        "class_name": "Entrenamiento Funcional"
+      },
+      {
+        "rating": 5,
+        "comment": "Relajante y revitalizante. Me siento renovado después de cada sesión.",
+        "user_name": "Gary Chandler",
+        "class_name": "Yoga al Atardecer"
+      },
+      {
+        "rating": 4,
+        "comment": "Muy buena clase, aunque me gustaría que fuera un poco más larga.",
+        "user_name": "Fannie George",
+        "class_name": "Yoga al Atardecer"
+      }
+    ]  

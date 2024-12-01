@@ -15,6 +15,7 @@ import { UserWithoutPassword } from './types/userWithoutPassword.type';
 import { UsersCustomRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { PaymentsCustomRepository } from '../payments/payments.repository';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +27,7 @@ export class UsersService {
     private classesCustomRepository: ClassesCustomRepository,
     private membershipsCustomRepository: MembershipsCustomRepository,
     private paymentsCustomRepository: PaymentsCustomRepository,
+    private reviewsCustomService: ReviewsService,
   ) {}
 
   async seedDatabase() {
@@ -72,6 +74,17 @@ export class UsersService {
     setTimeout(() => {
       this.classesCustomRepository.initializeClasses();
     }, 12500);
+
+    setTimeout(() => {
+      console.info(
+          `Seeding reviews
+           ⏳⏳⏳⏳⌛
+          `);
+    }, 12000);
+    setTimeout(() => {
+      this.reviewsCustomService.initializeReviews();
+    }, 12500);
+
 
     setTimeout(() => {
       console.info(`
