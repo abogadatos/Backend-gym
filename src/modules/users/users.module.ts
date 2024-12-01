@@ -8,6 +8,8 @@ import { ClassesModule } from '../classes/classes.module';
 import { TrainersModule } from '../trainers/trainers.module';
 import { MembershipsModule } from '../memberships/memberships.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { ReviewsModule } from '../reviews/reviews.module';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { PaymentsModule } from '../payments/payments.module';
     TrainersModule,
     ClassesModule,
     MembershipsModule,
+    forwardRef(() => ReviewsModule),
     forwardRef(() => PaymentsModule)
   ],
   controllers: [UsersController],
