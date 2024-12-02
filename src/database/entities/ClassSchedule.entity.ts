@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,JoinColumn
 import { Classes } from "./classes.entity";
 import { BookedClasses } from "./booked_classes.entity";
 
-@Entity('ClassSchedule')
+@Entity('classschedule')
 export class ClassSchedule{
 
 @PrimaryGeneratedColumn('uuid')

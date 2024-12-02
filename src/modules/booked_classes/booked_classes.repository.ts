@@ -159,6 +159,10 @@ async deleteBooked(bookingId: string) {
       relations: ['user'],
     });
   }
+  async deleteByScheduleId(scheduleId: string) {
+    await this.bookedClassesRepository.delete({ schedule: { id: scheduleId } });
+  }
+  
 }
 
 

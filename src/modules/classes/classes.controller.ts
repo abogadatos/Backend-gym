@@ -12,6 +12,7 @@ import { ClassesService } from './classes.service';
 import { CreateClassDto } from './dto/create-classes.dto';
 import { UpdateClassDto } from './dto/update-classes.dto';
 
+
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly classService: ClassesService) {}
