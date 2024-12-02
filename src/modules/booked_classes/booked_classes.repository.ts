@@ -146,13 +146,25 @@ async deleteBooked(bookingId: string) {
 
 
 
-  async getBooketsByUserId(userId:string) {
-    return await this.bookedClassesRepository.find({
-      where: { user: { id: userId } },
-      relations: ['class'],
-    });
-  }
+async getBooketsByUserId(userId: string) {
+  const bookedClasses = await this.bookedClassesRepository.find({
+    where: { user: { id: userId } },
+    relations: ['user', 'class', 'class.schedules'],
+  });
 
+
+  return bookedClasses.map(bookedClass => {
+    const { user, class: bookedClassDetails } = bookedClass;
+
+    
+    const schedule = bookedClassDetails.schedules?.[0];
+    return {
+      user,
+      class: bookedClassDetails,
+      schedule,
+    };
+  });
+}
   async getBooketsByclassId(classId:string) {
     return await this.bookedClassesRepository.find({
       where: { class: { id: classId } },
