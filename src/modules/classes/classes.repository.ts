@@ -143,53 +143,83 @@ export class ClassesCustomRepository {
 
 
   async updateClass(id: string, updateClassDto: UpdateClassDto): Promise<Classes> {
-    const { scheduleClass, ...updates } = updateClassDto;
-  
-   
-    const classEntity = await this.classesRepository.findOne({
-      where: { id },
-      relations: ['schedules', 'bookedClasses', 'bookedClasses.user'],
-    });
-  
-    if (!classEntity) throw new NotFoundException('Class not found');
-  
-   
-    const previousSchedules = classEntity.schedules;
-  
- 
-    Object.assign(classEntity, updates);
-  
+  const { scheduleClass, ...updates } = updateClassDto;
 
-    if (scheduleClass) {
-      await this.classScheduleRepository.delete({ class: { id } });
-      classEntity.schedules = scheduleClass.map((schedule) =>
-        this.classScheduleRepository.create(schedule),
-      );
+
+  const classEntity = await this.classesRepository.findOne({
+    where: { id },
+    relations: ['schedules', 'bookedClasses', 'bookedClasses.user'],
+  });
+
+  if (!classEntity) throw new NotFoundException('Class not found');
+
+  const previousSchedules = JSON.stringify(classEntity.schedules);
+
+  Object.assign(classEntity, updates);
+
+  if (scheduleClass) {
+    
+    const existingSchedules = classEntity.schedules.map((sch) => sch.id);
+    const incomingSchedules = scheduleClass.map((sch) => sch.id).filter(Boolean);
+
+
+    const schedulesToDelete = existingSchedules.filter(
+      (id) => !incomingSchedules.includes(id),
+    );
+
+    if (schedulesToDelete.length > 0) {
+      await this.classScheduleRepository.delete(id);
     }
-  
 
-    const updatedClass = await this.classesRepository.save(classEntity);
-  
-    const schedulesChanged = JSON.stringify(previousSchedules) !== JSON.stringify(classEntity.schedules);
-  
+
+    classEntity.schedules = await Promise.all(
+      scheduleClass.map((schedule) => {
+        if (schedule.id) {
+          
+          return this.classScheduleRepository.save({
+            ...schedule,
+            class: { id },
+          });
+        } else {
+         
+          return this.classScheduleRepository.save(
+            this.classScheduleRepository.create({ ...schedule, class: { id } }),
+          );
+        }
+      }),
+    );
+  }
+
+
+  const updatedClass = await this.classesRepository.save(classEntity);
+
+
+  const newSchedules = JSON.stringify(classEntity.schedules);
+  const schedulesChanged = previousSchedules !== newSchedules;
+
  
-    if (schedulesChanged && classEntity.bookedClasses.length > 0) {
-      const recipients = classEntity.bookedClasses.map((booking) => booking.user.email);
-  
-      const newSchedule = classEntity.schedules.map(
+  if (schedulesChanged && classEntity.bookedClasses.length > 0) {
+    const recipients = classEntity.bookedClasses.map(
+      (booking) => booking.user.email,
+    );
+
+    const newScheduleDetails = classEntity.schedules
+      .map(
         (schedule) =>
           `Día: ${schedule.day}, desde ${schedule.startTime} hasta ${schedule.endTime}`,
-      ).join('<br>');
-  
-      await this.emailService.sendClassUpdateEmail(
-        recipients,
-        updatedClass.name,
-        newSchedule,
-      );
-    }
-  
-    return updatedClass;
+      )
+      .join('<br>');
+
+    await this.emailService.sendClassUpdateEmail(
+      recipients,
+      updatedClass.name,
+      newScheduleDetails,
+    );
   }
+
+  return updatedClass;
+}
+
   
   async deleteClass(id: string) {
     
