@@ -4,70 +4,76 @@ import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
 import { Repository } from 'typeorm';
 import { CreateClassScheduleDto } from './dto/createSchedule.dto';
 import { UpdateClassScheduleDto } from './dto/updateSchedule.dto';
+import { BookedClassesCustomRepository } from '../booked_classes/booked_classes.repository';
+import { Classes } from 'src/database/entities/classes.entity';
 
 @Injectable()
 export class ScheduleService {
   constructor(
     @InjectRepository(ClassSchedule)
-    private readonly classScheduleRepository: Repository<ClassSchedule>,
+    private readonly scheduleRepository: Repository<ClassSchedule>,
+    private readonly bookedClassesRepository:BookedClassesCustomRepository
   ) {}
 
-  async createSchedule(createClassScheduleDto: CreateClassScheduleDto) {
-    const { classId, ...scheduleData } = createClassScheduleDto;
-  
-  
-    const schedule = this.classScheduleRepository.create({
-      ...scheduleData,
-      class: { id: classId }, 
-    });
-  
-    return await this.classScheduleRepository.save(schedule);
-  }
-  async updateSchedules(classId: string, schedules: UpdateClassScheduleDto[]) {
-    const existingSchedules = await this.classScheduleRepository.find({
-      where: { class: { id: classId } },
-    });
-  
-    const incomingIds = schedules.map((sch) => sch.id).filter((id) => id);
-    const schedulesToDelete = existingSchedules.filter(
-      (sch) => !incomingIds.includes(sch.id),
+  async createSchedule(
+    schedules: CreateClassScheduleDto[],
+    classEntity: Classes,
+  ): Promise<ClassSchedule[]> {
+    const scheduleEntities = schedules.map((schedule) =>
+      this.scheduleRepository.create({
+        ...schedule,
+        class: classEntity,
+        currentParticipants: 0,
+        remainingCapacity: classEntity.capacity,
+      }),
     );
-  
-   
-    if (schedulesToDelete.length > 0) {
-      await this.classScheduleRepository.remove(schedulesToDelete);
-    }
-  
-    const updatedOrCreatedSchedules = schedules.map(async (sch) => {
-      if (sch.id) {
-        
-        return this.classScheduleRepository.save({
-          ...sch,
-          class: { id: classId },
-        });
-      } else {
-     
-        return this.classScheduleRepository.save(
-          this.classScheduleRepository.create({ ...sch, class: { id: classId } }),
-        );
-      }
-    });
-  
-    return Promise.all(updatedOrCreatedSchedules);
+
+    return this.scheduleRepository.save(scheduleEntities);
   }
 
-  async deleteSchedule(scheduleId: string) {
+  async updateSchedule(id: string, updateScheduleDto: UpdateClassScheduleDto) {
+    
+    const schedule = await this.scheduleRepository.findOne({where:{id}});
+    
+ 
+    if (!schedule) {
+      throw new Error('Horario no encontrado');
+    }
 
-    const schedule = await this.classScheduleRepository.findOne({
+
+    if (updateScheduleDto.day) {
+      schedule.day = updateScheduleDto.day;
+    }
+    if (updateScheduleDto.startTime) {
+      schedule.startTime = updateScheduleDto.startTime;
+    }
+    if (updateScheduleDto.endTime) {
+      schedule.endTime = updateScheduleDto.endTime;
+    }
+
+   
+    return this.scheduleRepository.save(schedule);
+  }
+
+  async deleteSchedule(scheduleId: string): Promise<void> {
+    const schedule = await this.scheduleRepository.findOne({
       where: { id: scheduleId },
+      relations: ['bookedClasses'],
     });
 
     if (!schedule) {
-      throw new NotFoundException('Schedule not found');
+      throw new Error('Horario no encontrado');
     }
 
 
-    await this.classScheduleRepository.remove(schedule);
+    if (schedule.bookedClasses && schedule.bookedClasses.length > 0) {
+      for (const booking of schedule.bookedClasses) {
+        await this.bookedClassesRepository.deleteBooked(booking.id);
+      }
+    }
+
+ 
+    await this.scheduleRepository.remove(schedule);
   }
 
   }

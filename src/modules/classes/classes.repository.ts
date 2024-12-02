@@ -7,9 +7,11 @@ import * as data from '../../utils/mockeClass.json';
 import { CreateClassDto } from './dto/create-classes.dto';
 import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
 import { TrainersCustomRepository } from '../trainers/trainers.repository';
-import { UpdateClassDto } from './dto/update-classes.dto';
+
 import { EmailService } from '../email/email.service';
 import { ScheduleService } from '../schedule/schedule.service';
+import { BookedClassesCustomRepository } from '../booked_classes/booked_classes.repository';
+import { UpdateClassDto } from './dto/update-classes.dto';
 
 @Injectable()
 export class ClassesCustomRepository {
@@ -21,6 +23,7 @@ export class ClassesCustomRepository {
     @InjectRepository(ClassSchedule)
     private readonly classScheduleRepository:Repository<ClassSchedule>,
     private readonly scheduleService: ScheduleService,
+    private readonly bookedClassRepository:BookedClassesCustomRepository,
 
     private readonly dataSource: DataSource,
   ) {}
@@ -110,116 +113,107 @@ export class ClassesCustomRepository {
   }
 
   async createClass(createClassDto: CreateClassDto): Promise<Classes> {
-    const { schedules, trainerId, ...classData } = createClassDto;
+  const { schedules, trainerId, ...classData } = createClassDto;
 
-   
-    const newClass = this.classesRepository.create({
-      ...classData,
-      trainer: { id: trainerId }, 
-    });
 
-    
-    const savedClass = await this.classesRepository.save(newClass);
-
-    if (schedules && schedules.length > 0) {
-      const scheduleEntities = schedules.map((schedule) =>
-        this.classScheduleRepository.create({
-          ...schedule,
-          remainingCapacity: createClassDto.capacity,
-          class: savedClass, 
-        }),
-      );
-
-      
-      await this.classScheduleRepository.save(scheduleEntities);
+  let trainer = null;
+  if (trainerId) {
+    trainer = await this.trainerRepository.getTrainerById(trainerId);
+    if (!trainer) {
+      throw new Error('El entrenador especificado no existe.');
     }
-
- 
-    return this.classesRepository.findOne({
-      where: { id: savedClass.id },
-      relations: ['schedules', 'trainer','reviews'],
-    });
   }
 
 
-  async updateClass(id: string, updateClassDto: UpdateClassDto): Promise<Classes> {
-  const { scheduleClass, ...updates } = updateClassDto;
-
-
-  const classEntity = await this.classesRepository.findOne({
-    where: { id },
-    relations: ['schedules', 'bookedClasses', 'bookedClasses.user'],
+  const newClass = this.classesRepository.create({
+    ...classData,
+    trainer,
   });
 
-  if (!classEntity) throw new NotFoundException('Class not found');
 
-  const previousSchedules = JSON.stringify(classEntity.schedules);
-
-  Object.assign(classEntity, updates);
-
-  if (scheduleClass) {
-    
-    const existingSchedules = classEntity.schedules.map((sch) => sch.id);
-    const incomingSchedules = scheduleClass.map((sch) => sch.id).filter(Boolean);
-
-
-    const schedulesToDelete = existingSchedules.filter(
-      (id) => !incomingSchedules.includes(id),
-    );
-
-    if (schedulesToDelete.length > 0) {
-      await this.classScheduleRepository.delete(id);
-    }
-
-
-    classEntity.schedules = await Promise.all(
-      scheduleClass.map((schedule) => {
-        if (schedule.id) {
-          
-          return this.classScheduleRepository.save({
-            ...schedule,
-            class: { id },
-          });
-        } else {
-         
-          return this.classScheduleRepository.save(
-            this.classScheduleRepository.create({ ...schedule, class: { id } }),
-          );
-        }
-      }),
-    );
-  }
-
-
-  const updatedClass = await this.classesRepository.save(classEntity);
-
-
-  const newSchedules = JSON.stringify(classEntity.schedules);
-  const schedulesChanged = previousSchedules !== newSchedules;
+  const savedClass = await this.classesRepository.save(newClass);
 
  
-  if (schedulesChanged && classEntity.bookedClasses.length > 0) {
-    const recipients = classEntity.bookedClasses.map(
-      (booking) => booking.user.email,
-    );
-
-    const newScheduleDetails = classEntity.schedules
-      .map(
-        (schedule) =>
-          `Día: ${schedule.day}, desde ${schedule.startTime} hasta ${schedule.endTime}`,
-      )
-      .join('<br>');
-
-    await this.emailService.sendClassUpdateEmail(
-      recipients,
-      updatedClass.name,
-      newScheduleDetails,
-    );
+  if (schedules && schedules.length > 0) {
+    await this.scheduleService.createSchedule(schedules, savedClass);
   }
 
-  return updatedClass;
-}
 
+  return this.classesRepository.findOne({
+    where: { id: savedClass.id },
+    relations: ['schedules', 'trainer', 'reviews'],
+  });
+}
+ async updateClass(id: string, updateClassDto: UpdateClassDto): Promise<Classes> {
+    const classToUpdate = await this.classesRepository.findOne({
+      where: { id },
+      relations: ['schedules', 'bookedClasses'],
+    });
+  
+    if (!classToUpdate) {
+      throw new Error('Clase no encontrada');
+    }
+  
+   
+    if (updateClassDto.name) classToUpdate.name = updateClassDto.name;
+    if (updateClassDto.description) classToUpdate.description = updateClassDto.description;
+    if (updateClassDto.location) classToUpdate.location = updateClassDto.location;
+    if (updateClassDto.imgUrl) classToUpdate.imgUrl = updateClassDto.imgUrl;
+  
+  
+    if (updateClassDto.capacity) {
+      classToUpdate.capacity = updateClassDto.capacity;
+  
+   
+      for (const schedule of classToUpdate.schedules) {
+        schedule.remainingCapacity = classToUpdate.capacity - schedule.currentParticipants;
+        
+        await this.classScheduleRepository.save(schedule);
+      }
+    }
+  
+  
+    if (updateClassDto.trainerId) {
+      const trainer = await this.trainerRepository.getTrainerById(updateClassDto.trainerId);
+  
+      if (!trainer) {
+        throw new Error('Entrenador no encontrado');
+      }
+  
+      classToUpdate.trainer = trainer;
+    }
+  
+   
+    if (Array.isArray(updateClassDto.schedules)) {
+      for (const schedule of updateClassDto.schedules) {
+        const existingSchedule = classToUpdate.schedules.find(s => s.id === schedule.id);
+  
+        if (existingSchedule) {
+          
+          existingSchedule.day = schedule.day ?? existingSchedule.day;
+          existingSchedule.startTime = schedule.startTime ?? existingSchedule.startTime;
+          existingSchedule.endTime = schedule.endTime ?? existingSchedule.endTime;
+  
+        
+          existingSchedule.remainingCapacity = classToUpdate.capacity - existingSchedule.currentParticipants;
+          
+       
+          await this.classScheduleRepository.save(existingSchedule);
+        } else {
+       
+          const newSchedule = this.classScheduleRepository.create({
+            ...schedule,
+            class: classToUpdate,
+            currentParticipants: 0,
+            remainingCapacity: classToUpdate.capacity,
+          });
+          await this.classScheduleRepository.save(newSchedule);
+        }
+      }
+    }
+
+    return this.classesRepository.save(classToUpdate);
+  }
   
   async deleteClass(id: string) {
     

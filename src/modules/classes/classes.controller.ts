@@ -17,6 +17,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 
+
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly classService: ClassesService) {}
