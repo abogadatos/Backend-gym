@@ -136,6 +136,12 @@ export class AuthService {
       const newUser = this.usersRepository.create(userData);
       await this.usersRepository.save(newUser);
 
+      try {
+        await this.emailService.sendWelcomeEmail(newUser.email, newUser.name);
+      } catch (error) {
+        console.error('Error while sending :', error.message);
+      }
+
       const user: UserWithoutPassword = await this.usersRepository.findOne({
         where: { email: userData.email },
       });
