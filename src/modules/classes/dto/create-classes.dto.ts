@@ -7,7 +7,7 @@ import {
   ValidateNested,
   IsArray,
 } from 'class-validator';
-import { CreateClassScheduleDto } from './createSchedule.dto';
+import { CreateClassScheduleDto } from '../../schedule/dto/createSchedule.dto';
 
 export class CreateClassDto {
   @IsString()

@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsString, IsInt, IsUUID, IsOptional, IsPositive, ValidateNested} from 'class-validator';
-import { CreateClassScheduleDto } from './createSchedule.dto';
+import { CreateClassScheduleDto } from '../../schedule/dto/createSchedule.dto';
 
 export class UpdateClassDto {
   @IsString()

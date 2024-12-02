@@ -85,6 +85,18 @@ export class UsersService {
       this.reviewsCustomService.initializeReviews();
     }, 12500);
 
+    
+    setTimeout(() => {
+      console.info(
+          `Seeding payments
+           ⏳⏳⏳⏳⌛
+          `);
+    }, 12000);
+
+    setTimeout(() => {
+      this.paymentsCustomRepository.initializePayments();
+    }, 12500);
+
 
     setTimeout(() => {
       console.info(`
