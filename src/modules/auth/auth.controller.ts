@@ -7,6 +7,7 @@ import {
   BadRequestException,
   UseInterceptors,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/signInUser.dto';
@@ -14,6 +15,11 @@ import { CreateUserDto } from './dto/signUpUser.dto';
 import { CleanDataPipe } from 'src/pipes/normalize-data.pipe';
 import { AuthZeroDTO } from './dto/auth0-logIn.dto';
 import { addJWTInterceptor } from 'src/interceptors/addJWT.interceptor';
+import { Role } from 'src/enum/roles.enum';
+import { Roles } from 'src/decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +27,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup/third')
+  @ApiBearerAuth()
   @UseInterceptors(addJWTInterceptor)
   async signUpAuthZero(@Body() authZeroData: AuthZeroDTO) {
     return await this.authService.signUpAuth(authZeroData);
@@ -50,5 +57,8 @@ export class AuthController {
   }
 
   @Patch('signedUpModify')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   async patchUser() {}
 }

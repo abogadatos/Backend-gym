@@ -31,79 +31,41 @@ export class UsersService {
   ) {}
 
   async seedDatabase() {
-    setTimeout(() => {
-      console.info('Seeding your database');
-    }, 200);
+    console.info(`
+      Seeding memberships
+          💎💎💎💎💎
+    `);
+    await this.membershipsCustomRepository.addMemberships();
 
-    setTimeout(() => {
-      console.info(`
-            Seeding memberships
-                💎💎💎💎💎
-            `);
-    }, 500);
-    setTimeout(() => {
-      this.membershipsCustomRepository.addMemberships();
-    }, 700);
+    console.info(`
+      Seeding users
+        👧🧑👱👨
+    `);
+    await this.userSeeder();
 
-    setTimeout(() => {
-      console.info(`
-              Seeding users
-                👧🧑👱👨
-          `);
-    }, 1500);
-    setTimeout(() => {
-      this.userSeeder();
-    }, 1700);
+    console.info(`
+      Seeding trainers
+        🏃🏽💥🏋‍♀🔥💪🏼
+    `);
+    await this.trainersCustomRepository.initializeTrainers();
 
-    setTimeout(() => {
-      console.info(`
-          Seeding trainers
-            🏃🏽💥🏋‍♀🔥💪🏼
-          `);
-    }, 9000);
-    setTimeout(() => {
-      this.trainersCustomRepository.initializeTrainers();
-    }, 9200);
+    console.info(`
+      Seeding class
+       ⏳⏳⏳⏳⌛
+    `);
+    await this.classesCustomRepository.initializeClasses();
 
-    setTimeout(() => {
-      console.info(`
-          Seeding class
-           ⏳⏳⏳⏳⌛
-          `);
-    }, 12000);
-    setTimeout(() => {
-      this.classesCustomRepository.initializeClasses();
-    }, 12500);
+    console.info(`
+      Seeding payments
+          💳💰💸
+    `);
+    await this.paymentsCustomRepository.initializePayments();
 
-    setTimeout(() => {
-      console.info(
-          `Seeding reviews
-           ⏳⏳⏳⏳⌛
-          `);
-    }, 12000);
-    setTimeout(() => {
-      this.reviewsCustomService.initializeReviews();
-    }, 12500);
-
-    
-    setTimeout(() => {
-      console.info(
-          `Seeding payments
-           ⏳⏳⏳⏳⌛
-          `);
-    }, 12000);
-
-    setTimeout(() => {
-      this.paymentsCustomRepository.initializePayments();
-    }, 12500);
-
-
-    setTimeout(() => {
-      console.info(`
-              Database seeding completed
-                ✅✅✅✅✅✅✅✅✅✅
-          `);
-    }, 14000);
+    console.info(`
+      Seeding reviews
+             ⏳⏳⏳⏳⌛
+    `);
+    await this.reviewsCustomService.initializeReviews();
   }
 
   async userSeeder() {
