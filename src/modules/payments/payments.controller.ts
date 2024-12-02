@@ -29,8 +29,8 @@ export class PaymentsController {
 
   @Get('success')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.User, Role.Admin, Role.SuperAdmin)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async paymentSuccess(@Query('session_id') sessionId: string) {
     return this.paymentsService.handlePaymentSuccess(sessionId);
   }
