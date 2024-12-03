@@ -17,7 +17,7 @@
       }
     ],
     "imgUrl": "https://i.imgur.com/VLNjzIU.jpg",
-    "trainerId": "trainer-1" 
+    "trainerName":"Hulda Robbins"
   },
   {
     "name": "Entrenamiento Funcional",
@@ -37,7 +37,7 @@
       }
     ],
     "imgUrl": "https://i.imgur.com/2oafcMa.jpg",
-    "trainerId": "trainer-2"  
+    "trainerName":  "Christina Summers"  
   },
   {
     "name": "Zumba Energizante",
@@ -57,7 +57,7 @@
       }
     ],
     "imgUrl": "https://i.imgur.com/34WcY56.jpg",
-    "trainerId": "trainer-3"  
+    "trainerName": "Francisco Washington"
   },
   {
     "name": "CrossFit de Alto Rendimiento",
@@ -77,7 +77,7 @@
       }
     ],
     "imgUrl": "https://i.imgur.com/8DpxtRA.jpg",
-    "trainerId": "trainer-4" 
+    "trainerName": "Cecelia Reid"
   },
   {
     "name": "Pilates para Principiantes",
@@ -98,6 +98,6 @@
       }
     ],
     "imgUrl": "https://i.imgur.com/krZ9HnK.jpg",
-    "trainerId": "trainer-5"  
+    "trainerName": "Johnny Rodgers"
   }
 ]
