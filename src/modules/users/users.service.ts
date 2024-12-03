@@ -16,6 +16,7 @@ import { UsersCustomRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { PaymentsCustomRepository } from '../payments/payments.repository';
 import { ReviewsService } from '../reviews/reviews.service';
+import { RoutinesService } from '../routines/routines.service';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +29,7 @@ export class UsersService {
     private membershipsCustomRepository: MembershipsCustomRepository,
     private paymentsCustomRepository: PaymentsCustomRepository,
     private reviewsCustomService: ReviewsService,
+    private routinesService:RoutinesService,
   ) {}
 
   async seedDatabase() {
@@ -66,11 +68,21 @@ export class UsersService {
              ⏳⏳⏳⏳⌛
     `);
     await this.reviewsCustomService.initializeReviews();
+
+    console.info(`
+      Seeding routines
+    `);
+
+    await this.routinesService.initializeRoutines()
+
+
   }
 
   async userSeeder() {
     return await this.usersCustomRepository.initializeUser();
   }
+
+  
 
   async getUsers(
     page: number,
