@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -29,7 +30,7 @@ export class UsersService {
     private membershipsCustomRepository: MembershipsCustomRepository,
     private paymentsCustomRepository: PaymentsCustomRepository,
     private reviewsCustomService: ReviewsService,
-    private routinesService:RoutinesService,
+    private routinesService: RoutinesService,
   ) {}
 
   async seedDatabase() {
@@ -73,16 +74,12 @@ export class UsersService {
       Seeding routines
     `);
 
-    await this.routinesService.initializeRoutines()
-
-
+    await this.routinesService.initializeRoutines();
   }
 
   async userSeeder() {
     return await this.usersCustomRepository.initializeUser();
   }
-
-  
 
   async getUsers(
     page: number,
@@ -123,6 +120,12 @@ export class UsersService {
       where: { id: userID },
     });
     if (!foundUser) throw new NotFoundException('user not found or not exist');
+
+    if (foundUser.banned) {
+      throw new ForbiddenException(
+        `Your account has been banned. Reason: ${foundUser.banReason || 'No reason provided.'}`,
+      );
+    }
 
     if (foundUser.auth === 'form') {
       const hashedPassword = await bcrypt.hash(userInfo.password, 10);

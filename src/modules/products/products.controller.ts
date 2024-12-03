@@ -16,6 +16,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
+import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -31,7 +32,7 @@ export class ProductsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findAll() {
     return this.productsService.findAll();
@@ -39,7 +40,7 @@ export class ProductsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(+id);

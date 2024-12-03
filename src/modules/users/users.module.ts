@@ -9,14 +9,12 @@ import { TrainersModule } from '../trainers/trainers.module';
 import { MembershipsModule } from '../memberships/memberships.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { ReviewsModule } from '../reviews/reviews.module';
-import { ReviewsService } from '../reviews/reviews.service';
 import { RoutinesModule } from '../routines/routines.module';
-import { RoutinesService } from '../routines/routines.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,UsersCustomRepository]),
-    TrainersModule,
+    TypeOrmModule.forFeature([User, UsersCustomRepository]),
+    forwardRef(() => TrainersModule),
     ClassesModule,
     MembershipsModule,
     forwardRef(() => ReviewsModule),

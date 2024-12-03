@@ -15,6 +15,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
+import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -22,7 +23,7 @@ export class ReviewsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   async findAllReviews() {
     return this.reviewsService.getReviews();
@@ -30,7 +31,7 @@ export class ReviewsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   async findOne(@Param('id') id: string) {
     return this.reviewsService.getByIdReviews(id);
@@ -38,7 +39,7 @@ export class ReviewsController {
 
   @Get('class/:classId')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Associate, Role.Trainer, Role.Admin, Role.SuperAdmin)
   async findByClass(@Param('classId') classId: string) {
     return this.reviewsService.getReviewsByClass(classId);
@@ -46,7 +47,7 @@ export class ReviewsController {
 
   @Post() // TODO después de verificación de Rodrigo, borrar Role.User
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   async create(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewsService.postReviews(createReviewDto);
@@ -54,7 +55,7 @@ export class ReviewsController {
 
   @Put(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async update(
     @Param('id') id: string,
@@ -65,7 +66,7 @@ export class ReviewsController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Associate, Role.Admin, Role.SuperAdmin)
   async remove(@Param('id') id: string) {
     return this.reviewsService.deleteReviews(id);

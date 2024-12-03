@@ -1,21 +1,20 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Memberships } from 'src/database/entities/membership.entity';
 import { Payment } from 'src/database/entities/payment.entity';
 import { MembershipStatus } from 'src/enum/membership_status.enum';
 import { UsersCustomRepository } from '../users/users.repository';
 import { PaymentsCustomRepository } from './payments.repository';
-const stripe = require('stripe')(process.env.SECRET_STRIPE)
- 
+const stripe = require('stripe')(process.env.SECRET_STRIPE);
 
 @Injectable()
 export class PaymentsService {
   constructor(
-    private readonly usersCustomRepository: UsersCustomRepository, 
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,  
+    private readonly usersCustomRepository: UsersCustomRepository,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Memberships)
     private readonly membershipsCustomRepository: Repository<Memberships>,
     @InjectRepository(Payment)
@@ -25,7 +24,7 @@ export class PaymentsService {
 
   async addMemberships() {
     return await this.paymentsCustomRepository.initializePayments();
-}
+  }
   async createCustomer(createCustomerDto: CreateCustomerDto) {
     const { userEmail, userName, stripePriceId } = createCustomerDto;
 
@@ -33,9 +32,11 @@ export class PaymentsService {
       const membership = await this.membershipsCustomRepository.findOne({
         where: { stripePriceId: stripePriceId }, // Buscar directamente por el stripePriceId
       });
-  
+
       if (!membership) {
-        throw new Error(`No se encontró una membresía con el stripePriceId: ${stripePriceId}`);
+        throw new Error(
+          `No se encontró una membresía con el stripePriceId: ${stripePriceId}`,
+        );
       }
 
       // 2. Crear el cliente en Stripe
@@ -50,18 +51,17 @@ export class PaymentsService {
         mode: 'subscription',
         payment_method_types: ['card'],
         customer: customer.id,
-        success_url: 'http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}',
+        success_url:
+          'http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}',
         cancel_url: 'http://localhost:3000/cancel',
         metadata: {
-          stripePriceId: stripePriceId, 
-          userEmail: userEmail, 
+          stripePriceId: stripePriceId,
+          userEmail: userEmail,
         },
       });
-      
 
       console.log('Stripe Session ID:', session.id);
 
-      
       return {
         sessionId: session.id,
         sessionUrl: session.url,
@@ -77,43 +77,64 @@ export class PaymentsService {
 
   async handlePaymentSuccess(sessionId: string): Promise<any> {
     if (!sessionId) {
-      throw new HttpException('sessionId no proporcionado', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'sessionId no proporcionado',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-  
+
     try {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-  
+
       if (!session) {
-        throw new HttpException('Sesión no encontrada en Stripe', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Sesión no encontrada en Stripe',
+          HttpStatus.NOT_FOUND,
+        );
       }
-  
+
       if (session.payment_status !== 'paid') {
-        throw new HttpException('El pago no se completó', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'El pago no se completó',
+          HttpStatus.BAD_REQUEST,
+        );
       }
-  
-      console.log('Correo electrónico del cliente:', session.metadata.userEmail);
-  
+
+      console.log(
+        'Correo electrónico del cliente:',
+        session.metadata.userEmail,
+      );
+
       const user = await this.usersRepository.findOne({
         where: { email: session.metadata.userEmail },
       });
-  
+
       if (!user) {
-        console.error('No se encontró el usuario con el email:', session.metadata.userEmail);
-        throw new HttpException('No se encontró el usuario con el email proporcionado', HttpStatus.NOT_FOUND);
+        console.error(
+          'No se encontró el usuario con el email:',
+          session.metadata.userEmail,
+        );
+        throw new HttpException(
+          'No se encontró el usuario con el email proporcionado',
+          HttpStatus.NOT_FOUND,
+        );
       }
-  
+
       const membership = await this.membershipsCustomRepository.findOne({
         where: { stripePriceId: session.metadata.stripePriceId },
       });
-  
+
       if (!membership) {
-        console.error('No se encontró una membresía con el stripePriceId:', session.metadata.stripePriceId);
+        console.error(
+          'No se encontró una membresía con el stripePriceId:',
+          session.metadata.stripePriceId,
+        );
         throw new HttpException(
           `No se encontró una membresía con el stripePriceId: ${session.metadata.stripePriceId}`,
           HttpStatus.NOT_FOUND,
         );
       }
-  
+
       const paymentData = {
         user_id: user.id,
         membership_id: membership.id,
@@ -123,20 +144,23 @@ export class PaymentsService {
         status: 'completed',
         transaction_id: session.id,
       };
-  
+
       await this.paymentsRepository.save(paymentData);
-  
+
       user.membership_status = MembershipStatus.Active;
-  
-      const updatedUser = await this.usersCustomRepository.updateUser(user.id,user);  // Aquí usamos `save`, que actualizará el usuario correctamente
-  
+
+      const updatedUser = await this.usersCustomRepository.updateUser(
+        user.id,
+        user,
+      ); // Aquí usamos `save`, que actualizará el usuario correctamente
+
       console.log({
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,
         userData: updatedUser,
         membershipStatus: updatedUser.membership_status,
       });
-  
+
       return {
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,
@@ -145,32 +169,36 @@ export class PaymentsService {
       };
     } catch (error) {
       console.error('Error procesando el pago:', error);
-      throw new HttpException(`Error procesando el pago: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        `Error procesando el pago: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-  }  
-  
+  }
+
   async checkPaymentStatus(sessionId: string) {
     if (!sessionId) {
-      throw new HttpException('sessionId no proporcionado', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'sessionId no proporcionado',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-  
+
     try {
-     
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-  
+
       if (!session) {
         throw new HttpException('Sesión no encontrada', HttpStatus.NOT_FOUND);
       }
-  
-    
+
       return {
-        status: session.payment_status, 
+        status: session.payment_status,
         message:
           session.payment_status === 'paid'
             ? 'Pago exitoso'
             : 'El pago no se completó',
         sessionId: session.id,
-        amount: session.amount_total / 100, 
+        amount: session.amount_total / 100,
         customer: session.customer,
       };
     } catch (error) {
@@ -185,30 +213,24 @@ export class PaymentsService {
   async getAllPayments(
     page: number,
     limit: number,
-    amount?: string,      
-    specificDate?: string,  
-    status?: string,      
-    orderDirection: 'ASC' | 'DESC' = 'ASC',  
+    amount?: string,
+    specificDate?: string,
+    status?: string,
+    orderDirection: 'ASC' | 'DESC' = 'ASC',
   ) {
-    
     const parsedDate = specificDate ? new Date(specificDate) : undefined;
 
-    
     return await this.paymentsCustomRepository.getAllPayments(
       page,
       limit,
       amount,
-      parsedDate,   
+      parsedDate,
       status,
       orderDirection,
     );
   }
-  
-  async getPaymentsById(id:string){
+
+  async getPaymentsById(id: string) {
     return await this.paymentsCustomRepository.getPaymentsById(id);
   }
-  }
-
-
-
-  
+}

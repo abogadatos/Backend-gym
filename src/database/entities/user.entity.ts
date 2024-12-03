@@ -14,6 +14,8 @@ import { Attendance } from './attendance.entity';
 import { Reviews } from './reviews.entity';
 import { Payment } from './payment.entity';
 import { Trainers } from './trainer.entity';
+import { BanStatus } from 'src/enum/banStatus.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({
   name: 'users',
@@ -25,6 +27,10 @@ export class User {
    * @example "c4d7a29b-32be-4d41-b0e1-9db8f6f4ec45"
    */
   @PrimaryGeneratedColumn('uuid')
+  @ApiProperty({
+    description: 'Unique identifier for each user',
+    example: 'c4d7a29b-32be-4d41-b0e1-9db8f6f4ec45',
+  })
   id: string;
 
   /**
@@ -39,6 +45,10 @@ export class User {
     type: 'varchar',
     length: 50,
     nullable: false,
+  })
+  @ApiProperty({
+    description: "User's first name",
+    example: 'Linus Benedict',
   })
   name: string;
 
@@ -55,6 +65,10 @@ export class User {
     length: 80,
     nullable: false,
   })
+  @ApiProperty({
+    description: "User's unique email address",
+    example: 'linus.torvals@genius.com',
+  })
   email: string;
 
   /**
@@ -66,6 +80,11 @@ export class User {
   @Column({
     type: 'varchar',
     length: 60,
+    nullable: true,
+  })
+  @ApiProperty({
+    description: 'Hashed password for user authentication',
+    example: '**********',
     nullable: true,
   })
   password: string;
@@ -83,6 +102,11 @@ export class User {
     length: 15,
     nullable: true,
   })
+  @ApiProperty({
+    description: "User's phone number",
+    example: '+1-202-555-0173',
+    nullable: true,
+  })
   phone: string;
 
   /**
@@ -95,10 +119,15 @@ export class User {
    * @example "google"
    */
   @Column({
-    type: 'varchar', // Store it as a simple string in the database
-    length: 16, // Limit length for validation purposes
-    nullable: false, // Ensure it's always set
-    default: 'form', // Set the default value
+    type: 'varchar',
+    length: 16,
+    nullable: false,
+    default: 'form',
+  })
+  @ApiProperty({
+    description: 'Authentication method used by the user',
+    enum: ['google', 'googleIncomplete', 'form'],
+    default: 'form',
   })
   auth: 'google' | 'googleIncomplete' | 'form'; // Define acceptable values as a TypeScript union type
 
@@ -112,6 +141,11 @@ export class User {
    */
   @Column({
     type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  @ApiProperty({
+    description: 'Roles assigned to the user',
     enum: Role,
     default: Role.User,
   })
@@ -131,6 +165,11 @@ export class User {
     enum: MembershipStatus,
     default: MembershipStatus.Inactive,
   })
+  @ApiProperty({
+    description: 'Membership status assigned to the user',
+    enum: MembershipStatus,
+    default: MembershipStatus.Inactive,
+  })
   membership_status: MembershipStatus;
 
   /**
@@ -146,6 +185,11 @@ export class User {
     length: 50,
     nullable: true,
   })
+  @ApiProperty({
+    description: "User's country of residence",
+    example: 'Colombia',
+    nullable: true,
+  })
   country: string;
 
   /**
@@ -158,6 +202,11 @@ export class User {
    */
   @Column({
     type: 'text',
+    nullable: true,
+  })
+  @ApiProperty({
+    description: "User's full address",
+    example: 'P. Sherman 42 Wallaby Way, Sidney',
     nullable: true,
   })
   address: string;
@@ -176,10 +225,103 @@ export class User {
     type: 'text',
     default: `https://res.cloudinary.com/dwhejzrua/image/upload/v1727710566/um0h7zmnozrblufpcikd.jpg`,
   })
+  @ApiProperty({
+    description: 'URL of the product image',
+    example: 'https://example.com/image.jpg',
+  })
   image: string;
 
   /**
-   * Timestamp indicating when the user account was created.
+   * Indicates if the user is banned.
+   *
+   * - Defaults to false.
+   *
+   * @remarks
+   * This field determines whether the user is banned from the platform. If set to true,
+   * the user is banned. The default is false, meaning the user is not banned.
+   *
+   * @example false
+   */
+  @Column({
+    type: 'boolean',
+    default: false,
+    nullable: false,
+  })
+  @ApiProperty({
+    description: 'Indicates if the user is banned',
+    example: false,
+  })
+  banned: boolean;
+
+  /**
+   * Reason for banning the user.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field provides the reason for banning the user. It is optional and may be
+   * left null if no reason is specified.
+   *
+   * @example 'Repeated violations of terms'
+   */
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  @ApiProperty({
+    description: 'Reason for banning the user',
+    example: 'Repeated violations of terms',
+    nullable: true,
+  })
+  banReason: string;
+
+  /**
+   * Ban status of the user.
+   *
+   * - Defaults to 'None'.
+   *
+   * @remarks
+   * This field indicates the current status of the user's ban. The default is 'None',
+   * meaning no ban. The status is represented by an enum value.
+   *
+   * @example BanStatus.None
+   */
+  @Column({
+    type: 'enum',
+    enum: BanStatus,
+    default: BanStatus.None,
+  })
+  @ApiProperty({
+    description: 'Ban status of the user',
+    enum: BanStatus,
+    default: BanStatus.None,
+  })
+  banStatus: BanStatus;
+
+  /**
+   * Timestamp of when the user was banned.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field records the timestamp when the user was banned. It is optional and may
+   * be null if the user is not banned.
+   *
+   * @example '2024-10-13T14:20:30.000Z'
+   */
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  @ApiProperty({
+    description: 'Timestamp of when the user was banned',
+    example: '2024-10-13T14:20:30.000Z',
+    nullable: true,
+  })
+  bannedAt: Date;
+
+  /**
+   * Timestamp when the user account was created.
    *
    * @remarks
    * Automatically generated when a new user record is created.
@@ -187,21 +329,99 @@ export class User {
    * @example "2024-10-13T14:20:30.000Z"
    */
   @CreateDateColumn()
+  @ApiProperty({
+    description: 'Timestamp when the user account was created',
+    example: '2024-10-13T14:20:30.000Z',
+  })
   created_At: Date;
 
+  /**
+   * Timestamp when the user account was last updated.
+   *
+   * @remarks
+   * Automatically updated whenever the user record is modified.
+   *
+   * @example "2024-10-13T14:20:30.000Z"
+   */
   @UpdateDateColumn()
+  @ApiProperty({
+    description: 'Timestamp when the user account was last updated',
+    example: '2024-10-13T14:20:30.000Z',
+  })
   updated_At: Date;
 
+  /**
+   * Booked classes for the user.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field represents the list of classes the user has booked. It is a one-to-many
+   * relationship with the `BookedClasses` entity, meaning a user can have multiple
+   * booked classes.
+   *
+   * @example [{ "id": 1, "className": "Yoga 101", "date": "2024-10-13T14:00:00.000Z" }]
+   */
   @OneToOne(() => Trainers, (trainers) => trainers.userID)
   @OneToMany(() => BookedClasses, (bookedClasses) => bookedClasses.user)
+  @ApiProperty({
+    description: 'Booked classes for the user',
+    type: [BookedClasses],
+  })
   bookedClasses: BookedClasses[];
 
+  /**
+   * Attendance records for the user.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field holds the attendance records for the user. It is a one-to-many
+   * relationship with the `Attendance` entity, meaning a user can have multiple attendance
+   * records.
+   *
+   * @example [{ "id": 1, "className": "Yoga 101", "status": "Present" }]
+   */
   @OneToMany(() => Attendance, (attendance) => attendance.user)
+  @ApiProperty({
+    description: 'Attendance records for the user',
+    type: [Attendance],
+  })
   attendanceRecords: Attendance[];
 
+  /**
+   * Payments made by the user.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field holds the payment records for the user. It is a one-to-many
+   * relationship with the `Payment` entity, meaning a user can have multiple payment records.
+   *
+   * @example [{ "id": 1, "amount": 100, "date": "2024-10-13T14:00:00.000Z" }]
+   */
   @OneToMany(() => Payment, (payment) => payment.user)
+  @ApiProperty({
+    description: 'Payments made by the user',
+    type: [Payment],
+  })
   payments: Payment[];
 
+  /**
+   * Reviews submitted by the user.
+   *
+   * - Optional.
+   *
+   * @remarks
+   * This field holds the reviews that the user has submitted. It is a one-to-many
+   * relationship with the `Reviews` entity, meaning a user can have multiple reviews.
+   *
+   * @example [{ "id": 1, "rating": 5, "reviewText": "Great class!" }]
+   */
   @OneToMany(() => Reviews, (reviews) => reviews.user)
+  @ApiProperty({
+    description: 'Reviews submitted by the user',
+    type: [Reviews],
+  })
   reviews: Reviews[];
 }

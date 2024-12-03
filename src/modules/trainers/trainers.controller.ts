@@ -18,6 +18,7 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('trainers')
 export class TrainersController {
@@ -33,8 +34,8 @@ export class TrainersController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
-  // corroborar su usuario puede x ID, ver trainers
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  // corroborar su usuario puede ver trainers x ID
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findAll(@Query('page') page: string, @Query('limit') limit: string) {
     const pageNumber = page ? parseInt(page, 10) : 1;
@@ -44,8 +45,8 @@ export class TrainersController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
-  // corroborar su usuario puede x ID, ver trainers
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  // corroborar su usuario puede ver trainers x ID
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findOne(@Param('id') id: string) {
     return await this.trainersService.findOne(id);

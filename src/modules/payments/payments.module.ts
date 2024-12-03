@@ -13,10 +13,9 @@ import { UsersCustomRepository } from '../users/users.repository';
     TypeOrmModule.forFeature([Payment]),
     MembershipsModule,
     forwardRef(() => UsersModule),
-    
   ],
   controllers: [PaymentsController],
-  providers: [PaymentsService, PaymentsCustomRepository,UsersCustomRepository],
+  providers: [PaymentsService, PaymentsCustomRepository, UsersCustomRepository],
   exports: [PaymentsCustomRepository],
 })
 export class PaymentsModule {}

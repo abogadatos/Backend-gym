@@ -1,4 +1,4 @@
-import { Injectable,NotFoundException} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClassSchedule } from 'src/database/entities/ClassSchedule.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +12,7 @@ export class ScheduleService {
   constructor(
     @InjectRepository(ClassSchedule)
     private readonly scheduleRepository: Repository<ClassSchedule>,
-    private readonly bookedClassesRepository:BookedClassesCustomRepository
+    private readonly bookedClassesRepository: BookedClassesCustomRepository,
   ) {}
 
   async createSchedule(
@@ -32,14 +32,11 @@ export class ScheduleService {
   }
 
   async updateSchedule(id: string, updateScheduleDto: UpdateClassScheduleDto) {
-    
-    const schedule = await this.scheduleRepository.findOne({where:{id}});
-    
- 
+    const schedule = await this.scheduleRepository.findOne({ where: { id } });
+
     if (!schedule) {
       throw new Error('Horario no encontrado');
     }
-
 
     if (updateScheduleDto.day) {
       schedule.day = updateScheduleDto.day;
@@ -51,7 +48,6 @@ export class ScheduleService {
       schedule.endTime = updateScheduleDto.endTime;
     }
 
-   
     return this.scheduleRepository.save(schedule);
   }
 
@@ -65,15 +61,12 @@ export class ScheduleService {
       throw new Error('Horario no encontrado');
     }
 
-
     if (schedule.bookedClasses && schedule.bookedClasses.length > 0) {
       for (const booking of schedule.bookedClasses) {
         await this.bookedClassesRepository.deleteBooked(booking.id);
       }
     }
 
- 
     await this.scheduleRepository.remove(schedule);
   }
-
-  }
+}

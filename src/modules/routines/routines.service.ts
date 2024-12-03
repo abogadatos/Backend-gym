@@ -6,13 +6,12 @@ import { Routine } from 'src/database/entities/routines.entity';
 import * as data from '../../utils/mockRoutines.json';
 
 @Injectable()
-export class RoutinesService{
+export class RoutinesService {
   constructor(
     @InjectRepository(Routine)
     private readonly routineRepository: Repository<Routine>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
-
 
   async initializeRoutines() {
     try {
@@ -36,8 +35,6 @@ export class RoutinesService{
       throw error;
     }
   }
-
-
 
   async uploadRoutine(file: Express.Multer.File) {
     const routineUrl = await this.cloudinaryService.uploadFile(file);

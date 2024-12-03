@@ -5,6 +5,7 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('attendance')
 export class AttendanceController {
@@ -12,7 +13,7 @@ export class AttendanceController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   getAllAttendance() {
     return this.attendanceService.getAllAttendanceService();
@@ -20,7 +21,7 @@ export class AttendanceController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   getAttendanceById() {
     return this.attendanceService.getAttendanceByIdService();
@@ -28,7 +29,7 @@ export class AttendanceController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   registerAttendance() {
     return this.attendanceService.registerAttendanceService();
@@ -36,7 +37,7 @@ export class AttendanceController {
 
   @Put(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   upDateAttendance() {
     return this.attendanceService.upDateAttendanceService();
@@ -44,7 +45,7 @@ export class AttendanceController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Admin, Role.SuperAdmin)
   deleteAttendance() {
     return this.attendanceService.deleteAttendanceService();
@@ -52,7 +53,7 @@ export class AttendanceController {
 
   @Get('/class/:classId')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   getAttendanceByClassId() {
     return this.attendanceService.getAttendanceByClassIdService();
@@ -60,7 +61,7 @@ export class AttendanceController {
 
   @Get('user/:userId')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard, BanGuard)
   @Roles(Role.User, Role.Associate, Role.Trainer, Role.Admin, Role.SuperAdmin)
   getAttendanceByUserId() {
     return this.attendanceService.getAttendanceByUserIdService();
