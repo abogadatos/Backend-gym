@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Classes } from 'src/database/entities/classes.entity';
 import { ClassesCustomRepository } from './classes.repository';
 
 import { CreateClassDto } from './dto/create-classes.dto';
@@ -10,7 +9,7 @@ import { ScheduleService } from '../schedule/schedule.service';
 export class ClassesService {
   constructor(
     private classesCustomRepository: ClassesCustomRepository,
-    private scheduleService:ScheduleService,
+    private scheduleService: ScheduleService,
   ) {}
 
   async classesSeeder() {
@@ -23,7 +22,7 @@ export class ClassesService {
   getClassByID(id: string) {
     return this.classesCustomRepository.getClassById(id);
   }
-  createClass(createClassDto:CreateClassDto) {
+  createClass(createClassDto: CreateClassDto) {
     return this.classesCustomRepository.createClass(createClassDto);
   }
   updateClass(id: string, classe: UpdateClassDto) {
@@ -32,5 +31,4 @@ export class ClassesService {
   deleteClass(id: string) {
     return this.classesCustomRepository.deleteClass(id);
   }
-
 }

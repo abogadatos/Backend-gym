@@ -9,6 +9,6 @@ import { Memberships } from 'src/database/entities/membership.entity';
   imports: [TypeOrmModule.forFeature([Memberships])],
   controllers: [MembershipsController],
   providers: [MembershipsCustomRepository, MembershipsService],
-  exports: [MembershipsCustomRepository,TypeOrmModule],
+  exports: [MembershipsCustomRepository, TypeOrmModule],
 })
 export class MembershipsModule {}

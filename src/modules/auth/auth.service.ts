@@ -2,6 +2,7 @@ import { UsersService } from './../users/users.service';
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -191,6 +192,12 @@ export class AuthService {
       throw new NotFoundException('User does not exist');
     }
 
+    if (userFound.banned) {
+      throw new ForbiddenException(
+        `Your account has been banned. Reason: ${userFound.banReason || 'No reason provided.'}`,
+      );
+    }
+
     const validatedPassword = await bcrypt.compare(
       userData.password,
       userFound.password,
@@ -210,6 +217,9 @@ export class AuthService {
         phone: userFound.phone,
         country: userFound.country,
         address: userFound.address,
+        banned: userFound.banned,
+        banSatus: userFound.banStatus,
+        banReason: userFound.banReason,
       };
 
       const token = this.jwtService.sign(userPayload);
