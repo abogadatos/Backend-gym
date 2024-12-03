@@ -37,11 +37,11 @@ export class ClassesCustomRepository {
   
     for (const person of data) {
       const trainer = trainers.find(
-        (t) => `${t.userID.name}` === person.trainerId,
+        (t) => `${t.userID.name}` === person.trainerName,
       );
   
-      const trainerId = trainer ? trainer.id : null;
-      const trainerName = trainer ? trainer.userID.name : 'Sin entrenador';
+      const trainerName = trainer ? trainer.id : null;
+     
   
       // Crear la clase
       const newClass = await this.classesRepository
@@ -56,7 +56,7 @@ export class ClassesCustomRepository {
           imgUrl: person.imgUrl,
           created_at: new Date(),
           update_at: new Date(),
-          trainer: trainerId,
+          trainer: trainerName,
         })
         .orIgnore()
         .execute();
@@ -82,7 +82,7 @@ export class ClassesCustomRepository {
   
       console.log(
         `Clase "${person.name}" creada con ${
-          trainer ? `entrenador UUID ${trainerId}` : '"Sin entrenador"'
+          trainer ? `entrenador  ${trainerName}` : '"Sin entrenador"'
         }.`,
       );
     }
