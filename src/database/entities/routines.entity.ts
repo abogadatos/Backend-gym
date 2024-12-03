@@ -5,6 +5,10 @@ export class Routine {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  
+  @Column()
+  name: string; 
+
   @Column()
   routine: string; 
 }
