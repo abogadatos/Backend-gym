@@ -10,6 +10,8 @@ import { MembershipsModule } from '../memberships/memberships.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { ReviewsModule } from '../reviews/reviews.module';
 import { ReviewsService } from '../reviews/reviews.service';
+import { RoutinesModule } from '../routines/routines.module';
+import { RoutinesService } from '../routines/routines.service';
 
 @Module({
   imports: [
@@ -18,7 +20,8 @@ import { ReviewsService } from '../reviews/reviews.service';
     ClassesModule,
     MembershipsModule,
     forwardRef(() => ReviewsModule),
-    forwardRef(() => PaymentsModule)
+    forwardRef(() => PaymentsModule),
+    forwardRef(() => RoutinesModule),
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersCustomRepository],
