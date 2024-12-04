@@ -132,7 +132,7 @@ async deleteBooked(bookingId: string) {
 
   const classDate = new Date(`${classSchedule.day}T${classSchedule.startTime}`);
 
-  await this.bookedClassesRepository.save(booking);
+  await this.bookedClassesRepository.remove(booking);
 
   await this.emailService.sendCancellationEmail(
     booking.user.email,
