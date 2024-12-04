@@ -52,8 +52,8 @@ export class PaymentsService {
         payment_method_types: ['card'],
         customer: customer.id,
         success_url:
-          'http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: 'http://localhost:3000/cancel',
+          `process.env.DOMAIN_STRIPE/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: 'process.env.DOMAIN_STRIPE/cancel',
         metadata: {
           stripePriceId: stripePriceId,
           userEmail: userEmail,
