@@ -114,7 +114,7 @@ export class UsersController {
   @Put(':id')
   @ApiBearerAuth()
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   async updateUser(
     @Param('id', ParseUUIDPipe) userID: string,
     @Body() userData: UpdateUserDto,

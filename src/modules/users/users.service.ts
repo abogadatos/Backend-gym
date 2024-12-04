@@ -128,44 +128,28 @@ export class UsersService {
       );
     }
   
-    // Hash password only if it is provided
+    
+    Object.keys(userInfo).forEach((key) => {
+      if (userInfo[key] === '' || userInfo[key] === null || userInfo[key] === undefined) {
+        delete userInfo[key];
+      }
+    });
+  
+  
+    if (Object.keys(userInfo).length === 0) {
+      return { message: 'No changes were made' };
+    }
+  
+ 
     if (userInfo.password) {
       userInfo.password = await bcrypt.hash(userInfo.password, 10);
     }
   
-    // Update user based on auth type
-    if (foundUser.auth === 'form') {
-      const updatedUser = this.usersRepository.merge(foundUser, userInfo);
-      const userData = await this.usersRepository.save(updatedUser);
+ 
+    const updatedUser = this.usersRepository.merge(foundUser, userInfo);
+    const userData = await this.usersRepository.save(updatedUser);
   
-      return { message: 'User Updated Successfully', userData };
-    }
-  
-    if (foundUser.auth === 'googleIncomplete') {
-      if (
-        foundUser.password === null ||
-        foundUser.phone === null ||
-        foundUser.country === null ||
-        foundUser.address === null
-      ) {
-        const updatedUser = this.usersRepository.merge(foundUser, {
-          ...userInfo,
-          auth: 'google',
-        });
-        const userData = await this.usersRepository.save(updatedUser);
-  
-        return { message: 'User Updated Successfully', userData };
-      }
-    }
-  
-    if (foundUser.auth === 'google') {
-      const updatedUser = this.usersRepository.merge(foundUser, userInfo);
-      const userData = await this.usersRepository.save(updatedUser);
-  
-      return { message: 'User Updated Successfully', userData };
-    }
-  
-    throw new InternalServerErrorException('Unhandled auth type');
+    return { message: 'User Updated Successfully', userData };
   }
   
   async getUserById(userID: string): Promise<UserWithoutPassword> {
