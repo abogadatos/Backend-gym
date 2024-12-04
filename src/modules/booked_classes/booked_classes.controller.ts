@@ -39,7 +39,7 @@ export class BookedClassesController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Associate, Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Associate,Role.User, Role.Admin, Role.SuperAdmin)
   async createBooked(@Body() bookClassDto: CreateBookedClassDto) {
     return await this.bookendClassesService.createBookedService(bookClassDto);
   }
@@ -47,7 +47,7 @@ export class BookedClassesController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Associate, Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Associate,Role.User,  Role.Admin, Role.SuperAdmin)
   async deleteBooked(@Param('bookingId') bookingId: string) {
     return await this.bookendClassesService.deleteBookedService(bookingId);
   }
@@ -55,7 +55,7 @@ export class BookedClassesController {
   @Get('user/:userId') // TODO revisar funcionamiento
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Trainer,Role.User, Role.Admin, Role.SuperAdmin)
   async getBooketsByUserId(@Param('userId') userId: string) {
     return await this.bookendClassesService.getBooketsByUserIdService(userId);
   }
