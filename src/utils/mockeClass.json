@@ -2,7 +2,7 @@
   {
     "name": "Yoga al Atardecer",
     "description": "Una clase relajante para terminar el día con vistas al atardecer.",
-    "location": "Terraza del gimnasio",
+    "location": "-32.8960301, -68.8590746",
     "capacity": 20,
     "schedule": [
       {
@@ -22,7 +22,7 @@
   {
     "name": "Entrenamiento Funcional",
     "description": "Circuitos intensos para mejorar fuerza, resistencia y flexibilidad.",
-    "location": "Sala de pesas",
+    "location": "-32.8960301, -68.8590746",
     "capacity": 15,
     "schedule": [
       {
@@ -42,7 +42,7 @@
   {
     "name": "Zumba Energizante",
     "description": "Baila y ejercítate al ritmo de música vibrante y divertida.",
-    "location": "Sala de danza",
+    "location": "-32.8960301, -68.8590746",
     "capacity": 25,
     "schedule": [
       {
@@ -62,7 +62,7 @@
   {
     "name": "CrossFit de Alto Rendimiento",
     "description": "Sesiones intensas para los amantes del fitness extremo.",
-    "location": "Zona de entrenamiento al aire libre",
+    "location": "-32.8960301, -68.8590746",
     "capacity": 12,
     "schedule": [
       {
@@ -82,7 +82,7 @@
   {
     "name": "Pilates para Principiantes",
     "description": "Movimientos básicos para mejorar postura y flexibilidad.",
-    "location": "Sala de pilates",
+    "location": "-32.8960301, -68.8590746",
     "capacity": 10,
     "schedule": [
       {
