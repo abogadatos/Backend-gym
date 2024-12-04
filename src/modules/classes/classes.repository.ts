@@ -40,7 +40,17 @@ export class ClassesCustomRepository {
         (t) => `${t.userID.name}` === person.trainerName,
       );
   
-      const trainerName = trainer ? trainer.id : null;
+      const trainerName = trainer ? trainer.id : null
+
+      const existingClass = await this.classesRepository
+      .createQueryBuilder('classes')
+      .where('classes.name = :name', { name: person.name })
+      .getOne();
+
+    if (existingClass) {
+      console.log(`Clase "${person.name}" ya existe. No se puede duplicar.`);
+      continue; 
+    }
      
   
       // Crear la clase
