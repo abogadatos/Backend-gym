@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { MembershipsCustomRepository } from './memberships.repository';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,6 +32,14 @@ export class MembershipsService {
       );
     }
 
+    const existingMembership = await this.membershipsRepository.findOne({
+      where: { name },
+    });
+  
+    if (existingMembership) {
+      throw new ConflictException('Ya existe una membresía con ese nombre.');
+    }
+
     const stripeProduct = await stripe.products.create({
       name,
       description,
@@ -40,7 +48,7 @@ export class MembershipsService {
     const stripePrice = await stripe.prices.create({
       unit_amount: Math.round(price * 100),
       currency: 'mxn',
-      recurring: { interval: 'month', interval_count: duration },
+      recurring: { interval: 'day', interval_count: duration },
       product: stripeProduct.id,
     });
 
