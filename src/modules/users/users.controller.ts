@@ -11,6 +11,7 @@ import {
   Patch,
   UseGuards,
   NotFoundException,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -110,7 +111,7 @@ export class UsersController {
     return { message: `User ${user.name} has been unbanned`, user };
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiBearerAuth()
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard, BanGuard)

@@ -10,6 +10,7 @@ import * as data from '../../utils/mock-users.json';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
 import { validate } from 'class-validator';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersCustomRepository {
@@ -88,28 +89,27 @@ export class UsersCustomRepository {
     return await this.userRepository.findOne({ where: { email } });
   }
 
-  async updateUser(id: string, user: Partial<User>) {
-    const userExists = await this.userRepository.findOne({ where: { id } });
-    if (!userExists) {
+  async updateUser(id: string, userDto: UpdateUserDto) {
+    // Verificar si el usuario existe
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    const errors = await validate(user);
-    if (errors.length > 0) {
-      throw new InternalServerErrorException(
-        'Validation failed',
-        errors.toString(),
-      );
-    }
-
     try {
-      Object.assign(userExists, user);
+      // Hashear contraseña si fue incluida en el DTO
+      if (userDto.password) {
+        const saltRounds = 10; // Ajusta según sea necesario
+        userDto.password = await bcrypt.hash(userDto.password, saltRounds);
+      }
 
-      const savedUser = await this.userRepository.save(userExists);
+      // Asignar los campos actualizados al usuario
+      Object.assign(user, userDto);
 
-      //   const { password, ...userWithoutSensitiveData } = savedUser;
+      // Guardar el usuario actualizado en la base de datos
+      const updatedUser = await this.userRepository.save(user);
 
-      return savedUser;
+      return updatedUser;
     } catch (error) {
       throw new InternalServerErrorException(
         'Failed to update user',
@@ -117,6 +117,7 @@ export class UsersCustomRepository {
       );
     }
   }
+  
 
   async remove(id: string) {
     const user = await this.userRepository.findOneBy({ id });

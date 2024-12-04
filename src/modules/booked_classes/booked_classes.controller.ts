@@ -22,7 +22,7 @@ export class BookedClassesController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async getAllBookedClasses() {
     return await this.bookendClassesService.getAllBookedClassesService();
@@ -30,15 +30,15 @@ export class BookedClassesController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
-  @Roles(Role.Associate, Role.Trainer, Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles( Role.Trainer, Role.Admin, Role.SuperAdmin)
   async getBookedClassById(@Param('id') id: string) {
     return await this.bookendClassesService.getBookedClassByIdService(id);
   }
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Associate, Role.Admin, Role.SuperAdmin)
   async createBooked(@Body() bookClassDto: CreateBookedClassDto) {
     return await this.bookendClassesService.createBookedService(bookClassDto);
@@ -46,7 +46,7 @@ export class BookedClassesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Associate, Role.Admin, Role.SuperAdmin)
   async deleteBooked(@Param('bookingId') bookingId: string) {
     return await this.bookendClassesService.deleteBookedService(bookingId);
@@ -54,7 +54,7 @@ export class BookedClassesController {
 
   @Get('user/:userId') // TODO revisar funcionamiento
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async getBooketsByUserId(@Param('userId') userId: string) {
     return await this.bookendClassesService.getBooketsByUserIdService(userId);
@@ -62,8 +62,8 @@ export class BookedClassesController {
 
   @Get('class/:classId') // TODO después de verificación de Rodrigo, borrar Role.User
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
-  @Roles(Role.User, Role.Associate, Role.Trainer, Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles( Role.Associate, Role.Trainer, Role.Admin, Role.SuperAdmin)
   async getBooketsByclassId(@Param('classId') classId: string) {
     return await this.bookendClassesService.getBooketsByclassIdService(classId);
   }

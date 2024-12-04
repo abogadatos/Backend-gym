@@ -34,7 +34,7 @@ export class TrainersController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   // corroborar su usuario puede ver trainers x ID
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findAll(@Query('page') page: string, @Query('limit') limit: string) {
@@ -45,7 +45,7 @@ export class TrainersController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   // corroborar su usuario puede ver trainers x ID
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findOne(@Param('id') id: string) {

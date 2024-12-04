@@ -25,7 +25,7 @@ export class RoutinesController {
 
   @Post('upload')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   @UseInterceptors(FileInterceptor('file'))
   async uploadRoutineFile(
