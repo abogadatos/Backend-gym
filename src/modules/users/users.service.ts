@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
@@ -116,53 +117,57 @@ export class UsersService {
   }
 
   async updateUser(userID: string, userInfo: UpdateUserDto) {
-    const foundUser = await this.usersRepository.findOne({
-      where: { id: userID },
-    });
-    if (!foundUser) throw new NotFoundException('user not found or not exist');
-
+    const foundUser = await this.usersRepository.findOne({ where: { id: userID } });
+    if (!foundUser) {
+      throw new NotFoundException('User not found or does not exist');
+    }
+  
     if (foundUser.banned) {
       throw new ForbiddenException(
-        `Your account has been banned. Reason: ${foundUser.banReason || 'No reason provided.'}`,
+        `Your account has been banned. Reason: ${foundUser.banReason || 'No reason provided.'}`
       );
     }
-
+  
+    // Hash password only if it is provided
+    if (userInfo.password) {
+      userInfo.password = await bcrypt.hash(userInfo.password, 10);
+    }
+  
+    // Update user based on auth type
     if (foundUser.auth === 'form') {
-      const hashedPassword = await bcrypt.hash(userInfo.password, 10);
-
       const updatedUser = this.usersRepository.merge(foundUser, userInfo);
-      updatedUser.password = hashedPassword;
       const userData = await this.usersRepository.save(updatedUser);
-
+  
       return { message: 'User Updated Successfully', userData };
-    } else if (foundUser.auth === 'googleIncomplete') {
+    }
+  
+    if (foundUser.auth === 'googleIncomplete') {
       if (
         foundUser.password === null ||
         foundUser.phone === null ||
         foundUser.country === null ||
         foundUser.address === null
       ) {
-        const hashedPassword = await bcrypt.hash(userInfo.password, 10);
-        userInfo.password = hashedPassword;
-
-        const updatedUser = this.usersRepository.merge(foundUser, userInfo);
-        updatedUser.auth = 'google';
+        const updatedUser = this.usersRepository.merge(foundUser, {
+          ...userInfo,
+          auth: 'google',
+        });
         const userData = await this.usersRepository.save(updatedUser);
-
+  
         return { message: 'User Updated Successfully', userData };
       }
-    } else if (foundUser.auth === 'google') {
-      const hashedPassword = await bcrypt.hash(userInfo.password, 10);
-
-      userInfo.password = hashedPassword;
+    }
+  
+    if (foundUser.auth === 'google') {
       const updatedUser = this.usersRepository.merge(foundUser, userInfo);
-
       const userData = await this.usersRepository.save(updatedUser);
-
+  
       return { message: 'User Updated Successfully', userData };
     }
+  
+    throw new InternalServerErrorException('Unhandled auth type');
   }
-
+  
   async getUserById(userID: string): Promise<UserWithoutPassword> {
     const foundUser: User | undefined = await this.usersRepository.findOne({
       where: { id: userID },

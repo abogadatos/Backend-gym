@@ -36,7 +36,7 @@ export class ClassesController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async postClass(@Body() createClassDto: CreateClassDto) {
     return await this.classService.createClass(createClassDto);
@@ -44,7 +44,7 @@ export class ClassesController {
 
   @Put(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async updateClass(
     @Param('id') id: string,
@@ -55,7 +55,7 @@ export class ClassesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async deleteClass(@Param('id') id: string) {
     return await this.classService.deleteClass(id);
