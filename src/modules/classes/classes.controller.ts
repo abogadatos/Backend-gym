@@ -35,17 +35,17 @@ export class ClassesController {
   }
 
   @Post()
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
-  @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  // @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async postClass(@Body() createClassDto: CreateClassDto) {
     return await this.classService.createClass(createClassDto);
   }
 
   @Put(':id')
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
-  @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  // @Roles(Role.Trainer, Role.Admin, Role.SuperAdmin)
   async updateClass(
     @Param('id') id: string,
     @Body() updateClassDto: UpdateClassDto,

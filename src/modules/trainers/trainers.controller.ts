@@ -33,8 +33,8 @@ export class TrainersController {
   }
 
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard, RolesGuard, BanGuard)
   // corroborar su usuario puede ver trainers x ID
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async findAll(@Query('page') page: string, @Query('limit') limit: string) {

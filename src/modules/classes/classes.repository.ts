@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Classes } from 'src/database/entities/classes.entity';
 import { Trainers } from 'src/database/entities/trainer.entity';
@@ -40,8 +40,8 @@ export class ClassesCustomRepository {
         (t) => `${t.userID.name}` === person.trainerName,
       );
   
-      const trainerName = trainer ? trainer.id : null;
      
+      const trainerName = trainer ? trainer.id : null;
   
       // Crear la clase
       const newClass = await this.classesRepository
@@ -82,7 +82,7 @@ export class ClassesCustomRepository {
   
       console.log(
         `Clase "${person.name}" creada con ${
-          trainer ? `entrenador  ${trainerName}` : '"Sin entrenador"'
+          trainer ? `entrenador UUID ${trainerName}` : '"Sin entrenador"'
         }.`,
       );
     }
@@ -112,9 +112,16 @@ export class ClassesCustomRepository {
     return classe;
   }
 
-  async createClass(createClassDto: CreateClassDto): Promise<Classes> {
-  const { schedules, trainerId, ...classData } = createClassDto;
+  async createClass(createClassDto: CreateClassDto){
+  
+   
+    const { name,schedules, trainerId, ...classData } = createClassDto;
 
+    const existingClass = await this.classesRepository.findOne({
+      where: { name: name },
+    });
+
+  if (existingClass) throw new BadRequestException(`There's already a class with the name ${name}`)
 
   let trainer = null;
   if (trainerId) {
@@ -126,6 +133,7 @@ export class ClassesCustomRepository {
 
 
   const newClass = this.classesRepository.create({
+    name,
     ...classData,
     trainer,
   });
@@ -147,7 +155,7 @@ export class ClassesCustomRepository {
  async updateClass(id: string, updateClassDto: UpdateClassDto): Promise<Classes> {
     const classToUpdate = await this.classesRepository.findOne({
       where: { id },
-      relations: ['schedules', 'bookedClasses'],
+      relations: ['schedules', 'bookedClasses','trainer'],
     });
   
     if (!classToUpdate) {
@@ -159,7 +167,6 @@ export class ClassesCustomRepository {
     if (updateClassDto.description) classToUpdate.description = updateClassDto.description;
     if (updateClassDto.location) classToUpdate.location = updateClassDto.location;
     if (updateClassDto.imgUrl) classToUpdate.imgUrl = updateClassDto.imgUrl;
-  
   
     if (updateClassDto.capacity) {
       classToUpdate.capacity = updateClassDto.capacity;
@@ -177,7 +184,7 @@ export class ClassesCustomRepository {
       const trainer = await this.trainerRepository.getTrainerById(updateClassDto.trainerId);
   
       if (!trainer) {
-        throw new Error('Entrenador no encontrado');
+        throw new NotFoundException('Entrenador no encontrado');
       }
   
       classToUpdate.trainer = trainer;
@@ -212,7 +219,8 @@ export class ClassesCustomRepository {
       }
     }
 
-    return this.classesRepository.save(classToUpdate);
+   return await this.classesRepository.save(classToUpdate)
+  
   }
   
   async deleteClass(id: string) {
