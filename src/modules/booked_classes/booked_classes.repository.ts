@@ -114,36 +114,52 @@ async createBooked(bookClass: CreateBookedClassDto) {
 
 
 async deleteBooked(bookingId: string) {
+  // Buscar la reserva con sus relaciones
   const booking = await this.bookedClassesRepository.findOne({
     where: { id: bookingId },
-    relations: ['user', 'class', 'class.schedules'],
-    
+    relations: ['user', 'class', 'schedule'], // Asegúrate de incluir 'schedule' aquí
   });
 
   if (!booking) {
     throw new BadRequestException('No se encontró la reserva.');
   }
 
-
-  const classSchedule = booking.class.schedules[0];
-  if (!classSchedule) {
-    throw new BadRequestException('La clase no tiene un horario asignado.');
+  // Obtener el horario asociado
+  const schedule = booking.schedule;
+  if (!schedule) {
+    throw new BadRequestException('No se encontró el horario asociado a la reserva.');
   }
 
-  const classDate = new Date(`${classSchedule.day}T${classSchedule.startTime}`);
+  // Validar y actualizar currentParticipants y remainingCapacity
+  if (schedule.currentParticipants > 0) {
+    schedule.currentParticipants -= 1;
+  }
+  if (schedule.remainingCapacity < booking.class.capacity) {
+    schedule.remainingCapacity += 1;
+  }
 
-  await this.bookedClassesRepository.remove(booking);
+  // Guardar los cambios en el horario
+  await this.classScheduleRepository.save(schedule);
 
+  // Enviar email de cancelación
   await this.emailService.sendCancellationEmail(
     booking.user.email,
     booking.class.name,
-    classDate,  
+    new Date(`${schedule.day}T${schedule.startTime}`),
   );
 
-  
-  return booking;
-}
+  // Eliminar la reserva
+  await this.bookedClassesRepository.remove(booking);
 
+  return {
+    message: 'Reserva eliminada correctamente.',
+    updatedSchedule: {
+      id: schedule.id,
+      currentParticipants: schedule.currentParticipants,
+      remainingCapacity: schedule.remainingCapacity,
+    },
+  };
+}
 
 
 async getBooketsByUserId(userId: string) {
