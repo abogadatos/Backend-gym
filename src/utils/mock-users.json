@@ -8,7 +8,7 @@
     "country": "Isle of Man",
     "address": "Owen 78, OpEOMrgxftIpKz Serbia",
     "city": "Ciudad 98",
-    "image":"https://res.cloudinary.com/lucasebas/image/upload/v1733275553/justDoIt/lorecbvvzounccutjun2.jpg"
+    "image": "https://res.cloudinary.com/lucasebas/image/upload/v1733275553/justDoIt/lorecbvvzounccutjun2.jpg"
   },
   {
     "name": "Lucas Sebastian",
@@ -24,7 +24,7 @@
     "name": "Nelson Enrique Arias Gámez",
     "email": "nechodev@gmail.com",
     "password": "ilymYMar123@",
-    "roles": "admin",
+    "roles": "super",
     "phone": "1928091",
     "country": "México",
     "address": "Stone 26, KHfFh British Virgin Islands",

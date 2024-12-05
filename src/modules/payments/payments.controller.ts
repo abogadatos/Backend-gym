@@ -6,7 +6,6 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
-import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('payment')
 export class PaymentsController {
@@ -22,7 +21,7 @@ export class PaymentsController {
 
   @Post('create-customer')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
     return this.paymentsService.createCustomer(createCustomerDto);
@@ -38,7 +37,7 @@ export class PaymentsController {
 
   @Get('check-payment-status')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   async checkPaymentStatus(@Query('session_id') sessionId: string) {
     return this.paymentsService.checkPaymentStatus(sessionId);
@@ -68,7 +67,7 @@ export class PaymentsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
   async getPaymentsById(id: string) {
     return this.paymentsService.getPaymentsById(id);

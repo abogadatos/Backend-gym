@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 import * as data from '../../utils/mock-users.json';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
-import { validate } from 'class-validator';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
@@ -117,7 +116,6 @@ export class UsersCustomRepository {
       );
     }
   }
-  
 
   async remove(id: string) {
     const user = await this.userRepository.findOneBy({ id });

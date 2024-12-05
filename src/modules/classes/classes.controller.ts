@@ -16,7 +16,6 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
-import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('classes')
 export class ClassesController {

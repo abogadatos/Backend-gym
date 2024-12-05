@@ -1,10 +1,8 @@
 import {
-  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
-  InternalServerErrorException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
@@ -117,41 +115,51 @@ export class UsersService {
   }
 
   async updateUser(userID: string, userInfo: UpdateUserDto) {
-    const foundUser = await this.usersRepository.findOne({ where: { id: userID } });
+    const foundUser = await this.usersRepository.findOne({
+      where: { id: userID },
+    });
     if (!foundUser) {
       throw new NotFoundException('User not found or does not exist');
     }
-  
-    if (foundUser.banned) {
-      throw new ForbiddenException(
-        `Your account has been banned. Reason: ${foundUser.banReason || 'No reason provided.'}`
-      );
+
+    if (foundUser.banned === true) {
+      console.log({
+        message: `This account has been banned at ${foundUser.bannedAt}. Reason: ${foundUser.banReason || 'No reason provided.'}`,
+        userData: foundUser,
+      });
+      foundUser.banned = false;
+      foundUser.banReason = null;
+      foundUser.bannedAt = null;
+
+      const unBannedUser = this.usersRepository.update(userID, userInfo);
+
+      return unBannedUser;
     }
-  
-    
+
     Object.keys(userInfo).forEach((key) => {
-      if (userInfo[key] === '' || userInfo[key] === null || userInfo[key] === undefined) {
+      if (
+        userInfo[key] === '' ||
+        userInfo[key] === null ||
+        userInfo[key] === undefined
+      ) {
         delete userInfo[key];
       }
     });
-  
-  
+
     if (Object.keys(userInfo).length === 0) {
       return { message: 'No changes were made' };
     }
-  
- 
+
     if (userInfo.password) {
       userInfo.password = await bcrypt.hash(userInfo.password, 10);
     }
-  
- 
+
     const updatedUser = this.usersRepository.merge(foundUser, userInfo);
     const userData = await this.usersRepository.save(updatedUser);
-  
+
     return { message: 'User Updated Successfully', userData };
   }
-  
+
   async getUserById(userID: string): Promise<UserWithoutPassword> {
     const foundUser: User | undefined = await this.usersRepository.findOne({
       where: { id: userID },

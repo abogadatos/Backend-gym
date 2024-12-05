@@ -18,7 +18,6 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('trainers')
 export class TrainersController {
