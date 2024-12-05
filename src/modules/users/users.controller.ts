@@ -8,7 +8,6 @@ import {
   HttpException,
   HttpStatus,
   ParseUUIDPipe,
-  Patch,
   UseGuards,
   NotFoundException,
   Put,
@@ -21,7 +20,6 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { BanGuard } from 'src/guards/ban.guard';
 
 @Controller('users')
 export class UsersController {
@@ -68,7 +66,7 @@ export class UsersController {
     }
   }
 
-  @Patch('ban/:id')
+  @Put('ban/:id')
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -79,22 +77,43 @@ export class UsersController {
     const userData = await this.usersService.getUserById(userId);
     if (!userData) throw new NotFoundException('User not found');
 
-    userData.banned = true;
-    userData.banReason = reason;
-    userData.bannedAt = new Date();
+    if (
+      userData.roles === 'admin' ||
+      userData.roles === 'super' ||
+      userData.roles === 'trainer'
+    ) {
+      return {
+        message: `You cannot ban this user`,
+        userData: userData,
+      };
+    } else if (userData.roles === 'user' || userData.roles === 'associate') {
+      userData.banned = true;
+      userData.banReason = reason;
+      userData.bannedAt = new Date();
 
-    // TODO arreglar, aquí está el error de por qué no deja avanzar en el proceso de banear user google. googleIncomplete
-    await this.usersService.updateUser(userId, userData);
+      console.log({
+        message: `Ban Hammer is about to be used on ${userData.name}`,
+        userInfo: userData,
+      });
 
-    console.info({
-      message: `User ${userData.name} has been banned`,
-      userData,
-    });
+      // TODO arreglar, aquí está el error de por qué no deja avanzar en el proceso de banear user google. googleIncomplete
+      await this.usersService.updateUser(userId, userData);
 
-    return { message: `User ${userData.name} has been banned`, userData };
+      console.log({
+        message: `User ${userData.name} has been banned`,
+        banReason: `Ban Hammer was used on ${userData.name} because ${userData.banReason || 'No reason provided.'}`,
+        userData,
+      });
+
+      return {
+        message: `User ${userData.name} has been banned`,
+        banReason: `Ban Hammer was used on ${userData.name} because ${userData.banReason || 'No reason provided.'}`,
+        userData,
+      };
+    }
   }
 
-  @Patch('unban/:id')
+  @Put('unban/:id')
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -102,13 +121,15 @@ export class UsersController {
     const user = await this.usersService.getUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    user.banned = false;
-    user.banReason = null;
-    user.bannedAt = null;
+    if (user && user.banned === true) {
+      user.banned = false;
+      user.banReason = null;
+      user.bannedAt = null;
 
-    await this.usersService.updateUser(userId, user);
+      await this.usersService.updateUser(userId, user);
+    }
 
-    return { message: `User ${user.name} has been unbanned`, user };
+    return { message: `User ${user.name} has been unbanned`, userData: user };
   }
 
   @Put(':id')
@@ -125,7 +146,7 @@ export class UsersController {
   @Get('/profile/:id')
   @ApiBearerAuth()
   @Roles(Role.User, Role.Associate, Role.Admin, Role.SuperAdmin)
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   async getUserById(@Param('id') id: string) {
     return await this.usersService.getUserById(id);
   }
@@ -133,7 +154,7 @@ export class UsersController {
   @Get('email/:email')
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.SuperAdmin)
-  @UseGuards(AuthGuard, RolesGuard, BanGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   async getUserByEmail(@Param('email') email: string): Promise<User> {
     return await this.usersService.getUserByEmail(email);
   }

@@ -2,7 +2,7 @@ import { UsersService } from './../users/users.service';
 import {
   BadRequestException,
   ConflictException,
-  ForbiddenException,
+  //   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -71,7 +71,10 @@ export class AuthService {
           userExists.country === null ||
           userExists.address === null
         ) {
-          console.log('User may update his profile to complete its data');
+          console.log({
+            message: `User may update his profile to complete its data`,
+            userData: userExists,
+          });
           return userExists;
         }
 
@@ -81,18 +84,12 @@ export class AuthService {
           userExists.country !== null &&
           userExists.address !== null
         ) {
-          console.log('Cae en auth.service.ts linea 83');
-          return {
-            userID: userExists.id,
-            userName: userExists.name,
-            userEmail: userExists.email,
-            userRol: userExists.roles,
-            userAuth: userExists.auth,
-            userMembershipStatus: userExists.membership_status,
-            userCreatedAt: userExists.created_At,
-          };
+          console.log({
+            message: `User may update his profile to complete its data`,
+            userData: userExists,
+          });
+          return userExists;
         }
-        // return userExists;
       }
     } else if (userExists === null) {
       try {
@@ -117,7 +114,7 @@ export class AuthService {
         return newUserFromAuthZero;
       } catch (error) {
         throw new BadRequestException(
-          'User insertion within database error.',
+          'User registration error.',
           error.message,
         );
       }
@@ -143,8 +140,13 @@ export class AuthService {
         console.error('Error while sending :', error.message);
       }
 
-      const user: UserWithoutPassword = await this.usersRepository.findOne({
+      const user = await this.usersRepository.findOne({
         where: { email: userData.email },
+      });
+
+      console.log({
+        message: `Signed Up user on auth.service, line 152`,
+        userData: user,
       });
 
       return user;
@@ -176,6 +178,11 @@ export class AuthService {
     }
 
     await this.usersRepository.save(newUser);
+    try {
+      await this.emailService.sendWelcomeEmail(newUser.email, newUser.name);
+    } catch (error) {
+      console.error('Error while sending :', error.message);
+    }
     const user: UserWithoutPassword = await this.usersRepository.findOne({
       where: { email: email },
     });
@@ -192,11 +199,11 @@ export class AuthService {
       throw new NotFoundException('User does not exist');
     }
 
-    if (userFound.banned) {
-      throw new ForbiddenException(
-        `Your account has been banned. Reason: ${userFound.banReason || 'No reason provided.'}`,
-      );
-    }
+    // if (userFound.banned) {
+    //   throw new ForbiddenException(
+    //     `Your account has been banned. Reason: ${userFound.banReason || 'No reason provided.'}`,
+    //   );
+    // }
 
     const validatedPassword = await bcrypt.compare(
       userData.password,

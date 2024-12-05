@@ -17,16 +17,25 @@ export class BanGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const user = request.user; // Assumes user is already authenticated
+    const { email } = request.body;
+    console.log(`User in BanGuard:, ${email}`);
 
-    console.log(user.id);
+    if (!email) {
+      console.log({
+        message: `The user you're looking for wasn't found`,
+        userEmail: email,
+      });
+      throw new ForbiddenException('Email is required to log in.');
+    }
 
-    if (!user) return false;
-
-    const foundUser = await this.userRepo.findOne({ where: { id: user.id } });
-    if (foundUser.banned) {
+    const foundUser = await this.userRepo.findOne({ where: { email: email } });
+    if (foundUser && foundUser.banned === true) {
+      console.log({
+        message: `Your account has been banned. Reason: ${foundUser.banReason || 'no reason provided'}`,
+        userData: foundUser,
+      });
       throw new ForbiddenException(
-        `Your account has been banned. Reason: ${user.banReason}`,
+        `Your account has been banned. Reason: ${foundUser.banReason || 'no reason provided'}`,
       );
     }
 

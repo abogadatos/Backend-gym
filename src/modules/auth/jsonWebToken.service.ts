@@ -19,13 +19,21 @@ export class JsonWebTokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateJwt(user: JWTPayload): Promise<string> {
+  async generateJwt(user): Promise<string> {
     const payload = {
       //! parametros para crear el JWT
       //! con esto se puede implementar un guardian que busque en base de datos la
       //! concordancia entre los datos del token y los datos la DB
       id: user.id,
-      roles: user.roles, //! ==> INCLUCION DEL ROL
+      name: user.name,
+      email: user.email,
+      roles: user.roles,
+      phone: user.phone,
+      country: user.country,
+      address: user.address,
+      banned: user.banned,
+      banSatus: user.banStatus,
+      banReason: user.banReason,
     };
     const secret = this.configService.get<string>('jwt.secret');
     const signOptions = this.configService.get<object>('jwt.signOptions');
@@ -35,8 +43,15 @@ export class JsonWebTokenService {
   async generateCPT(user: User) {
     const payload = {
       id: user.id,
+      name: user.name,
       email: user.email,
       roles: user.roles,
+      phone: user.phone,
+      country: user.country,
+      address: user.address,
+      banned: user.banned,
+      banSatus: user.banStatus,
+      banReason: user.banReason,
     };
     const secret = this.configService.get<string>('jwt.secret');
     const signOptions = this.configService.get<object>('jwt.signOptions');

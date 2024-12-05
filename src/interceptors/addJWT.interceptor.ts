@@ -41,9 +41,9 @@ export class addJWTInterceptor implements NestInterceptor {
             return { token, userData };
           }
 
-          return { userData, token };
+          return { userData, token, expires_in: process.env.JWT_EXPIRES_IN };
         } catch (error) {
-          throw new Error('Error al generar el token');
+          throw new Error('Error while creating JWT');
         }
       }),
     );
