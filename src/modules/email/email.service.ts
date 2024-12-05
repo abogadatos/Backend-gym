@@ -9,15 +9,15 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'justdoitgym12@gmail.com',
-        pass: 'urfx wsxa pdhp htlc',
+        user: 'jusdoitgym@gmail.com',
+        pass: 'iwre qwef dqlh sqhq',
       },
     });
   }
 
   async sendWelcomeEmail(to: string, name: string) {
     const mailOptions = {
-      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
+      from: '"Just Do It Gym" <jusdoitgym@gmail.com>',
       to,
       subject: '¡Bienvenido a Just Do It Gym!',
       html: `
@@ -40,7 +40,7 @@ export class EmailService {
   async sendReservationEmail( email: string, className:string, day:string, startTime:string,) {
 
     const mailOptions = {
-      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
+      from: '"Just Do It Gym" <jusdoitgym@gmail.com>',
       to:email,
       subject: 'Confirmación de reserva de clase',
       html: `
@@ -60,7 +60,7 @@ export class EmailService {
     const formattedTime = schedule.toLocaleTimeString();
 
     const mailOptions = {
-      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
+      from: '"Just Do It Gym" <jusdoitgym@gmail.com>',
       to,
       subject: 'Reserva Cancelada',
       html: `
@@ -79,7 +79,7 @@ export class EmailService {
   async sendClassUpdateEmail(recipients: string[],className: string,newSchedule: string,) {
  
     const mailOptions={
-          from:'"Just Do It Gym" <justdoitgym12@gmail.com>' ,
+          from:'"Just Do It Gym" <jusdoitgym@gmail.com>' ,
           to: recipients,
           subject:`Actualización en la clase "${className}"`,
           text:`Queremos informarte que tu clase de "${className}" ha cambiado de horario. Ahora se dará el día ${newSchedule}.`,
@@ -97,7 +97,7 @@ export class EmailService {
   }
   async sendClassCancellationEmail(recipients: string[], className: string){
     const mailOptions={
-      from:'"Just Do It Gym" <justdoitgym12@gmail.com>' ,
+      from:'"Just Do It Gym" <jusdoitgym@gmail.com>' ,
       to: recipients,
       subject:`cancelacion de la clase "${className}"`,
       text:`Queremos informarte que tu clase de "${className}" ha sido cancelada y ya no estará disponible.`,
@@ -119,36 +119,28 @@ export class EmailService {
     }
   }
 
-
-  async sendMembershipCreatedEmail(
-    email: string,
-    membershipName: string,
-    price: number,
-    duration: number,
-    description?: string,
-  ) {
+  async sendMembershipNotificationEmail(to: string, name: string, membershipName: string): Promise<void> {
     const mailOptions = {
-      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
-      to: email,
-      subject: '¡Nueva membresía creada con éxito!',
+      from: '"Just Do It Gym" <jusdoitgym@gmail.com>',
+      to,
+      subject: '¡Compra de Membresía Exitosa!',
       html: `
-        <h1>¡Gracias por elegir Just Do It Gym!</h1>
-        <p>Tu membresía <strong>"${membershipName}"</strong> ha sido creada con éxito.</p>
-        <p><strong>Precio:</strong> $${price.toFixed(2)} MXN</p>
-        <p><strong>Duración:</strong> ${duration} días</p>
-        ${description ? `<p><strong>Descripción:</strong> ${description}</p>` : ''}
-        <p>Esperamos que disfrutes de todos los beneficios que ofrecemos.</p>
-        <p>¡Gracias por confiar en nosotros!</p>
+        <h1>¡Hola, ${name}!</h1>
+        <p>Gracias por adquirir la membresía <strong>${membershipName}</strong> en <strong>Just Do It Gym</strong>.</p>
+        <p>Estamos emocionados de verte aprovechar al máximo esta experiencia.</p>
+        <p>Si tienes alguna pregunta, no dudes en contactarnos. ¡Prepárate para alcanzar tus metas!</p>
       `,
     };
   
     try {
       const info = await this.transporter.sendMail(mailOptions);
-      console.log('Email enviado: ', info.response);
+      console.log('Notificación de membresía enviada: ', info.response);
     } catch (error) {
-      console.error('Error enviando email: ', error.message);
-      throw new Error('No se pudo enviar el email de confirmación de membresía');
+      console.error('Error enviando la notificación de membresía: ', error.message);
+      throw new Error('No se pudo enviar la notificación de membresía');
     }
   }
+  
+
   
 }

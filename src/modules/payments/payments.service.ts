@@ -8,6 +8,7 @@ import { Payment } from 'src/database/entities/payment.entity';
 import { MembershipStatus } from 'src/enum/membership_status.enum';
 import { UsersCustomRepository } from '../users/users.repository';
 import { PaymentsCustomRepository } from './payments.repository';
+import { EmailService } from '../email/email.service';
 import { Role } from 'src/enum/roles.enum';
 const stripe = require('stripe')(process.env.SECRET_STRIPE);
 
@@ -21,6 +22,7 @@ export class PaymentsService {
     @InjectRepository(Payment)
     private readonly paymentsRepository: Repository<Payment>,
     private readonly paymentsCustomRepository: PaymentsCustomRepository,
+    private readonly emailService:EmailService
   ) {}
 
   async addMemberships() {
@@ -158,6 +160,11 @@ export class PaymentsService {
         user,
       ); // Aquí usamos `save`, que actualizará el usuario correctamente
 
+      await this.emailService.sendMembershipNotificationEmail(
+        user.email,
+        user.name,
+        membership.name,
+      );
       console.log({
         message: `Pago procesado exitosamente. El estado de la membresía del usuario ahora es: ${updatedUser.membership_status}`,
         paymentData,

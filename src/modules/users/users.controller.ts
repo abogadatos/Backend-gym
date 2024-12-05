@@ -76,42 +76,32 @@ export class UsersController {
   ) {
     const userData = await this.usersService.getUserById(userId);
     if (!userData) throw new NotFoundException('User not found');
-
-    if (
-      userData.roles === 'admin' ||
-      userData.roles === 'super' ||
-      userData.roles === 'trainer'
-    ) {
+  
+    if (['admin', 'super', 'trainer'].includes(userData.roles)) {
       return {
         message: `You cannot ban this user`,
-        userData: userData,
+        userData,
       };
-    } else if (userData.roles === 'user' || userData.roles === 'associate') {
-      userData.banned = true;
-      userData.banReason = reason;
-      userData.bannedAt = new Date();
-
-      console.log({
-        message: `Ban Hammer is about to be used on ${userData.name}`,
-        userInfo: userData,
+    } else if (['user', 'associate'].includes(userData.roles)) {
+      // Actualiza solo los campos necesarios
+      await this.usersService.updateBanStatus(userId, {
+        banned: true,
+        banReason: reason,
+        bannedAt: new Date(),
       });
-
-      // TODO arreglar, aquí está el error de por qué no deja avanzar en el proceso de banear user google. googleIncomplete
-      await this.usersService.updateUser(userId, userData);
-
+  
       console.log({
         message: `User ${userData.name} has been banned`,
-        banReason: `Ban Hammer was used on ${userData.name} because ${userData.banReason || 'No reason provided.'}`,
-        userData,
+        banReason: `Ban Hammer was used on ${userData.name} because ${reason || 'No reason provided.'}`,
       });
-
+  
       return {
         message: `User ${userData.name} has been banned`,
-        banReason: `Ban Hammer was used on ${userData.name} because ${userData.banReason || 'No reason provided.'}`,
-        userData,
+        banReason: `Ban Hammer was used on ${userData.name} because ${reason || 'No reason provided.'}`,
       };
     }
   }
+  
 
   @Put('unban/:id')
   @ApiBearerAuth()

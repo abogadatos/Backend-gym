@@ -198,4 +198,18 @@ export class UsersService {
 
     return user;
   }
+  async updateBanStatus(userId: string, banData: Partial<User>): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    // Actualiza únicamente los campos relacionados con el baneo
+    user.banned = banData.banned;
+    user.banReason = banData.banReason;
+    user.bannedAt = banData.bannedAt;
+  
+    await this.usersRepository.save(user);
+  }
+  
 }
