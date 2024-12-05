@@ -223,8 +223,9 @@ export class User {
    */
   @Column({
     type: 'text',
-    default: `https://res.cloudinary.com/dwhejzrua/image/upload/v1727710566/um0h7zmnozrblufpcikd.jpg`,
+    default: `https://cdn.discordapp.com/attachments/1303023926859010150/1314304963786313729/justDoItGym-logo.png?ex=67534961&is=6751f7e1&hm=25b5c942b57d23641babd5712293b95704c92476c92871e6e8f9f8502486a94d&`,
   })
+  
   @ApiProperty({
     description: 'URL of the product image',
     example: 'https://example.com/image.jpg',
