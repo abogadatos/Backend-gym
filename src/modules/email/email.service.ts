@@ -118,4 +118,37 @@ export class EmailService {
       console.error('Error al enviar correos: ', error);
     }
   }
+
+
+  async sendMembershipCreatedEmail(
+    email: string,
+    membershipName: string,
+    price: number,
+    duration: number,
+    description?: string,
+  ) {
+    const mailOptions = {
+      from: '"Just Do It Gym" <justdoitgym12@gmail.com>',
+      to: email,
+      subject: '¡Nueva membresía creada con éxito!',
+      html: `
+        <h1>¡Gracias por elegir Just Do It Gym!</h1>
+        <p>Tu membresía <strong>"${membershipName}"</strong> ha sido creada con éxito.</p>
+        <p><strong>Precio:</strong> $${price.toFixed(2)} MXN</p>
+        <p><strong>Duración:</strong> ${duration} días</p>
+        ${description ? `<p><strong>Descripción:</strong> ${description}</p>` : ''}
+        <p>Esperamos que disfrutes de todos los beneficios que ofrecemos.</p>
+        <p>¡Gracias por confiar en nosotros!</p>
+      `,
+    };
+  
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log('Email enviado: ', info.response);
+    } catch (error) {
+      console.error('Error enviando email: ', error.message);
+      throw new Error('No se pudo enviar el email de confirmación de membresía');
+    }
+  }
+  
 }
