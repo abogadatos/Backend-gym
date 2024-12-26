@@ -1,13 +1,12 @@
-![JustDoIt-Gym-Logo](/src/assets/justDoItGym-logo-v2.png){: width="972" height="589" .w-50 .right}
+<p align="center">
+    <a href="https://pf-frontend-silk.vercel.app/" target="blank" ><img src="https://res.cloudinary.com/dwhejzrua/image/upload/v1735167545/justDoItGym-logo-v2_oqthej.png" width="200" alt="Just Do It Logo"></a>
+</p>
 
-<div style="text-align: center;">
-  <img src="/src/assets//justDoItGym-logo-v2.png" alt="Example Image" width="400" />
-</div>
-# Gym Management System 🏋️‍♂️💪
+<h1 align="center">Just Do It - Gym management System 🏋️‍♂️💪</h1>
 
 ## Descripción 📋
 
-El `Gym Management System` es una solución integral diseñada para gestionar las operaciones de un gimnasio. Este sistema proporciona funcionalidades para administrar usuarios, entrenadores, membresías, pagos, clases, reservas, asistencia y reseñas, ¡facilitando la gestión eficiente del negocio! 🚀
+`Just Do It - Gym management System` es una solución integral diseñada para gestionar las operaciones de un gimnasio. Este sistema proporciona funcionalidades para administrar usuarios, entrenadores, membresías, pagos, clases, reservas, asistencia y reseñas, ¡facilitando la gestión eficiente del negocio! 🚀
 
 ## Características Principales 🌟
 
