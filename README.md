@@ -69,10 +69,50 @@ La base de datos está compuesta por las siguientes tablas:
 
 ## Relaciones 🔗
 
-- users tiene una relación uno a muchos con payments, booked_classes, reviews.
-- trainers tiene una relación uno a muchos con classes.
-- classes tiene una relación uno a muchos con booked_classes y attendance.
-- memberships tiene una relación uno a muchos con payments.
+**1. Tabla `users` (Usuarios):**
+
+- El campo `membership_id` está correctamente relacionado con el campo `id` de la tabla memberships.
+- El campo `id` de users está relacionado correctamente con múltiples tablas:
+  - `payments` (`user_id`): Relación entre usuarios y sus pagos.
+  - `booked_classes` (`user_id`): Relación entre usuarios y las clases reservadas.
+  - `attendance` (`user_id`): Relación entre usuarios y su asistencia.
+  - `reviews` (`user_id`): Relación entre usuarios y las reseñas que escriben.
+
+**2. Tabla `trainers` (Entrenadores):**
+
+- El campo `user_id` de `trainers` está correctamente relacionado con el campo id de la tabla users, indicando que cada entrenador está vinculado a un usuario.
+
+**3. Tabla `classes` (Clases):**
+
+- El campo `trainer_id` está relacionado con el campo `id` de la tabla `trainers`, indicando qué entrenador imparte cada clase.
+- El campo `id` de classes está relacionado correctamente con:
+  - `booked_classes` (`class_id`): Relación entre las clases y las reservas realizadas.
+  - `attendance` (`class_id`): Relación entre las clases y la asistencia registrada.
+  - `reviews` (`class_id`): Relación entre las clases y las reseñas.
+
+**4. Tabla payments (Pagos):**
+
+- El campo `user_id` está relacionado con el campo `id` de la tabla `users`, indicando qué usuario realizó el pago.
+- El campo `membership_id` está relacionado con el campo `id` de la tabla `memberships`, indicando qué membresía está asociada a cada pago.
+
+**5. Tabla booked_classes (Clases Reservadas):**
+
+- El campo `user_id` está relacionado con el campo `id` de la tabla `users`, indicando quién reservó la clase.
+- El campo `class_id` está relacionado con el campo `id` de la tabla `classes`, indicando qué clase fue reservada.
+
+**6. Tabla attendance (Asistencia):**
+
+- El campo `user_id` está relacionado con el campo `id` de la tabla `users`, indicando quién asistió a la clase.
+- El campo `class_id` está relacionado con el campo `id` de la tabla `classes`, indicando a qué clase asistieron.
+
+**7. Tabla reviews (Reseñas):**
+
+- El campo `user_id` está relacionado con el campo `id` de la tabla `users`, indicando quién escribió la reseña.
+- El campo `class_id` está relacionado con el campo `id` de la tabla `classes`, indicando sobre qué clase trata la reseña.
+
+<p align="center">
+    <a href="https://pf-frontend-silk.vercel.app/" target="blank" ><img src="https://res.cloudinary.com/dwhejzrua/image/upload/v1735181728/JustDoIt-Gym-PF_viasuw.png" width="400" alt="Just Do It Logo"></a>
+</p>
 
 ## Instalación y Configuración ⚙️
 
